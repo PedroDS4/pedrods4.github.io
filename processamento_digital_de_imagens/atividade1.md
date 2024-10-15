@@ -3,13 +3,15 @@
 **Engenharia Mecatrônica**  
 **Disciplina: Processamento Digital de Imagens**
 
-### **Título do Relatório: Operação de Negativo e Inversão de Quadrantes de Imagem**
-
-**Aluno(a): [Pedro Arthur Oliveira dos Santos]**  
-**Professor(a): [Agostinho Brito Junior]**  
-**Data: [25/10]**
-
 ---
+title: "Título do Relatório"
+author: "Pedro Arthur Oliveira dos Santos"
+date: "2024-10-25"
+---
+
+**Aluno(a):** Pedro Arthur Oliveira dos Santos  
+**Professor(a):** Agostinho Brito Junior  
+**Data:** 25/10
 
 ## 1. Introdução
 
@@ -29,13 +31,13 @@ O objetivo deste experimento é implementar e analisar a operação de negativo 
 
 A operação de negativo de uma imagem foi realizada utilizando o código escrito em [linguagem utilizada, ex.: Python]. A fórmula matemática utilizada para realizar o negativo de uma imagem em escala de cinza é expressa por:
 
-\[
+$$
 g(x, y) = 255 - f(x, y)
-\]
+$$
 
 Onde:
-- \(f(x, y)\) representa o valor de intensidade de cinza do pixel na posição \((x, y)\) da imagem original,
-- \(g(x, y)\) é o valor correspondente do pixel na imagem negativa,
+- \( f(x, y) \) representa o valor de intensidade de cinza do pixel na posição \( (x, y) \) da imagem original,
+- \( g(x, y) \) é o valor correspondente do pixel na imagem negativa,
 - 255 é o valor máximo de intensidade em uma imagem de 8 bits, o que permite obter o complemento do valor de intensidade original.
 
 A operação foi aplicada pixel a pixel, modificando cada ponto da imagem de acordo com a equação acima.
