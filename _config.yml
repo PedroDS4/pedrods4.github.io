@@ -6,7 +6,13 @@ theme: "jekyll-theme-hacker"
 collections:
   pages:
     output: true
-
+    
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+  math_engine: mathjax
+  
 # Configuração de navegação
 navigation:
   - name: "Página Principal"
