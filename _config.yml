@@ -1,11 +1,18 @@
-title: "Minha Página de Processamento de Imagens"
 description: "Relatórios e atividades da disciplina"
+title: "Meu Portfólio Acadêmico"
 theme: "jekyll-theme-hacker"
-# Navegação
+remote_theme: "mmistakes/minimal-mistakes"
+
+# Configuração da navegação
+collections:
+  pages:
+    output: true
+
+# Configuração de navegação
 navigation:
-  - name: "Página Inicial"
+  - name: "Página Principal"
     link: "/"
-  - name: "Relatório 1"
-    link: "/pagina1"
-  - name: "Relatório 2"
-    link: "/pagina2"
+  - name: "Processamento Digital de Imagens"
+    link: "/processamento_digital_de_imagens/"
+  - name: "Cálculo numérico"
+    link: "/calculo_numerico/"
