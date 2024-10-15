@@ -43,25 +43,25 @@ Além da operação de negativo, foi implementada a técnica de inversão de qua
 A equação matemática da inversão de quadrantes é simplesmente a troca das posições dos pixels de uma certa região por outra.
 Temos que m é o número de linhas da imagem(eixo x) e n o número de colunas(eixo y), temos então que para uma nova imagem $g(x,y)$ :
 
-*Primeiro quadrante 
+* Primeiro quadrante 
 
 $$
 g(x,y) = f(x+m/2,y+m/2)  
 $$
 
-*Segundo quadrante
+* Segundo quadrante
 
 $$
 g(x,y+m/2) = f(x+m/2,y)  
 $$
 
-*Terceiro quadrante
+* Terceiro quadrante
 
 $$
 g(x+m,y) = f(x,y+m/2)  
 $$
 
-*Quarto quadrante
+* Quarto quadrante
 
 $$
 g(x+m/2,y+m/2) = f(x,y)  
