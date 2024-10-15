@@ -1,0 +1,11 @@
+title: "Minha Página de Processamento de Imagens"
+description: "Relatórios e atividades da disciplina"
+theme: "jekyll-theme-hacker"
+# Navegação
+navigation:
+  - name: "Página Inicial"
+    link: "/"
+  - name: "Relatório 1"
+    link: "/pagina1"
+  - name: "Relatório 2"
+    link: "/pagina2"
