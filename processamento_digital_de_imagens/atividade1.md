@@ -16,6 +16,7 @@ date: "2024-10-25"
 ## 1. Introdução
 
 No campo do processamento digital de imagens, a operação de negativo de uma imagem é uma das transformações mais simples e amplamente utilizadas para realçar certas características visuais. O negativo de uma imagem consiste em uma operação que altera os valores de intensidade de cada pixel, invertendo suas cores. Em uma imagem em escala de cinza, isso significa substituir o valor de intensidade de cada pixel por seu complementar na escala de 0 a 255, de forma que áreas claras se tornam escuras e áreas escuras se tornam claras.
+Outra operação que pode ser feita com imagem é a troca das posições espaciais dos seus pixels.
 
 O objetivo deste relatório é apresentar a implementação da operação de negativo aplicada a uma imagem digital e discutir seus efeitos visuais, além de abordar a inversão de quadrantes da imagem como uma forma adicional de manipulação.
 
@@ -29,6 +30,7 @@ O objetivo deste experimento é implementar e analisar a operação de negativo 
 
 ## 3. Metodologia
 
+### Operação de negativo
 A operação de negativo de uma imagem foi realizada utilizando o código escrito em [linguagem utilizada, ex.: Python]. A fórmula matemática utilizada para realizar o negativo de uma imagem em escala de cinza é expressa por:
 
 $$
@@ -36,13 +38,39 @@ g(x, y) = 255 - f(x, y)
 $$
 
 Onde:
-- \( $f(x, y)$ \) representa o valor de intensidade de cinza do pixel na posição \( (x, y) \) da imagem original,
-- \( $g(x, y)$ \) é o valor correspondente do pixel na imagem negativa,
+- $f(x, y)$  representa o valor de intensidade de cinza do pixel na posição \( (x, y) \) da imagem original,
+- $g(x, y)$ é o valor correspondente do pixel na imagem negativa,
 - 255 é o valor máximo de intensidade em uma imagem de 8 bits, o que permite obter o complemento do valor de intensidade original.
 
 A operação foi aplicada pixel a pixel, modificando cada ponto da imagem de acordo com a equação acima.
 
+### Operação de Inversão de quadrantes
 Além da operação de negativo, foi implementada a técnica de inversão de quadrantes. Esta operação consiste em dividir a imagem em quatro quadrantes e trocar suas posições, de modo a reordenar visualmente a disposição dos pixels.
+A equação matemática da inversão de quadrantes é simplesmente a troca das posições dos pixels de uma certa região por outra.
+Temos que m é o número de linhas da imagem(eixo x) e n o número de colunas(eixo y), temos então que para uma nova imagem $g(x,y)$ :
+
+*Primeiro quadrante 
+$$
+g(x,y) = f(x+m/2,y+m/2)  
+$$
+
+*Segundo quadrante
+$$
+
+$$
+
+*Terceiro quadrante
+$$
+
+$$
+
+*Quarto quadrante
+$$
+
+$$
+
+e conseguimos fazer isso tudo apenas em um laço.
+
 
 ---
 
