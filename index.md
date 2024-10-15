@@ -1,8 +1,8 @@
 ---
 layout: default
 permalink: index.html
-title: Página pessoal de Agostinho Brito
-description: "Cursos, tutoriais e alguns posts eventuais"
+title: Página pessoal Pedro Arthur
+description: "Apresentação de Projetos, Relatórios e Contribuições de código"
 ---
 
 ## **Bem vindo à página pessoal e portifólio acadêmico de Pedro Arthur**
