@@ -44,23 +44,27 @@ A equação matemática da inversão de quadrantes é simplesmente a troca das p
 Temos que m é o número de linhas da imagem(eixo x) e n o número de colunas(eixo y), temos então que para uma nova imagem $g(x,y)$ :
 
 *Primeiro quadrante 
+
 $$
 g(x,y) = f(x+m/2,y+m/2)  
 $$
 
 *Segundo quadrante
-$$
 
+$$
+g(x,y+m/2) = f(x+m/2,y)  
 $$
 
 *Terceiro quadrante
-$$
 
+$$
+g(x+m,y) = f(x,y+m/2)  
 $$
 
 *Quarto quadrante
-$$
 
+$$
+g(x+m/2,y+m/2) = f(x,y)  
 $$
 
 e conseguimos fazer isso tudo apenas em um laço.
