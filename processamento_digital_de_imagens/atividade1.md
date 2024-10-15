@@ -3,12 +3,6 @@
 **Engenharia Mecatrônica**  
 **Disciplina: Processamento Digital de Imagens**
 
----
-title: "Título do Relatório"
-author: "Pedro Arthur Oliveira dos Santos"
-date: "2024-10-25"
----
-
 **Aluno(a):** Pedro Arthur Oliveira dos Santos  
 **Professor(a):** Agostinho Brito Junior  
 **Data:** 25/10
