@@ -70,6 +70,10 @@ $$
 e conseguimos fazer isso tudo apenas em um laço.
 
 
+### 3.1. Implementação
+As funções foram feitas usando uma classe ponto para facilitar a entrada e a manipulação dos pixels.
+puts " 2 22 2 "
+
 ---
 
 ## 4. Resultados
