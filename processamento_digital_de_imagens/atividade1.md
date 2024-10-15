@@ -64,4 +64,4 @@ A inversão dos quadrantes, por sua vez, altera a disposição espacial dos pixe
 
 ## 6. Referências
 
-(Nesse campo, você pode adicionar as referências bibliográficas que utilizar, de acordo com as normas da ABNT.)
+GONZALEZ, Rafael C.; WOODS, Richard E. **Processamento Digital de Imagens**. 3. ed. São Paulo: Pearson Prentice Hall, 2010.
