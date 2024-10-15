@@ -74,11 +74,15 @@ e conseguimos fazer isso tudo apenas em um laço.
 
 ## 4. Resultados
 
+### Operação de negativo
 A operação de negativo produz um efeito visual interessante, onde as áreas mais escuras da imagem original tornam-se claras e vice-versa. Isso permite uma nova percepção da cena, podendo realçar detalhes que não são tão evidentes na imagem original.
 
-Na imagem original, as áreas com maiores valores de \(f(x, y)\) são transformadas em áreas de menor valor de \(g(x, y)\), o que resulta em um efeito de contraste invertido. A fórmula \(g(x, y) = 255 - f(x, y)\) garante que o valor de intensidade de cinza de cada pixel seja subtraído de 255, criando essa inversão.
+Na imagem original, as áreas com maiores valores de $f(x, y)$ são transformadas em áreas de menor valor de $g(x, y)$, o que resulta em um efeito de contraste invertido. O efeito garante que o valor de intensidade de cinza de cada pixel seja subtraído de 255, criando essa inversão.
 
+
+### Operação de inversão de quadrantes
 A inversão dos quadrantes introduziu uma distorção espacial na imagem, onde as partes da imagem foram reorganizadas, criando um novo padrão visual que pode ser útil para efeitos artísticos ou análises de simetria.
+
 
 ---
 
