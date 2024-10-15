@@ -12,7 +12,7 @@ Olá, meu nome é Pedro Arthur, sou aluno de graduação em engenharia mecatrôn
 Aqui estão as paginas das disciplinas com os projetos desenvolvidos:
 
 - [Processamento Digital de Imagens](processamento_digital_de_imagens/index.md)
-- [Outra Disciplina](calculo_numerico/index.md)
+- [Calculo numérico](calculo_numerico/index.md)
 
 Fique à vontade para julgar ou dar sugestões de melhoria.
 
