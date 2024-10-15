@@ -36,8 +36,8 @@ g(x, y) = 255 - f(x, y)
 $$
 
 Onde:
-- \( f(x, y) \) representa o valor de intensidade de cinza do pixel na posição \( (x, y) \) da imagem original,
-- \( g(x, y) \) é o valor correspondente do pixel na imagem negativa,
+- \( $f(x, y)$ \) representa o valor de intensidade de cinza do pixel na posição \( (x, y) \) da imagem original,
+- \( $g(x, y)$ \) é o valor correspondente do pixel na imagem negativa,
 - 255 é o valor máximo de intensidade em uma imagem de 8 bits, o que permite obter o complemento do valor de intensidade original.
 
 A operação foi aplicada pixel a pixel, modificando cada ponto da imagem de acordo com a equação acima.
