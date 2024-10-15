@@ -1,7 +1,6 @@
 description: "Relatórios e atividades da disciplina"
 title: "Meu Portfólio Acadêmico"
 theme: "jekyll-theme-hacker"
-remote_theme: "mmistakes/minimal-mistakes"
 
 # Configuração da navegação
 collections:
