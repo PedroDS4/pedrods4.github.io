@@ -37,16 +37,16 @@ g(x, y) = 255 - f(x, y)
 $$
 
 Onde:
-- $f(x, y)$  representa o valor de intensidade de cinza do pixel na posição \( (x, y) \) da imagem original,
-- $g(x, y)$ é o valor correspondente do pixel na imagem negativa,
-- 255 é o valor máximo de intensidade em uma imagem de 8 bits, o que permite obter o complemento do valor de intensidade original.
+- $$f(x, y)$$  representa o valor de intensidade de cinza do pixel na posição \( (x, y) \) da imagem original,
+- $$g(x, y)$$ é o valor correspondente do pixel na imagem negativa,
+- $$255$$ é o valor máximo de intensidade em uma imagem de 8 bits, o que permite obter o complemento do valor de intensidade original.
 
 A operação foi aplicada pixel a pixel, modificando cada ponto da imagem de acordo com a equação acima.
 
 ### Operação de Inversão de quadrantes
 Além da operação de negativo, foi implementada a técnica de inversão de quadrantes. Esta operação consiste em dividir a imagem em quatro quadrantes e trocar suas posições, de modo a reordenar visualmente a disposição dos pixels.
 A equação matemática da inversão de quadrantes é simplesmente a troca das posições dos pixels de uma certa região por outra.
-Temos que m é o número de linhas da imagem(eixo x) e n o número de colunas(eixo y), temos então que para uma nova imagem $g(x,y)$ :
+Temos que m é o número de linhas da imagem(eixo x) e n o número de colunas(eixo y), temos então que para uma nova imagem $$g(x,y)$$ :
 
 * Primeiro quadrante 
 
@@ -77,9 +77,16 @@ e conseguimos fazer isso tudo apenas em um laço.
 
 ### 3.1. Implementação
 As funções foram feitas usando uma classe ponto para facilitar a entrada e a manipulação dos pixels.
-puts " 2 22 2 "
+As funções implementadas estão mostradas abaixo:
+* Código da operação de negativo
+```
 
----
+```
+
+* Código da operação de inversão de quadrantes
+```
+
+```
 
 ## 4. Resultados
 
