@@ -37,7 +37,7 @@ g(x, y) = 255 - f(x, y)
 $$
 
 Onde:
-- $$f(x, y)$$  representa o valor de intensidade de cinza do pixel na posição \( (x, y) \) da imagem original,
+- $$f(x, y)$$  representa o valor de intensidade de cinza do pixel na posição $$(x, y)$$ da imagem original,
 - $$g(x, y)$$ é o valor correspondente do pixel na imagem negativa,
 - $$255$$ é o valor máximo de intensidade em uma imagem de 8 bits, o que permite obter o complemento do valor de intensidade original.
 
@@ -80,12 +80,12 @@ As funções foram feitas usando uma classe ponto para facilitar a entrada e a m
 As funções implementadas estão mostradas abaixo:
 * Código da operação de negativo
 ```
-
+include<iostream> 
 ```
 
 * Código da operação de inversão de quadrantes
 ```
-
+$include<iostream>
 ```
 
 ## 4. Resultados
