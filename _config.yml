@@ -1,6 +1,6 @@
 description: "Relatórios e atividades da disciplina"
 title: "Meu Portfólio Acadêmico"
-theme: "jekyll-theme-hacker"
+theme: jekyll-theme-cayman
 
 # Configuração da navegação
 collections:
@@ -8,10 +8,13 @@ collections:
     output: true
     
 markdown: kramdown
+
 kramdown:
   input: GFM
   syntax_highlighter: rouge
   math_engine: mathjax
+  
+mathjax: true
 
 include:
   - _includes/head_custom.html
