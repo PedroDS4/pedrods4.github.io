@@ -1,3 +1,8 @@
+<script type="text/javascript" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+
+
 # Universidade Federal do Rio Grande do Norte
 
 **Engenharia Mecatrônica**  
