@@ -12,6 +12,9 @@ kramdown:
   input: GFM
   syntax_highlighter: rouge
   math_engine: mathjax
+
+include:
+  - _includes/head_custom.html
   
 # Configuração de navegação
 navigation:
