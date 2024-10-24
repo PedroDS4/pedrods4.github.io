@@ -3,7 +3,8 @@
 </script>
 
 [Voltar para a página principal](../../index.md)
-#**Relatório Atividade 3: Esteganografia**
+
+# **Relatório Atividade 3: Esteganografia**
 # Universidade Federal do Rio Grande do Norte
 
 **Engenharia Mecatrônica**  
