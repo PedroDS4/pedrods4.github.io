@@ -37,40 +37,110 @@ mesma região, e pode ser representada como
 $$
 z = f(x, y)
 $$
+onde comumente z é um número entre 0 e 255, que são os números de bits(8) necessários para representar 256 valores.
 
-onde comumente z é um número entre 0 e 255, que são os números de bits(8) necessários para representar 256 valores
+
+### Função Imagem Senoidal
+Uma função senoidal pode definir uma imagem periódica, especificamente, podemos ter uma função senoidal nas linhas ou nas colunas, definindo
+
+$$
+z = f(x, y) = Asen(\frac{2*\pi*f*x}{M}) + B
+$$
+
+ou uma função senoidal periódica nas colunas
+
+$$
+z = f(x, y) = Asen(\frac{2*\pi*f*y}{N}) + B
+$$
+
+onde M e N são os números de linhas e colunas, respectivamente.
+
+### Construindo um gráfico em uma imagem bidimensional em escala cinza
+
+
 
 ### 3.1. Implementação
-As funções foram feitas usando 
-* Código da operação de negativo
+Foi então implementado como no exemplo mostrado pelo professor, uma imagem com uma função senoidal dependende das linhas, e construído o gráfico no erro para uma linha fixa x = 5 para fins de comparação. 
+
+* Código 
 ```
-include<iostream> 
+#include <iostream>
+#include <opencv2/opencv.hpp>
+#include <sstream>
+#include <string>
+
+int SIDE = 256;
+int PERIODOS = 4;
+
+int main(int argc, char** argv) {
+  std::stringstream ss_img, ss_yml;
+  cv::Mat image;
+  cv::Mat graphic;
+
+  graphic = cv::Mat::zeros(SIDE,SIDE,CV_32FC1);
+
+  ss_yml << "senoide-" << SIDE << ".yml";
+  image = cv::Mat::zeros(SIDE, SIDE, CV_32FC1);
+
+  cv::FileStorage fs(ss_yml.str(), cv::FileStorage::WRITE);
+
+  for (int i = 0; i < SIDE; i++) {
+    for (int j = 0; j < SIDE; j++) {
+      image.at<float>(i, j) = 127 * sin(2 * M_PI * PERIODOS *i / SIDE) + 128;
+    }
+  }
+
+  fs << "mat" << image;
+  fs.release();
+
+  cv::Mat image_yml = image.clone();
+
+  cv::normalize(image, image, 0, 255, cv::NORM_MINMAX);
+  image.convertTo(image, CV_8U);
+  ss_img << "senoide-" << SIDE << ".png";
+  cv::imwrite(ss_img.str(), image);
+
+
+
+  fs.open(ss_yml.str(), cv::FileStorage::READ);
+  fs["mat"] >> image;
+
+  cv::normalize(image, image, 0, 255, cv::NORM_MINMAX);
+  image.convertTo(image, CV_8U);
+
+  int line = 5;
+  for (int j = 0; j<SIDE ; j++){
+
+        
+        float linha = 1000*(abs(image.at<uchar>(line,j) - image_yml.at<float>(line,j)));
+        graphic.at<float>(linha, j) = linha;
+
+  }
+
+
+
+  cv::imshow("Gráfico da imagem da senoide bidimensional", image);
+  
+  cv::imshow("Gráfico do erro em função da coluna",graphic);
+  cv::waitKey();
+
+  return 0;
+}
 ```
 
-* Código da operação de inversão de quadrantes
-```
-$include<iostream>
-```
+
 
 ## 4. Resultados
 
-### Operação de negativo
-A operação de negativo produz um efeito visual interessante, onde as áreas mais escuras da imagem original tornam-se claras e vice-versa. Isso permite uma nova percepção da cena, podendo realçar detalhes que não são tão evidentes na imagem original.
-
-Na imagem original, as áreas com maiores valores de $f(x, y)$ são transformadas em áreas de menor valor de $g(x, y)$, o que resulta em um efeito de contraste invertido. O efeito garante que o valor de intensidade de cinza de cada pixel seja subtraído de 255, criando essa inversão.
-
-
-### Operação de inversão de quadrantes
-A inversão dos quadrantes introduziu uma distorção espacial na imagem, onde as partes da imagem foram reorganizadas, criando um novo padrão visual que pode ser útil para efeitos artísticos ou análises de simetria.
+### Imagens periódica
+Percebeu-se que ao contrário do exemplo feito pelo professor, a imagem aqui requisitada era periódica nas linhas, pois dependia da i-ésima linha x (i), e o gráfico do erro tem uma diferença que para ser notada, precisou ser multiplicada por 100, que é a diferença entre os números salvos em yml(float) e em png(uchar).
 
 
 ---
 
 ## 5. Conclusão
 
-A operação de negativo de uma imagem é uma técnica simples, mas eficaz, para a manipulação de imagens digitais. Ao substituir cada valor de intensidade de pixel pelo seu complemento, conseguimos inverter o contraste da imagem, o que pode ser útil em diversas aplicações, como em processamento médico, onde inversões de contraste podem revelar detalhes ocultos.
-
-A inversão dos quadrantes, por sua vez, altera a disposição espacial dos pixels, criando uma nova organização visual da imagem. Essas técnicas juntas demonstram como manipulações básicas no processamento de imagens podem resultar em efeitos visuais significativos e úteis.
+A manipulação e a serialização de dados é muito importante no processamento digital de imagens e nos pode dar uma noção das possíveis manipulações e formatos que podemos definir para uma imagem, e a implementação da imagem como uma função de duas variáveis também é capaz de nos dar uma melhor intuição ao trabalhar com imagens como se fosse funções de duas variáveis.
 
 ---
 
