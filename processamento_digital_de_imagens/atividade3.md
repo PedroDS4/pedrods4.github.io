@@ -56,14 +56,21 @@ $$
 onde M e N são os números de linhas e colunas, respectivamente.
 
 ### Construindo um gráfico em uma imagem bidimensional em escala cinza
+Para a construção do gráfico, foi subtraído o valor da imagem em uchar do valor da imagem em float gerada pelo arquivo yml, e então o valor correspondente foi posto na mesma linha, e foi definido uma linha para fazer o gráfico, nesse caso foi escolhida a linha 5, então
 
+$$
+i =  | z_{yml}(5,j) - z_{png}(5,j) |
+y(i) = i
+$$
 
 
 ### 3.1. Implementação
 Foi então implementado como no exemplo mostrado pelo professor, uma imagem com uma função senoidal dependende das linhas, e construído o gráfico no erro para uma linha fixa x = 5 para fins de comparação. 
 
-* Código 
+* Código
+
 ```
+
 #include <iostream>
 #include <opencv2/opencv.hpp>
 #include <sstream>
@@ -126,8 +133,8 @@ int main(int argc, char** argv) {
 
   return 0;
 }
-```
 
+```
 
 
 ## 4. Resultados
