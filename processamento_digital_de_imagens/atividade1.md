@@ -167,9 +167,8 @@ int main(int, char**) {
   cv::Mat image;
   cv::Vec3b val;
 
-  //image = cv::imread("pedro.png", cv::IMREAD_COLOR);
-  image = cv::imread("pedro.png", cv::IMREAD_GRAYSCALE);
-  if (!image.data) std::cout << "nao abriu pedro.png" << std::endl;
+  image = cv::imread("biel.png", cv::IMREAD_GRAYSCALE);
+  if (!image.data) std::cout << "nao abriu biel.png" << std::endl;
 
   cv::namedWindow("janela", cv::WINDOW_NORMAL);
   
@@ -227,9 +226,8 @@ cv::Mat troca_regioes(cv::Mat imagem){
 int main(int, char**) {
   cv::Mat image;
 
-  //image = cv::imread("pedro.png", cv::IMREAD_COLOR);
-  image = cv::imread("pedro.png", cv::IMREAD_GRAYSCALE);
-  if (!image.data) std::cout << "nao abriu pedro.png" << std::endl;
+  image = cv::imread("biel.png", cv::IMREAD_GRAYSCALE);
+  if (!image.data) std::cout << "nao abriu biel.png" << std::endl;
 
   cv::namedWindow("janela", cv::WINDOW_NORMAL);
 
