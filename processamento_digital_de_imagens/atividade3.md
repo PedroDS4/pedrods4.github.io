@@ -2,7 +2,7 @@
   src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
 </script>
 
-[Voltar para a página principal](../../index.md)
+[Voltar para a página principal](../index.md)
 
 #**Relatório Atividade 2: Serialização de dados**
 
@@ -17,68 +17,31 @@
 
 ## 1. Introdução
 
-No campo do processamento digital de imagens, a operação de negativo de uma imagem é uma das transformações mais simples e amplamente utilizadas para realçar certas características visuais. O negativo de uma imagem consiste em uma operação que altera os valores de intensidade de cada pixel, invertendo suas cores. Em uma imagem em escala de cinza, isso significa substituir o valor de intensidade de cada pixel por seu complementar na escala de 0 a 255, de forma que áreas claras se tornam escuras e áreas escuras se tornam claras.
-Outra operação que pode ser feita com imagem é a troca das posições espaciais dos seus pixels.
+No campo do processamento digital de imagens a serialização ou salvamento de dados de uma imagem é importante por causa da precisão que um formato tem, e em comparação com outros formatos analisar o melhor tipo de salvamento.
+O estudo das imagens como funções bidimensionais de duas variáveis tem várias aplicações nos estudos de processamento digital de imagens e nas suas aplicações, principalmente das várias ferramentas
+que as funções nos permitem usufruir.
 
 ---
 
 ## 2. Objetivo
 
-O objetivo deste experimento é implementar e analisar a operação de negativo de uma imagem, além de realizar a inversão de quadrantes, observando os efeitos resultantes dessas transformações.
-
+O Objetivo dessa atividade é trabalhar a serialização de dados para imagens, e também gerar imagens como funções bidimensionais a partir de uma função de intensidade luminosa senoidal bidimensional.
 ---
 
 ## 3. Metodologia
 
-### Operação de negativo
-A operação de negativo de uma imagem foi realizada utilizando o código escrito em [linguagem utilizada, ex.: Python]. A fórmula matemática utilizada para realizar o negativo de uma imagem em escala de cinza é expressa por:
+### Imagens como Funções bidimensionais
+Uma imagem em escala cinza é definida como uma função de duas variáveis que recebe uma posição, que é composta por uma linha(x) e uma coluna(y), e retorna o valor de intensidade de brilho nessa
+mesma região, e pode ser representada como
 
 $$
-g(x, y) = 255 - f(x, y)
+z = f(x, y)
 $$
 
-Onde:
-- $$f(x, y)$$  representa o valor de intensidade de cinza do pixel na posição $$(x, y)$$ da imagem original,
-- $$g(x, y)$$ é o valor correspondente do pixel na imagem negativa,
-- $$255$$ é o valor máximo de intensidade em uma imagem de 8 bits, o que permite obter o complemento do valor de intensidade original.
-
-A operação foi aplicada pixel a pixel, modificando cada ponto da imagem de acordo com a equação acima.
-
-### Operação de Inversão de quadrantes
-Além da operação de negativo, foi implementada a técnica de inversão de quadrantes. Esta operação consiste em dividir a imagem em quatro quadrantes e trocar suas posições, de modo a reordenar visualmente a disposição dos pixels.
-A equação matemática da inversão de quadrantes é simplesmente a troca das posições dos pixels de uma certa região por outra.
-Temos que m é o número de linhas da imagem(eixo x) e n o número de colunas(eixo y), temos então que para uma nova imagem $$g(x,y)$$ :
-
-* Primeiro quadrante 
-
-$$
-g(x,y) = f(x+m/2,y+m/2)  
-$$
-
-* Segundo quadrante
-
-$$
-g(x,y+m/2) = f(x+m/2,y)  
-$$
-
-* Terceiro quadrante
-
-$$
-g(x+m,y) = f(x,y+m/2)  
-$$
-
-* Quarto quadrante
-
-$$
-g(x+m/2,y+m/2) = f(x,y)  
-$$
-
-e conseguimos fazer isso tudo apenas em um laço.
-
+onde comumente z é um número entre 0 e 255, que são os números de bits(8) necessários para representar 256 valores
 
 ### 3.1. Implementação
-As funções foram feitas usando uma classe ponto para facilitar a entrada e a manipulação dos pixels.
-As funções implementadas estão mostradas abaixo:
+As funções foram feitas usando 
 * Código da operação de negativo
 ```
 include<iostream> 
