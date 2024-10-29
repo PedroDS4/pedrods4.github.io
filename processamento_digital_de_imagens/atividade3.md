@@ -133,8 +133,11 @@ int main(int argc, char** argv) {
 ## 4. Resultados
 
 ### Imagens periódica
-Percebeu-se que ao contrário do exemplo feito pelo professor, a imagem aqui requisitada era periódica nas linhas, pois dependia da i-ésima linha x (i), e o gráfico do erro tem uma diferença que para ser notada, precisou ser multiplicada por 100, que é a diferença entre os números salvos em yml(float) e em png(uchar).
+Percebeu-se que ao contrário do exemplo feito pelo professor, a imagem aqui requisitada era periódica nas linhas, pois dependia da i-ésima linha x (i).
+![Imagem gerada pela função senoide](./imagens/imagem_periodica.png)
 
+o gráfico do erro tem uma diferença que para ser notada, precisou ser multiplicada por 100, que é a diferença entre os números salvos em yml(float) e em png(uchar), percebeu-se que o erro foi constante ao longo da linha, o que pode significa um erro pequeno nas casas decimais.
+![Imagem do gráfico do erro em função da linha](./imagens/grafico_erro_linha.png)
 
 ---
 
