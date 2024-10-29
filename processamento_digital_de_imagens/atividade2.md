@@ -2,7 +2,7 @@
   src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
 </script>
 
-[Voltar para a página principal](../../index.md)
+[Voltar para a página principal](../index.md)
 
 # **Relatório Atividade 3: Esteganografia**
 # Universidade Federal do Rio Grande do Norte
