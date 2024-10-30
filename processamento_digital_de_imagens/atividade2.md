@@ -122,6 +122,7 @@ A recuperação da imagem foi um sucesso, foi possível recuperar completamente 
 ## 5. Conclusão
 
 A esteganografia é uma técnica muito útil para codificar imagem e a operação de recuperar uma imagem é feita de maneira simples e objetiva usando manipulação de bits, porém hoje em dia ja existem técnicas melhores de criptografia que conseguem fazer isso de forma mais otimizada, então hoje em dia essa técnica quase não é usada.
+
 ---
 
 ## 6. Referências
