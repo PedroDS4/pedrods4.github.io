@@ -104,6 +104,7 @@ onde é feita essa manipulação para cada componente de cor RGB, deslocando 8-n
 
 ### A recuperação da imagem foi um sucesso, foi possível recuperar completamente a imagem e ainda com uma ótima qualidade, a imagem recuperada parece ser algum tipo de arte, e é mostrada abaixo
 
+[Imagem recuperada da esteganografia](./imagens/imagem_escondida.png)
 
 
 ---
