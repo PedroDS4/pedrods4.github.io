@@ -22,91 +22,95 @@ No campo do processamento digital de imagens, a esteganografia é uma técnica q
 
 ## 2. Objetivo
 
-O objetivo deste experimento é implementar e analisar a operação de negativo de uma imagem, além de realizar a inversão de quadrantes, observando os efeitos resultantes dessas transformações.
+O objetivo deste experimento é descobrir a imagem que foi escondida em uma imagem fornecida pelo professor, onde foi aplicada uma técnica de esteganografia para esconder nela uma imagem.
 
 ---
 
 ## 3. Metodologia
 
-### Operação de negativo
-A operação de negativo de uma imagem foi realizada utilizando o código escrito em [linguagem utilizada, ex.: Python]. A fórmula matemática utilizada para realizar o negativo de uma imagem em escala de cinza é expressa por:
+### Manipulação de bits e esteganografia
+Em c++ e c podemos usar os operadores << e >> para deslocar bits para a esquerda ou para a direita, respectivamente, e para esconder uma imagem em outra, é preciso substituir os bits menos significativos
+da imagem portadora pelos mais significativos da imagem que será escondida.
+
+### Recuperando a imagem escondida
+Para recuperarmos a imagem escondida, criamos uma imagem vazia g(x,y) com as mesmas dimensões da imagem portadora, para então manipularmos separadamente cada pixel e decompor os bits para os menos significativos da imagem para serem o mais significativos dessa, para isso usamos o operador <<.
+Exemplo: Sabendo que os bits menos significativos são os três últimos, nesse caso que estamos trabalhando com a intensidade do pixel como sendo o tipo unsigned char, podemos ver abaixo como essa operação funciona
 
 $$
-g(x, y) = 255 - f(x, y)
-$$
+I = [ 1 0 0 0 1 1 1 0]
+I<<5
 
-Onde:
-- $$f(x, y)$$  representa o valor de intensidade de cinza do pixel na posição $$(x, y)$$ da imagem original,
-- $$g(x, y)$$ é o valor correspondente do pixel na imagem negativa,
-- $$255$$ é o valor máximo de intensidade em uma imagem de 8 bits, o que permite obter o complemento do valor de intensidade original.
-
-A operação foi aplicada pixel a pixel, modificando cada ponto da imagem de acordo com a equação acima.
-
-### Operação de Inversão de quadrantes
-Além da operação de negativo, foi implementada a técnica de inversão de quadrantes. Esta operação consiste em dividir a imagem em quatro quadrantes e trocar suas posições, de modo a reordenar visualmente a disposição dos pixels.
-A equação matemática da inversão de quadrantes é simplesmente a troca das posições dos pixels de uma certa região por outra.
-Temos que m é o número de linhas da imagem(eixo x) e n o número de colunas(eixo y), temos então que para uma nova imagem $$g(x,y)$$ :
-
-* Primeiro quadrante 
-
-$$
-g(x,y) = f(x+m/2,y+m/2)  
-$$
-
-* Segundo quadrante
-
-$$
-g(x,y+m/2) = f(x+m/2,y)  
-$$
-
-* Terceiro quadrante
-
-$$
-g(x+m,y) = f(x,y+m/2)  
-$$
-
-* Quarto quadrante
-
-$$
-g(x+m/2,y+m/2) = f(x,y)  
-$$
-
-e conseguimos fazer isso tudo apenas em um laço.
+I = [1 1 0 0 0 0 0 0]
+os três últimos bits foram movidos para a esquerda.
 
 
 ### 3.1. Implementação
-As funções foram feitas usando uma classe ponto para facilitar a entrada e a manipulação dos pixels.
-As funções implementadas estão mostradas abaixo:
-* Código da operação de negativo
+Foi usada apenas o operador << para mover os bits mais significativos para a direita, e depois fixar esses bits como pixels na nova imagem vazia.
+* Código usado para recuperar a imagem
 ```
-include<iostream> 
+#include <iostream>
+#include <opencv2/opencv.hpp>
+
+int main(int argc, char**argv) {
+  cv::Mat imagemPortadora, imagemEscondida;
+  cv::Vec3b valPortadora, valEscondida;
+  int nbits = 3;
+
+  imagemPortadora = cv::imread("desafio_esteganografia.png", cv::IMREAD_COLOR);
+  if (imagemPortadora.empty()) {
+    std::cerr << "Erro ao carregar a imagem!" << std::endl;
+    return -1;
+  }
+
+  // Inicialize imagemEscondida com o mesmo tamanho e tipo de imagemPortadora
+  imagemEscondida = cv::Mat::zeros(imagemPortadora.size(), imagemPortadora.type());
+
+  for (int i = 0; i < imagemPortadora.rows; i++) {
+    for (int j = 0; j < imagemPortadora.cols; j++) {
+
+      valPortadora = imagemPortadora.at<cv::Vec3b>(i, j);
+      valEscondida = imagemEscondida.at<cv::Vec3b>(i, j);
+
+      valEscondida[0] = valPortadora[0] << (8-nbits);
+      valEscondida[1] = valPortadora[1] << (8-nbits);
+      valEscondida[2] = valPortadora[2] << (8-nbits);
+
+      imagemEscondida.at<cv::Vec3b>(i, j) = valEscondida;
+    }
+  }
+
+  cv::imshow("Imagem escondida na esteganografia", imagemEscondida);
+  cv::waitKey(0);
+
+  //cv::imwrite("imagem escondida.png", imagemEscondida);
+  
+  return 0;
+}
 ```
 
-* Código da operação de inversão de quadrantes
+O trecho de código mais importante aqui é
+
 ```
-$include<iostream>
+      valEscondida[0] = valPortadora[0] << (8-nbits);
+      valEscondida[1] = valPortadora[1] << (8-nbits);
+      valEscondida[2] = valPortadora[2] << (8-nbits);
+
+      imagemEscondida.at<cv::Vec3b>(i, j) = valEscondida;
 ```
+
+onde é feita essa manipulação para cada componente de cor RGB, deslocando 8-nbits = 8-3 = 5 bits para a esuqerda, para então atribuir isso a um outro vetor que será fornecido a imagem RGB.
 
 ## 4. Resultados
 
-### Operação de negativo
-A operação de negativo produz um efeito visual interessante, onde as áreas mais escuras da imagem original tornam-se claras e vice-versa. Isso permite uma nova percepção da cena, podendo realçar detalhes que não são tão evidentes na imagem original.
+### A recuperação da imagem foi um sucesso, foi possível recuperar completamente a imagem e ainda com uma ótima qualidade, a imagem recuperada parece ser algum tipo de arte, e é mostrada abaixo
 
-Na imagem original, as áreas com maiores valores de $f(x, y)$ são transformadas em áreas de menor valor de $g(x, y)$, o que resulta em um efeito de contraste invertido. O efeito garante que o valor de intensidade de cinza de cada pixel seja subtraído de 255, criando essa inversão.
-
-
-### Operação de inversão de quadrantes
-A inversão dos quadrantes introduziu uma distorção espacial na imagem, onde as partes da imagem foram reorganizadas, criando um novo padrão visual que pode ser útil para efeitos artísticos ou análises de simetria.
 
 
 ---
 
 ## 5. Conclusão
 
-A operação de negativo de uma imagem é uma técnica simples, mas eficaz, para a manipulação de imagens digitais. Ao substituir cada valor de intensidade de pixel pelo seu complemento, conseguimos inverter o contraste da imagem, o que pode ser útil em diversas aplicações, como em processamento médico, onde inversões de contraste podem revelar detalhes ocultos.
-
-A inversão dos quadrantes, por sua vez, altera a disposição espacial dos pixels, criando uma nova organização visual da imagem. Essas técnicas juntas demonstram como manipulações básicas no processamento de imagens podem resultar em efeitos visuais significativos e úteis.
-
+A esteganografia é uma técnica muito útil para codificar imagem e a operação de recuperar uma imagem é feita de maneira simples e objetiva usando manipulação de bits, porém hoje em dia ja existem técnicas melhores de criptografia que conseguem fazer isso de forma mais otimizada, então hoje em dia essa técnica quase não é usada.
 ---
 
 ## 6. Referências
