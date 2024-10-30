@@ -41,13 +41,18 @@ I = [ 1 0 0 0 1 1 1 0]
 I<<5
 
 I = [1 1 0 0 0 0 0 0]
+$$
+
+
 os três últimos bits foram movidos para a esquerda.
 
 
 ### 3.1. Implementação
 Foi usada apenas o operador << para mover os bits mais significativos para a direita, e depois fixar esses bits como pixels na nova imagem vazia.
 * Código usado para recuperar a imagem
+  
 ```
+
 #include <iostream>
 #include <opencv2/opencv.hpp>
 
@@ -86,16 +91,19 @@ int main(int argc, char**argv) {
   
   return 0;
 }
+
 ```
 
 O trecho de código mais importante aqui é
 
 ```
+
       valEscondida[0] = valPortadora[0] << (8-nbits);
       valEscondida[1] = valPortadora[1] << (8-nbits);
       valEscondida[2] = valPortadora[2] << (8-nbits);
 
       imagemEscondida.at<cv::Vec3b>(i, j) = valEscondida;
+
 ```
 
 onde é feita essa manipulação para cada componente de cor RGB, deslocando 8-nbits = 8-3 = 5 bits para a esuqerda, para então atribuir isso a um outro vetor que será fornecido a imagem RGB.
@@ -104,8 +112,7 @@ onde é feita essa manipulação para cada componente de cor RGB, deslocando 8-n
 
 ### A recuperação da imagem foi um sucesso, foi possível recuperar completamente a imagem e ainda com uma ótima qualidade, a imagem recuperada parece ser algum tipo de arte, e é mostrada abaixo
 
-[Imagem recuperada da esteganografia](./imagens/imagem_escondida.png)
-
+[ Imagem recuperada da esteganografia](./imagens/imagem_escondida.png)
 
 ---
 
