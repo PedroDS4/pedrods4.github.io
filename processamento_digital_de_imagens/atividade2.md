@@ -37,10 +37,11 @@ Para recuperarmos a imagem escondida, criamos uma imagem vazia g(x,y) com as mes
 Exemplo: Sabendo que os bits menos significativos são os três últimos, nesse caso que estamos trabalhando com a intensidade do pixel como sendo o tipo unsigned char, podemos ver abaixo como essa operação funciona
 
 $$
+
 I = [ 1 0 0 0 1 1 1 0]
 I<<5
-
 I = [1 1 0 0 0 0 0 0]
+
 $$
 
 
@@ -49,7 +50,9 @@ os três últimos bits foram movidos para a esquerda.
 
 ### 3.1. Implementação
 Foi usada apenas o operador << para mover os bits mais significativos para a direita, e depois fixar esses bits como pixels na nova imagem vazia.
+
 * Código usado para recuperar a imagem
+
   
 ```
 
@@ -110,7 +113,7 @@ onde é feita essa manipulação para cada componente de cor RGB, deslocando 8-n
 
 ## 4. Resultados
 
-### A recuperação da imagem foi um sucesso, foi possível recuperar completamente a imagem e ainda com uma ótima qualidade, a imagem recuperada parece ser algum tipo de arte, e é mostrada abaixo
+A recuperação da imagem foi um sucesso, foi possível recuperar completamente a imagem e ainda com uma ótima qualidade, a imagem recuperada parece ser algum tipo de arte, e é mostrada abaixo
 
 [ Imagem recuperada da esteganografia](./imagens/imagem_escondida.png)
 
