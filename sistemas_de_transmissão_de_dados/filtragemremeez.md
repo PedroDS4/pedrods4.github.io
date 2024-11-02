@@ -118,17 +118,23 @@ title('<H(w)');
 
 ## 4. Resultados 
 
-### Espectro de frequência dos sinais
+### Gráficos dos sinais de voz
+![Sinal de voz original no tempo](./imagens/Sinal_de_voz_original.png)
 
+![Sinal de voz corrompido pelo ruído senoidal](./imagens/Sinal_corrompido.png)
 
+![Sinal de voz corrompido pelo ruído senoidal](./imagens/Sinal_filtrado.png)
+
+### Gráficos da resposta do filtro
+![Manitude da resposta em frequência do filtro](./imagens/Magnitude_resposta_em_frequencia_do_filtro.png)
+
+![Fase da resposta em frequência do filtro](./imagens/Fase_da_resposta_em_frequencia_do_filtro.png)
 
 ---
 
 ## 5. Conclusão
-
-A operação de negativo de uma imagem é uma técnica simples, mas eficaz, para a manipulação de imagens digitais. Ao substituir cada valor de intensidade de pixel pelo seu complemento, conseguimos inverter o contraste da imagem, o que pode ser útil em diversas aplicações, como em processamento médico, onde inversões de contraste podem revelar detalhes ocultos.
-
-A inversão dos quadrantes, por sua vez, altera a disposição espacial dos pixels, criando uma nova organização visual da imagem. Essas técnicas juntas demonstram como manipulações básicas no processamento de imagens podem resultar em efeitos visuais significativos e úteis.
+A resposta em frequência do filtro rejeita-faixas projetado ficou como o esperado, como mostra os gráficos do espectro da resposta em frequência do filtro, assim foi possível perceber que a fase linear esta presente, e isso é uma das características de um filtro FIR implementado e também é uma característica básica de qualquer sistema digital real.
+Foi possível observar que a filtragem não eliminou completamente o ruído, mas o atenuou ao ponto dele ficar imperceptível, e algumas frequências do sinal de voz ficaram alteradas, como observado no gráfico do sinal de voz original no tempo.
 
 ---
 
