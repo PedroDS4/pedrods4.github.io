@@ -134,4 +134,4 @@ A inversão dos quadrantes, por sua vez, altera a disposição espacial dos pixe
 
 ## 6. Referências
 
-GONZALEZ, Rafael C.; WOODS, Richard E. **Processamento Digital de Imagens**. 3. ed. São Paulo: Pearson Prentice Hall, 2010.
+Felipe, Luiz. *Slides Processamento Digital de Sinais e Sistemas de transmissão de dados*. **Processamento Digital de Sinais**. Universidade Federal do Rio Grande do Norte, 2024.
