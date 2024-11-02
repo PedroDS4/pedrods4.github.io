@@ -68,7 +68,10 @@ t_n = (0,1,...,N)\cdot T_s
 $$
 
 então finalmente o ruído amostrado se torna
+
+$$
 r(t_n) = r[n]
+$$
 
 Dessa maneira, tenis que o sinal corrompido $$z[n]$$ amostrado será
 
@@ -80,7 +83,7 @@ $$
 A resposta ao impulso de um filtro rejeita faixas é a transformada de fourier de uma combinação linear de funções retângulares defasadas na frequência, e pode ser modelada pela expressão matemática
 
 $$
-h[n] = \delta [n] + \frac{sin[w_{c1} n]}{\pi n} - \frac{sin[w_{c2} n]}{\pi n},  \textbf{ se } M \leq n \geq 0
+h[n] = \delta [n] + \frac{sin[w_{c1} n]}{\pi n} - \frac{sin[w_{c2} n]}{\pi n},  \textbf{ se } M \geq n \geq 0
 $$
 
 onde M é a ordem do filtro.
@@ -96,24 +99,30 @@ pegar apenas um canal(mono), além disso a função também retorna a frequênci
 [v, Fs] = audioread('Audio.wav');
 %colocando o resposta em mono
 v = mean(v,2);
+
 ```
 
 ### Filtro FIR no matlab
 No matlab é possível projetar um filtro FIR a partir da função firpm, que aceita como parâmetros a ordem do filtro, um eixo de frequências noramlziadas pela largura de banda essencial, e com os respectivos ganhos de cada
 frequência, e retorna a resposta ao impulso de um filtro FIR ótimo.
 * Função firpm
+  
 ```
+
  f = [0 fp1_n fs1_n fs2_n fp2_n 1];
 a = [1 1 0 0 1 1];
 M = 100;
 h = firpm (M, f, a);
+
 ```
 
 ### Plot da resposta do filtro no tempo e frequência
 Para plotar a resposta em frequência foi usada a função freqz do matlab, que retorna a transformada de fourier(módulo e fase) com seu respectivo eixo de frequências.
 Para obter o módulo, foi usada a função abs(H(w)), e para obter a fase num período, foi usada a função uwnrap(angle(H(w))).
 *Código da plotagem do espectro no matlab
+
 ```
+
 [H,f] = freqz(h)
 
 modH = abs(H);
@@ -137,6 +146,7 @@ title('<H(w)');
 ## 4. Resultados 
 
 ### Gráficos dos sinais de voz
+
 ![Sinal de voz original no tempo](./imagens/Sinal_de_voz_original.png)
 *Figura 1: Sinal de voz original no domínio do tempo.*
 
@@ -153,13 +163,11 @@ title('<H(w)');
 ![Fase da resposta em frequência do filtro](./imagens/Fase_da_resposta_em_frequencia_do_filtro.png)
 *Figura 5: Fase da resposta em frequência do filtro FIR.*
 
-
 ---
 
 ## 5. Conclusão
 A resposta em frequência do filtro rejeita-faixas projetado ficou como o esperado, como mostra os gráficos do espectro da resposta em frequência do filtro, assim foi possível perceber que a fase linear esta presente, e isso é uma das características de um filtro FIR implementado e também é uma característica básica de qualquer sistema digital real.
 Foi possível observar que a filtragem não eliminou completamente o ruído, mas o atenuou ao ponto dele ficar com volume muito menor que a voz original, e algumas frequências do sinal de voz ficaram alteradas, como observado no gráfico do sinal de voz original no tempo.
-
 
 ---
 
