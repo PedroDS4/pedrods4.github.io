@@ -38,6 +38,14 @@ $$
 r(t) = a_1 cos(2 \pi f_1 t) + a_2 cos(2 \pi f_2 t) 
 $$
 
+nessa simulação foram escolhidos os parâmetros 2, com $$f_1 = 2000Hz $$ e $$f_2 = 2300Hz$$, e as intensidades dos ruídos $$ a_1 = a_2 = 0.1 $$.
+Então o sinal de ruído ficou
+
+$$
+r(t) = 0.1 cos(2 \pi 2000 t) + 0.1 cos(2 \pi 2300 t) 
+$$
+
+
 ### Largura de banda essencial de um sinal de áudio
 Um sinal de áudio tem largura de banda essencial de $$4kHz$$, por padrão, que são as frequências que conseguimos escutar de forma melhor, então, para um sinal de voz na frequência podemos considerar 
 
