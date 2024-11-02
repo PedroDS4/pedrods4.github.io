@@ -102,6 +102,27 @@ pegar apenas um canal(mono), além disso a função também retorna a frequênci
 v = mean(v,2);
 
 ```
+### Calculo das frequências limite de passagem e rejeição para o filtro
+
+Foi convencionado uma largura de transição de 100Hz para as duas faixas de transição do filtro rejeita-faixas, assim, para que as frequências do ruído ficassem dentro da faixa de rejeição, a maior frequência do ruído teria que ser menor que a frequência limite de rejeição da segunda faixa de transição, e a menor frequência do ruído teria que ser maior que a menor frequência limite de rejeição, assim foi garantido que as frequências do ruído ficassem na faixa de rejeição, que o ganho tende a zero.
+Além disso também foi feita a normalização para metade da frequência de amostragem, que seria a largura de banda essencial do sinal incluindo o ruído, o cálculo foi feito como mostra o código abaixo
+
+```
+
+#Frequencias em Hz do projeto do filtro
+Fn = Fs/2;
+fs1 = (f1-100);
+fs2 = (f2+100);
+fp1 = (fs1 - 100);
+fp2 = (fs2 + 100);
+
+#Normalização das frequências do projeto para a função firpm
+fs1_n = fs1/Fn;
+fs2_n = fs2/Fn;
+fp1_n = fp1/Fn;
+fp2_n = fp2/Fn;
+
+```
 
 ### Filtro FIR no matlab
 No matlab é possível projetar um filtro FIR a partir da função firpm, que aceita como parâmetros a ordem do filtro, um eixo de frequências noramlziadas pela largura de banda essencial, e com os respectivos ganhos de cada
