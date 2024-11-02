@@ -3,7 +3,7 @@
 </script>
 
 [Voltar para a página principal](../../index.md)
-#Relatório Simulação 1: Filtragem Remeez no Matlab
+# **Relatório Simulação 1: Filtragem Remeez no Matlab**
 ## Universidade Federal do Rio Grande do Norte
 
 **Engenharia Mecatrônica**  
@@ -30,10 +30,49 @@ O objetivo dessa simulação é realizar a implementação de um filtro FIR util
 
 ## 3. Metodologia e implementação
 
-###Importando sinais de áudio no matlab
+### Ruído Impulsivo 
+Um ruído é chamado de impulsivo na frequência se assume a forma de uma senoide no tempo, e pode ser reprsentado por uma soma de senoides de diferentes frequências no tempo e é um sinal periódico. Para o ruído trabalhado nessa simulação, será usada a forma
+
+$$
+r(t) = a_1 cos(2 \pi f_1 t) + a_2 cos(2 \pi f_2 t) 
+$$
+
+### Largura de banda essencial de um sinal de áudio
+Um sinal de áudio tem largura de banda essencial de 4kHz, por padrão, que são as frequências que conseguimos escutar de forma melhor, então, para um sinal de voz podemos considerar 
+
+$$
+v(f) = 0, \textbf{se } f>=4000Hz 
+$$
+
+
+### Contaminação do sinal de ruído
+Para fazermos o experimento de filtragem, contaminamos o sinal de áudio com o ruído senoidal no tempo, então temos o sinal de voz corrompido $z(t)$ dado por
+
+$$
+z(t) = v(t) + r(t)
+$$
+
+### Amostragem dos sinais
+Por mais que as operações anteriores foram definidas no domínio do tempo, no computador é necessário amostrar os sinais.
+O sinal de áudio é amostrado assim que é recebido, ja o sinal de ruído pode ser gerado continuamente como uma função, mas pode ser amostrado e transformado num vetor, basta fazer
+
+$$
+r[n] = r(t = nT_s)
+$$
+
+onde T_s é o mesmo período de amostragem do sinal de voz.
+e para amostrarmos o sinal $r[n]$, precisamos antes do vetor de tempo contínuo amostrado do sinal de voz $v(t)$, assim podemos definir o vetor de tempo baseado no número de amostras $N$ do sinal de voz, assim
+
+$$
+t = (0,1,...,N)\cdot T_s
+$$
+
+então finalmente o ruído amostrado se torna
+### Importando sinais de áudio no matlab
 No matlab a função 'audioread' pode ser usada para ler um arquivo de áudio e transformá-lo para um vetor, normalmente o sinal é transformado para dois canais, porém fazendo a média do sinal podemos
 pegar apenas um canal(mono), além disso a função também retorna a frequência de amostragem, que por padrão é uma frequência alta de valor 48000Hz.
-*Importando um áudio para o matlab
+* Importando um áudio para o matlab
+
 ```
 %Importação do áudio
 [v, Fs] = audioread('Audio.wav');
@@ -77,21 +116,10 @@ title('<H(w)');
 
 ```
 
-$$ 
-g(x, y) = 255 - f(x, y)
-$$
+## 4. Resultados 
 
+### Espectro de frequência dos sinais
 
-## 4. Resultados
-
-### Operação de negativo
-A operação de negativo produz um efeito visual interessante, onde as áreas mais escuras da imagem original tornam-se claras e vice-versa. Isso permite uma nova percepção da cena, podendo realçar detalhes que não são tão evidentes na imagem original.
-
-Na imagem original, as áreas com maiores valores de $f(x, y)$ são transformadas em áreas de menor valor de $g(x, y)$, o que resulta em um efeito de contraste invertido. O efeito garante que o valor de intensidade de cinza de cada pixel seja subtraído de 255, criando essa inversão.
-
-
-### Operação de inversão de quadrantes
-A inversão dos quadrantes introduziu uma distorção espacial na imagem, onde as partes da imagem foram reorganizadas, criando um novo padrão visual que pode ser útil para efeitos artísticos ou análises de simetria.
 
 
 ---
