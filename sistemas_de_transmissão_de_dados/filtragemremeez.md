@@ -148,20 +148,31 @@ title('<H(w)');
 ### Gráficos dos sinais de voz
 
 ![Sinal de voz original no tempo](./imagens/Sinal_de_voz_original.png)
+
 *Figura 1: Sinal de voz original no domínio do tempo.*
 
+
 ![Sinal de voz corrompido pelo ruído senoidal](./imagens/Sinal_corrompido.png)
+
 *Figura 2: Sinal de voz corrompido pela adição de ruído senoidal.*
 
+
 ![Sinal de voz corrompido pelo ruído senoidal](./imagens/Sinal_filtrado.png)
+
 *Figura 3: Sinal de voz filtrado após a aplicação do filtro FIR.*
 
+
 ### Gráficos da resposta do filtro
+
 ![Magnitude da resposta em frequência do filtro](./imagens/Magnitude_resposta_em_frequencia_do_filtro.png)
+
 *Figura 4: Magnitude da resposta em frequência do filtro FIR.*
 
+
 ![Fase da resposta em frequência do filtro](./imagens/Fase_da_resposta_em_frequencia_do_filtro.png)
+
 *Figura 5: Fase da resposta em frequência do filtro FIR.*
+
 
 ---
 
