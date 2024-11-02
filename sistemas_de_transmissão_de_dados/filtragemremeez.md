@@ -18,6 +18,7 @@ A filtragem é uma das técnicas de processamento digital de sinais fundamentais
 Os filtros digitais podem ser divididos em dois tipos:
 * FIR: Filtros que possuem resposta ao impulso finita no tempo
 * IIR  Filtros que possuem resposta com suporte infinito no tempo
+  
 Cada um desses filtros tem suas vantagens e desvantagens em aplicações reais, o filtro que será utilizado nessa simulação será um filtro FIR.
 
 ---
