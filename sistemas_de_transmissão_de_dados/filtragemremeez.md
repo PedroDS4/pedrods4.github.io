@@ -38,7 +38,7 @@ r(t) = a_1 cos(2 \pi f_1 t) + a_2 cos(2 \pi f_2 t)
 $$
 
 ### Largura de banda essencial de um sinal de áudio
-Um sinal de áudio tem largura de banda essencial de 4kHz, por padrão, que são as frequências que conseguimos escutar de forma melhor, então, para um sinal de voz na frequência podemos considerar 
+Um sinal de áudio tem largura de banda essencial de $$4kHz$$, por padrão, que são as frequências que conseguimos escutar de forma melhor, então, para um sinal de voz na frequência podemos considerar 
 
 $$
 V(f) = 0, \textbf{se } f \geq 4000Hz 
@@ -46,7 +46,7 @@ $$
 
 
 ### Contaminação do sinal de ruído
-Para fazermos o experimento de filtragem, contaminamos o sinal de áudio com o ruído senoidal no tempo, então temos o sinal de voz corrompido $z(t)$ dado por
+Para fazermos o experimento de filtragem, contaminamos o sinal de áudio com o ruído senoidal no tempo, então temos o sinal de voz corrompido $$z(t)$$ dado por
 
 $$
 z(t) = v(t) + r(t)
@@ -61,7 +61,7 @@ r[n] = r(t = nT_s)
 $$
 
 onde T_s é o mesmo período de amostragem do sinal de voz.
-e para amostrarmos o sinal $r[n]$, precisamos antes do vetor de tempo contínuo amostrado do sinal de voz $v(t)$, assim podemos definir o vetor de tempo baseado no número de amostras $N$ do sinal de voz, assim
+e para amostrarmos o sinal $$r[n]$$, precisamos antes do vetor de tempo contínuo amostrado do sinal de voz $$v(t)$$ , assim podemos definir o vetor de tempo baseado no número de amostras $$N$$ do sinal de voz, assim
 
 $$
 t_n = (0,1,...,N)\cdot T_s
@@ -70,7 +70,7 @@ $$
 então finalmente o ruído amostrado se torna
 r(t_n) = r[n]
 
-Dessa maneira, tenis que o sinal corrompido $z[n]$ amostrado será
+Dessa maneira, tenis que o sinal corrompido $$z[n]$$ amostrado será
 
 $$
 z[n] = v[n] + r[n]
@@ -153,11 +153,13 @@ title('<H(w)');
 ![Fase da resposta em frequência do filtro](./imagens/Fase_da_resposta_em_frequencia_do_filtro.png)
 *Figura 5: Fase da resposta em frequência do filtro FIR.*
 
+
 ---
 
 ## 5. Conclusão
 A resposta em frequência do filtro rejeita-faixas projetado ficou como o esperado, como mostra os gráficos do espectro da resposta em frequência do filtro, assim foi possível perceber que a fase linear esta presente, e isso é uma das características de um filtro FIR implementado e também é uma característica básica de qualquer sistema digital real.
-Foi possível observar que a filtragem não eliminou completamente o ruído, mas o atenuou ao ponto dele ficar imperceptível, e algumas frequências do sinal de voz ficaram alteradas, como observado no gráfico do sinal de voz original no tempo.
+Foi possível observar que a filtragem não eliminou completamente o ruído, mas o atenuou ao ponto dele ficar com volume muito menor que a voz original, e algumas frequências do sinal de voz ficaram alteradas, como observado no gráfico do sinal de voz original no tempo.
+
 
 ---
 
