@@ -141,7 +141,8 @@ h = firpm (M, f, a);
 ### Plot da resposta do filtro no tempo e frequência
 Para plotar a resposta em frequência foi usada a função freqz do matlab, que retorna a transformada de fourier(módulo e fase) com seu respectivo eixo de frequências.
 Para obter o módulo, foi usada a função abs(H(w)), e para obter a fase num período, foi usada a função uwnrap(angle(H(w))).
-*Código da plotagem do espectro no matlab
+
+* Código da plotagem do espectro no matlab
 
 ```
 
