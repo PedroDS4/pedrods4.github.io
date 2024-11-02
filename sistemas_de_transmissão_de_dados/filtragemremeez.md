@@ -41,7 +41,7 @@ $$
 Um sinal de áudio tem largura de banda essencial de 4kHz, por padrão, que são as frequências que conseguimos escutar de forma melhor, então, para um sinal de voz na frequência podemos considerar 
 
 $$
-V(f) = 0, \textbf{se } f>=4000Hz 
+V(f) = 0, \textbf{se } f \geq 4000Hz 
 $$
 
 
@@ -75,6 +75,16 @@ Dessa maneira, tenis que o sinal corrompido $z[n]$ amostrado será
 $$
 z[n] = v[n] + r[n]
 $$
+
+### Filtro Rejeita-faixas
+A resposta ao impulso de um filtro rejeita faixas é a transformada de fourier de uma combinação linear de funções retângulares defasadas na frequência, e pode ser modelada pela expressão matemática
+
+$$
+h[n] = \delta [n] + \frac{sin[w_{c1} n]}{\pi n} - \frac{sin[w_{c2} n]}{\pi n},  \textbf{ se } M \leq n \geq 0
+$$
+
+onde M é a ordem do filtro.
+Então essa expressão pode ser implementada a partir da expressão da função acima truncada pelo número de termos que queiramos no filtro.
 
 ### Importando sinais de áudio no matlab
 No matlab a função 'audioread' pode ser usada para ler um arquivo de áudio e transformá-lo para um vetor, normalmente o sinal é transformado para dois canais, porém fazendo a média do sinal podemos
@@ -128,25 +138,21 @@ title('<H(w)');
 
 ### Gráficos dos sinais de voz
 ![Sinal de voz original no tempo](./imagens/Sinal_de_voz_original.png)
-
 *Figura 1: Sinal de voz original no domínio do tempo.*
 
 ![Sinal de voz corrompido pelo ruído senoidal](./imagens/Sinal_corrompido.png)
-
 *Figura 2: Sinal de voz corrompido pela adição de ruído senoidal.*
 
 ![Sinal de voz corrompido pelo ruído senoidal](./imagens/Sinal_filtrado.png)
-
 *Figura 3: Sinal de voz filtrado após a aplicação do filtro FIR.*
 
 ### Gráficos da resposta do filtro
 ![Magnitude da resposta em frequência do filtro](./imagens/Magnitude_resposta_em_frequencia_do_filtro.png)
-
 *Figura 4: Magnitude da resposta em frequência do filtro FIR.*
 
 ![Fase da resposta em frequência do filtro](./imagens/Fase_da_resposta_em_frequencia_do_filtro.png)
-
 *Figura 5: Fase da resposta em frequência do filtro FIR.*
+
 ---
 
 ## 5. Conclusão
