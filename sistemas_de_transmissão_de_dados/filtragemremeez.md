@@ -38,10 +38,10 @@ r(t) = a_1 cos(2 \pi f_1 t) + a_2 cos(2 \pi f_2 t)
 $$
 
 ### Largura de banda essencial de um sinal de áudio
-Um sinal de áudio tem largura de banda essencial de 4kHz, por padrão, que são as frequências que conseguimos escutar de forma melhor, então, para um sinal de voz podemos considerar 
+Um sinal de áudio tem largura de banda essencial de 4kHz, por padrão, que são as frequências que conseguimos escutar de forma melhor, então, para um sinal de voz na frequência podemos considerar 
 
 $$
-v(f) = 0, \textbf{se } f>=4000Hz 
+V(f) = 0, \textbf{se } f>=4000Hz 
 $$
 
 
@@ -53,7 +53,7 @@ z(t) = v(t) + r(t)
 $$
 
 ### Amostragem dos sinais
-Por mais que as operações anteriores foram definidas no domínio do tempo, no computador é necessário amostrar os sinais.
+Por mais que as operações anteriores foram definidas no domínio do tempo contínuo, no computador é necessário amostrar os sinais.
 O sinal de áudio é amostrado assim que é recebido, ja o sinal de ruído pode ser gerado continuamente como uma função, mas pode ser amostrado e transformado num vetor, basta fazer
 
 $$
@@ -64,10 +64,18 @@ onde T_s é o mesmo período de amostragem do sinal de voz.
 e para amostrarmos o sinal $r[n]$, precisamos antes do vetor de tempo contínuo amostrado do sinal de voz $v(t)$, assim podemos definir o vetor de tempo baseado no número de amostras $N$ do sinal de voz, assim
 
 $$
-t = (0,1,...,N)\cdot T_s
+t_n = (0,1,...,N)\cdot T_s
 $$
 
 então finalmente o ruído amostrado se torna
+r(t_n) = r[n]
+
+Dessa maneira, tenis que o sinal corrompido $z[n]$ amostrado será
+
+$$
+z[n] = v[n] + r[n]
+$$
+
 ### Importando sinais de áudio no matlab
 No matlab a função 'audioread' pode ser usada para ler um arquivo de áudio e transformá-lo para um vetor, normalmente o sinal é transformado para dois canais, porém fazendo a média do sinal podemos
 pegar apenas um canal(mono), além disso a função também retorna a frequência de amostragem, que por padrão é uma frequência alta de valor 48000Hz.
@@ -121,15 +129,24 @@ title('<H(w)');
 ### Gráficos dos sinais de voz
 ![Sinal de voz original no tempo](./imagens/Sinal_de_voz_original.png)
 
+*Figura 1: Sinal de voz original no domínio do tempo.*
+
 ![Sinal de voz corrompido pelo ruído senoidal](./imagens/Sinal_corrompido.png)
+
+*Figura 2: Sinal de voz corrompido pela adição de ruído senoidal.*
 
 ![Sinal de voz corrompido pelo ruído senoidal](./imagens/Sinal_filtrado.png)
 
+*Figura 3: Sinal de voz filtrado após a aplicação do filtro FIR.*
+
 ### Gráficos da resposta do filtro
-![Manitude da resposta em frequência do filtro](./imagens/Magnitude_resposta_em_frequencia_do_filtro.png)
+![Magnitude da resposta em frequência do filtro](./imagens/Magnitude_resposta_em_frequencia_do_filtro.png)
+
+*Figura 4: Magnitude da resposta em frequência do filtro FIR.*
 
 ![Fase da resposta em frequência do filtro](./imagens/Fase_da_resposta_em_frequencia_do_filtro.png)
 
+*Figura 5: Fase da resposta em frequência do filtro FIR.*
 ---
 
 ## 5. Conclusão
