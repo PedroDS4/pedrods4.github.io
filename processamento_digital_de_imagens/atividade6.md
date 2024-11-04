@@ -69,12 +69,64 @@ Adaptando o código convolucao.cpp para realizar a convoluçaõ com a máscara d
 
 
 
-### Exercício 3:
+### Exercício 2:
 * Código Implementado
 
 ```
 
+#include <iostream>
+#include <opencv2/opencv.hpp>
+#include "camera.hpp"
 
+int main(int, char **) {
+  cv::VideoCapture cap;
+  
+  float laplacian[] = {0, -1, 0, -1, 4, -1, 0, -1, 0};
+
+  cv::Mat frame, frame32f, laplaciano;
+  cv::Mat mask(3, 3, CV_32F);
+  cv::Mat f_max;
+  double width, height;
+  int counter;
+
+  cap.open(argv[1]);
+  if(!cap.isOpened())
+  return -1;
+
+  width=cap.get(cv::CAP_PROP_FRAME_WIDTH);
+  height=cap.get(cv::CAP_PROP_FRAME_HEIGHT);
+  std::cout << "largura=" << width << "\n";
+  std::cout << "altura =" << height<< "\n";
+  
+  cv::Size frameSize(static_cast<int>(width), static_cast<int>(height));
+  
+  mask = cv::Mat(3, 3, CV_32F, laplacian);
+ 
+  max_laplacian = cv::Mat::zeros(frameSize, CV_32F;
+  f_max = cv::Mat::zeros(frameSize, CV_32F);
+  
+  for(counter=0; cap.read(frame); counter++){
+
+    frame.convertTo(frame32f, CV_32F);
+    cv::filter2D(frame32f, laplaciano , frame32f.depth(), mask, cv::Point(1, 1), cv::BORDER_REPLICATE);
+    for( int i = 0; i <height; i++){
+        for (int j = 0; j < width; j++){
+            if  laplaciano.at<uchar>(i,j) >= max_laplacian.at<uchar>(i,j){
+                max_laplacian.at<uchar>(i,j) = laplaciano.at<uchar>(i,j);
+                f_max.at<uchar>(i,j) = frame32f.at<uchar>(i,j);
+            }
+        }
+    }
+    
+  }
+  
+  cv::imshow("janela", f_max);
+  cv::imwrite("Imagem Realçada.png", f_max);
+  cv::waitKey();
+  
+  
+  return 0;
+}
 
 ```
 
