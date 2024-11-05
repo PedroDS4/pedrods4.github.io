@@ -4,7 +4,7 @@
 
 [Voltar para a página principal](../index.md)
 
-#** Relatório Atividade 6: Filtragem no domínio espacial **
+#**Relatório Atividade 6: Filtragem no domínio espacial**
 
 # Universidade Federal do Rio Grande do Norte
 
