@@ -65,15 +65,17 @@ os dois for separadamente percorrem primeiro as colunas de cima e de baixo, para
 e depois foi feita a verificação de existiam buracos na imagem, com o trecho
 
 ```
-    bool has_holes = false;
+      bool has_holes = false;
         for (int y = i; y < height; y++) {
           for (int x = j; x < width; x++) {
-            if (image.at<uchar>(y, x) == 0) { // Encontrou um possível buraco
-              cv::Point hole_point(x, y);
-              cv::floodFill(image, hole_point, 100); // Marca o buraco com cor temporária
+            // Verifica se um ponto preto está cercado pela bolha
+            if (image.at<uchar>(y, x) == 0 && 
+               (image.at<uchar>(y, x+1) == nobjects)) {
+
+              // Marca o buraco com uma cor temporária para evitar duplicações
+              cv::floodFill(image, Point(x, y), 127); // 127 para diferenciar de outras áreas
               has_holes = true;
             }
-            if (image.at<uchar>(y, x) == current_object_id) break; // Sai do loop interno ao fim da bolha
           }
         }
 
@@ -91,11 +93,13 @@ Assim, o código final ficou
 using namespace cv;
 
 int main(int argc, char** argv) {
-  cv::Mat image, realce;
+  cv::Mat image;
   int width, height;
-  int nobjects;
-
+  int nobjects = 0;
+  int nobjects_with_holes = 0;
   cv::Point p;
+
+  // Carrega a imagem em escala de cinza
   image = cv::imread("bolhas.png", cv::IMREAD_GRAYSCALE);
 
   if (!image.data) {
@@ -107,57 +111,55 @@ int main(int argc, char** argv) {
   height = image.rows;
   std::cout << width << "x" << height << std::endl;
 
-  p.x = 0;
-  p.y = 0;
-
-  // busca objetos presentes
-  nobjects = 0;
-  nobjects_with_holes = 0;
-
-  // Flood Fill para retirar os objetos das bordas
+  // Remove objetos conectados às bordas
   for (int i = 0; i < width; i++) {
-    if (image.at<uchar>(0, i) == 255) cv::floodFill(image, Point(i, 0), 128);
-    if (image.at<uchar>(height-1, i) == 255) cv::floodFill(image, Point(i, height-1), 128);
+    if (image.at<uchar>(0, i) == 255) cv::floodFill(image, Point(i, 0), 0);
+    if (image.at<uchar>(height - 1, i) == 255) cv::floodFill(image, Point(i, height - 1), 0);
   }
   for (int i = 0; i < height; i++) {
-    if (image.at<uchar>(i, 0) == 255) cv::floodFill(image, Point(0, i), 128);
-    if (image.at<uchar>(i, width-1) == 255) cv::floodFill(image, Point(width-1, i), 128);
+    if (image.at<uchar>(i, 0) == 255) cv::floodFill(image, Point(0, i), 0);
+    if (image.at<uchar>(i, width - 1) == 255) cv::floodFill(image, Point(width - 1, i), 0);
   }
-    
-  
-  // Conta os objetos
+
+  // Conta os objetos e verifica buracos
   for (int i = 0; i < height; i++) {
     for (int j = 0; j < width; j++) {
       if (image.at<uchar>(i, j) == 255) {
-        // achou um objeto
+        // Encontrou uma nova bolha
         nobjects++;
-        // para o floodfill as coordenadas
-        // x e y são trocadas.
+
+        // Define um ID único para a bolha atual
         p.x = j;
         p.y = i;
-        // preenche o objeto com o contador
+
+        // Marca a bolha com o ID atual
         cv::floodFill(image, p, nobjects);
 
-
-
+        // Verifica por buracos dentro da área da bolha
         bool has_holes = false;
         for (int y = i; y < height; y++) {
           for (int x = j; x < width; x++) {
-            if (image.at<uchar>(y, x) == 0) { // Encontrou um possível buraco
-              cv::Point hole_point(x, y);
-              cv::floodFill(image, hole_point, 100); // Marca o buraco com cor temporária
+            // Verifica se um ponto preto está cercado pela bolha
+            if (image.at<uchar>(y, x) == 0 && 
+               (image.at<uchar>(y, x+1) == nobjects)) {
+
+              // Marca o buraco com uma cor temporária para evitar duplicações
+              cv::floodFill(image, Point(x, y), 127); // 127 para diferenciar de outras áreas
               has_holes = true;
             }
-            if (image.at<uchar>(y, x) == current_object_id) break; // Sai do loop interno ao fim da bolha
           }
         }
+       
 
+        // Conta a bolha com buraco, se encontrado
         if (has_holes) nobjects_with_holes++; 
       }
     }
   }
 
-  std::cout << "a figura tem " << nobjects << " bolhas\n";
+  std::cout << "A figura tem " << nobjects << " bolhas que não tocam as bordas e " 
+            << nobjects_with_holes << " bolhas com buracos. \n";
+
   cv::imshow("image", image);
   cv::imwrite("labeling.png", image);
   cv::waitKey();
@@ -168,7 +170,7 @@ int main(int argc, char** argv) {
 
 ## 4. Resultados
 
-Foi então executado o novo código e verificamos que a contagem de objetos com e sem buracos foi implementada corretamente, resultando em x objetos sem buracos e y objetos com buracos.
+Foi então executado o novo código e verificamos que a contagem de objetos com e sem buracos foi implementada corretamente, resultando em 21 objetos e 7 objetos sem buracos.
 
 ![Contagem de objetos com e sem buracos](./imagens/buracos.png)
 
