@@ -133,10 +133,10 @@ e a condicional para fazer a matriz de máximos ao longo de todos os frames do v
 
 
 $$
-
-\textbf{se } {\nabla^2}f (x,y) > max \nabla f(x,y) 
-\textbf{ então } max \nabla f(x,y) = f(x,y) 
-
+\begin{align}
+\textbf{se } \nabla^2 f(x,y) & > \max \nabla f(x,y) \\
+\textbf{então } \max \nabla f(x,y) & = f(x,y)
+\end{align}
 $$
 
 * Código da operação de realçamento
