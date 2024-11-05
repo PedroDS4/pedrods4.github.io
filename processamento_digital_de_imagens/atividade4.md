@@ -4,7 +4,7 @@
 
 [Voltar para a página principal](../index.md)
 
-# **Relatório Atividade 4: Preenchendo Regiões **
+# ** Relatório Atividade 4: Preenchendo Regiões **
 
 # Universidade Federal do Rio Grande do Norte
 
