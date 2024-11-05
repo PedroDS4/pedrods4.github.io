@@ -51,7 +51,7 @@ Aplique um filtro laplaciano de tamanho 3×3
 
 Compare o resultado do filtro com a matriz de máximos e selecione aqueles que possuem um valor maior que o correspondente na matriz de máximos. Para os pixels selecionados, copie para a imagem de saída os pixels coloridos da imagem capturada.
 
-Adaptando o código convolucao.cpp para realizar a convoluçaõ com a máscara da aproximação do laplaciano, temos que 
+Podemos primeiro converter a imagem para tons de cinza a fim de calcular o seu laplaciano, e depois verificar os pontos onde o laplaciano é máximo e armezenar o valor da função nesse ponto, para cada frame do vídeo.
 
 ---
 ### 3.1. Implementação
@@ -121,7 +121,7 @@ int main() {
 Foi utilizada a classe ``` VideoCapture ``` do opencv para manipular a captura de frames de vídeo, e foi usada uma máscara 3x3 com o seguinte formato para o laplaciano
 
 $$
-{\nabla^2}_f = 
+{\nabla^2}f = 
 \begin{bmatrix}
 0 & -1 & 0 \\
 -1 & 4 & -1 \\
@@ -132,7 +132,7 @@ $$
 e a condicional para fazer a matriz de máximos ao longo de todos os frames do vídeo
 
 $$
-\textbf{se } {\nabla^2}_f (x,y) > max \nabla f(x,y) \\
+\textbf{se } {\nabla^2}f (x,y) > max \nabla f(x,y) \\
 max \nabla f(x,y) = f(x,y) 
 $$
 
@@ -142,57 +142,74 @@ $$
 
 #include <iostream>
 #include <opencv2/opencv.hpp>
-#include "camera.hpp"
 
-int main(int, char **) {
-  cv::VideoCapture cap;
+int main(int argc, char **argv) {
+    cv::VideoCapture cap;
+
+    // Definindo o kernel do filtro Laplaciano
+    float laplacian[] = {0, -1, 0, -1, 4, -1, 0, -1, 0};
+
+    cv::Mat frame, framegray, frame32f, laplaciano;
+    cv::Mat mask(3, 3, CV_32F);
+    cv::Mat f_max;
+    cv::Mat max_laplacian;
+
+    // Abre o vídeo
+    cap.open(argv[1]);
+    if (!cap.isOpened()) return -1;
+
+    // Obter as dimensões do primeiro frame
+    cap.read(frame);
+    if (frame.empty()) return -1; // Verifica se o frame foi capturado corretamente
+    int width = frame.cols;  // Obter a largura do frame
+    int height = frame.rows; // Obter a altura do frame
+
+    std::cout << "largura=" << width << "\n";
+    std::cout << "altura =" << height << "\n";
+
+    // Criando matrizes para armazenar os resultados
+    mask = cv::Mat(3, 3, CV_32F, laplacian);
+    f_max = cv::Mat::zeros(frame.size(), CV_8UC3); // Imagem de saída colorida
+    max_laplacian = cv::Mat::zeros(frame.size(), CV_32F); // Matriz para armazenar máximos Laplacianos
   
-  float laplacian[] = {0, -1, 0, -1, 4, -1, 0, -1, 0};
+    // Loop para capturar todos os frames do vídeo
+    while (true) {
+        if (!cap.read(frame)) break; // Enquanto houver frames, o loop continua
 
-  cv::Mat frame, frame32f, laplaciano;
-  cv::Mat mask(3, 3, CV_32F);
-  cv::Mat f_max;
-  double width, height;
-  int counter;
+        // Converter o frame para tons de cinza
+        cv::cvtColor(frame, framegray, cv::COLOR_BGR2GRAY);
 
-  cap.open(argv[1]);
-  if(!cap.isOpened())
-  return -1;
+        // Converter o frame para float 32 bits.
+        framegray.convertTo(frame32f, CV_32F);
+        
+        // Aplicar o filtro Laplaciano
+        cv::filter2D(frame32f, laplaciano, CV_32F, mask, cv::Point(-1, -1), 0, cv::BORDER_REPLICATE);
 
-  width=cap.get(cv::CAP_PROP_FRAME_WIDTH);
-  height=cap.get(cv::CAP_PROP_FRAME_HEIGHT);
-  std::cout << "largura=" << width << "\n";
-  std::cout << "altura =" << height<< "\n";
-  
-  cv::Size frameSize(static_cast<int>(width), static_cast<int>(height));
-  
-  mask = cv::Mat(3, 3, CV_32F, laplacian);
- 
-  max_laplacian = cv::Mat::zeros(frameSize, CV_32F;
-  f_max = cv::Mat::zeros(frameSize, CV_32F);
-  
-  for(counter=0; cap.read(frame); counter++){
-
-    frame.convertTo(frame32f, CV_32F);
-    cv::filter2D(frame32f, laplaciano , frame32f.depth(), mask, cv::Point(1, 1), cv::BORDER_REPLICATE);
-    for( int i = 0; i <height; i++){
-        for (int j = 0; j < width; j++){
-            if  laplaciano.at<uchar>(i,j) >= max_laplacian.at<uchar>(i,j){
-                max_laplacian.at<uchar>(i,j) = laplaciano.at<uchar>(i,j);
-                f_max.at<uchar>(i,j) = frame32f.at<uchar>(i,j);
+        // Comparar o resultado do filtro com a matriz de máximos e atualizar a imagem de saída
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                // Se o valor do Laplaciano for maior que o máximo armazenado
+                if (laplaciano.at<float>(i, j) > max_laplacian.at<float>(i, j)) {
+                    max_laplacian.at<float>(i, j) = laplaciano.at<float>(i, j); // Atualiza o máximo
+                    f_max.at<cv::Vec3b>(i, j) = frame.at<cv::Vec3b>(i, j); // Copiar o pixel colorido original
+                }
             }
         }
+
+        // Exibir a imagem de saída
+        cv::imshow("janela", f_max);
+        
+        // Pressione 'q' para sair do loop
+        if (cv::waitKey(30) >= 0) break; // Pausa para exibir o frame e verifica se a tecla foi pressionada
     }
-    
-  }
-  
-  cv::imshow("janela", f_max);
-  cv::imwrite("Imagem Realçada.png", f_max);
-  cv::waitKey();
-  
-  
-  return 0;
+
+    cv::imwrite("Imagem Realçada.png", f_max); // Salvar a imagem final
+    cv::waitKey();
+    cv::destroyAllWindows(); // Fechar todas as janelas
+
+    return 0;
 }
+
 
 ```
 
@@ -227,7 +244,8 @@ Foi possível observar, como na imagem abaixo, que quanto maior o valor do núme
 
 ## 5. Conclusão
 
-As aplicações de filtragem no domínio espacial demonstradas nesse relatório foram implementadas para fazerem operações muito interessantes, e que são muito úteis no dia a dia, assim sendo um conteúdo 
+As aplicações de filtragem no domínio espacial demonstradas nesse relatório foram implementadas para fazerem operações muito interessantes, como realçar uma imagem cujos objetos importantes
+estavam em desfoquem, além da operação de borramento para variados tamanhos de matrizes.
 
 ---
 
