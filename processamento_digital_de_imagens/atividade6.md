@@ -58,6 +58,22 @@ Podemos primeiro converter a imagem para tons de cinza a fim de calcular o seu l
 
 ### Exercício 1:
 Primeiramente foi criada uma máscara genérica NxN utilizando a função ```  ``` do opencv, e depois foi implementado uma melhoria para melhor iteratividade do usuário.
+A máscara de média de tamanho $$N$$ genérico pode ser escrita como
+
+$$
+M = 
+\frac{1}{N} \cdot 
+\begin{bmatrix}
+1 & ... & 1 \\
+.    .    .
+.    .    .
+.    .    .
+1 & ... & 1 \\
+\end{bmatrix}
+$$
+
+e o borramento é proporcional ao valor de N.
+
 
 * Código Iterativo para alterar a dimensão da máscara com as setas ``` up ```  e ``` down ```.
 
