@@ -62,12 +62,14 @@ A máscara de média de tamanho $$N$$ genérico pode ser escrita como
 
 $$
 M = 
-\frac{1}{N} \cdot 
+\frac{1}{N²} \cdot 
 \begin{bmatrix}
+
 1 & 1 & \cdots & 1 \\
 1 & 1 & \cdots & 1 \\
 \vdots & \vdots & \ddots & \vdots \\
 1 & 1 & \cdots & 1 \\
+
 \end{bmatrix}_{N \times N}
 $$
 
