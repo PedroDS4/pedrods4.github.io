@@ -234,7 +234,7 @@ Foi possível observar, como na imagem abaixo, que quanto maior o valor do núme
 *Figura 2: Imagem borrada com máscara 11x11.*
 
 
-![Imagem borrada com máscara 21x21](./imagens/borramento3x3.png)
+![Imagem borrada com máscara 21x21](./imagens/borramento21x21.png)
 
 *Figura 3: Imagem borrada com máscara 21x21.*
 
