@@ -56,41 +56,10 @@ Adaptando o código convolucao.cpp para realizar a convoluçaõ com a máscara d
 ---
 ### 3.1. Implementação
 
-
-
 ### Exercício 1:
-* Código Implementado
+Primeiramente foi criada uma máscara genérica NxN utilizando a função ```  ``` do opencv, e depois foi implementado uma melhoria para melhor iteratividade do usuário.
 
-```
-#include <iostream>
-#include <opencv2/opencv.hpp>
-#include "camera.hpp"
-
-int main(int, char **) {
-
-  int N;
-  std::cout<<"Digite um valor ímpar para a dimensão da máscara de borramento"<<std::endl;
-  std::cin>>N;
-  int meio = (N-1)/2;
-  cv::Mat image, image_32F, imagem_borrada;
-  cv::Mat mask = cv::Mat::ones(N, N, CV_32F) / (float)(N * N);
-  mask = cv::Mat(N, N, CV_32F, media);
-  
-  image = cv::imread("image.png", cv::IMREAD_GRAYSCALE);
-  image.convertTo(image_32F, CV_32F);
-  cv::filter2D(image_32F, imagem_borrada , image_32F.depth(), mask, cv::Point(meio , meio), cv::BORDER_REPLICATE);
-  
-  cv::imshow("janela", imagem_borrada);
-  cv::imwrite("Imagem Realçada.png", f_max);
-  cv::waitKey();
-  
-  
-  return 0;
-}
-
-```
-
-*Código Iterativo
+* Código Iterativo para alterar a dimensão da máscara com as setas ``` up ```  e ``` down ```.
 
 ```
 #include <iostream>
@@ -149,7 +118,25 @@ int main() {
 
 
 ### Exercício 2:
-* Código Implementado
+Foi utilizada a classe ``` VideoCapture ``` do opencv para manipular a captura de frames de vídeo, e foi usada uma máscara 3x3 com o seguinte formato para o laplaciano
+
+$$
+{\nabla^2}_f = 
+\begin{bmatrix}
+0 & -1 & 0 \\
+-1 & 4 & -1 \\
+0 & -1 & 0 \\
+\end{bmatrix}
+$$
+
+e a condicional para fazer a matriz de máximos ao longo de todos os frames do vídeo
+
+$$
+\textbf{se } {\nabla^2}_f (x,y) > max \nabla f(x,y) \\
+max \nabla f(x,y) = f(x,y) 
+$$
+
+* Código da operação de realçamento
 
 ```
 
@@ -221,16 +208,19 @@ Foi possível observar, como na imagem abaixo, que quanto maior o valor do núme
 
 ![Imagem borrada com máscara 11x11](./imagens/borramento11x11.png)
 
-*Figura 1: Imagem borrada com máscara 11x11.*
+*Figura 2: Imagem borrada com máscara 11x11.*
+
 
 ![Imagem borrada com máscara 21x21](./imagens/borramento3x3.png)
 
-*Figura 1: Imagem borrada com máscara 21x21.*
+*Figura 3: Imagem borrada com máscara 21x21.*
 
 
 ### Exercício 2: 
 
 ![Imagem depois de passar pelo realçamento](./imagens/imagem_realçada.png)
+
+*Figura 4: Imagem realçada utilizando o conceito de laplaciano.*
 
 
 ---
