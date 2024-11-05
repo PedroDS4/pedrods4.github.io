@@ -241,7 +241,7 @@ Foi possível observar, como na imagem abaixo, que quanto maior o valor do núme
 
 ### Exercício 2: 
 
-![Imagem depois de passar pelo realçamento](./imagens/imagem_realçada.png)
+![Imagem depois de passar pelo realçamento](./imagens/imagem_realçada1.png)
 
 *Figura 4: Imagem realçada utilizando o conceito de laplaciano.*
 
