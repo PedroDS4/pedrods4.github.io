@@ -4,7 +4,7 @@
 
 [Voltar para a página principal](../index.md)
 
-# **Relatório Atividade 6: Filtragem no domínio espacial **
+#** Relatório Atividade 6: Filtragem no domínio espacial **
 
 # Universidade Federal do Rio Grande do Norte
 
@@ -132,7 +132,8 @@ $$
 e a condicional para fazer a matriz de máximos ao longo de todos os frames do vídeo
 
 $$
-\textbf{se } {\nabla^2}f (x,y) > max \nabla f(x,y) \\
+\textbf{se } {\nabla^2}f (x,y) > max \nabla f(x,y) 
+\\
 max \nabla f(x,y) = f(x,y) 
 $$
 
