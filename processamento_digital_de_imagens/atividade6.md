@@ -64,13 +64,13 @@ $$
 M = 
 \frac{1}{N} \cdot 
 \begin{bmatrix}
-1 & ... & 1 \\
-.    .    .
-.    .    .
-.    .    .
-1 & ... & 1 \\
-\end{bmatrix}
+1 & 1 & \cdots & 1 \\
+1 & 1 & \cdots & 1 \\
+\vdots & \vdots & \ddots & \vdots \\
+1 & 1 & \cdots & 1 \\
+\end{bmatrix}_{N \times N}
 $$
+
 
 e o borramento é proporcional ao valor de N.
 
