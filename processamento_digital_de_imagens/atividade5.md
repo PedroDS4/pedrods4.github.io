@@ -111,6 +111,19 @@ int main(int argc, char** argv) {
 
 ```
 
+### Exercício 2: 
+O detector de movimento pode ser implementado calculando a diferença em magnitude entre os histogramas e verificando se é maior que um certo valor
+```treshhold```, para então em caso afirmativo acionar um tipo de alarme.
+ou seja
+
+$$
+begin{align}
+\textbf{se }|h^{i}[n] - h^{i-1}[n]| > ```treshhold``` \\
+\textbf{ aciona_alarme()}
+end{align}
+$$
+
+
 * Código do detector de movimento
 
 ```
@@ -211,8 +224,8 @@ int main(int argc, char** argv) {
 
 ## 4. Resultados
 
-
-![Imagem gerada pela função senoide](./imagens/imagem_periodica.png)
+Foi possível observar que a equalização de histograma foi feita corretamente, ao apontar a câmera para lugares claros, os histogramas ficavam saturados.
+O detector de movimento também funcionou corretamente, visto que que quando me movimentei na câmera, o arlame foi acionado, como mostra a imagem abaixo
 
 ---
 
