@@ -117,10 +117,10 @@ O detector de movimento pode ser implementado calculando a diferença em magnitu
 ou seja
 
 $$
-begin{align}
+\begin{align}
 \textbf{se }|h^{i}[n] - h^{i-1}[n]| > ```treshhold``` \\
 \textbf{ aciona_alarme()}
-end{align}
+\end{align}
 $$
 
 
