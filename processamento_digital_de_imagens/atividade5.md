@@ -13,7 +13,7 @@
 
 **Aluno(a):** Pedro Arthur Oliveira dos Santos  
 **Professor(a):** Agostinho Brito Junior  
-**Data:** 25/10
+**Data:** 05/11
 
 ## 1. Introdução
 
@@ -24,17 +24,94 @@ como detecção de movimento, e operações sobre a própria imagem.
 
 ## 2. Objetivo
 
-O Objetivo dessa atividade é explorar a manipulação de histogramas para detecção de movimento e para a aplicação de técnica de equalização de histograma.
+O Objetivo dessa atividade é explorar a manipulação de histogramas para detecção de movimento e para a aplicação da técnica de equalização de histograma para melhorar a visualização e contraste da imagem.
 
 ---
 
 ## 3. Metodologia
 
+### Exercício 1:
+Equalização de histograma
+A operação de equalização de histograma usa conceitos de uma distribuição de probabilidade cumulativa para melhorar a distribuição dos tons de cinza
+e melhorar o contraste da imagem, e isso é implementado usando uma soma acumulada.
+Sendo assim, o j-ésimo termo do vetor de histograma equalizado é dado por
+
+$$
+h_{eq}[j] = \sum_{i = 0}^{j} h[j]
+$$
+
+
+### Exercício 2: 
+Detector de movimento
+O detector de movimento pode ser implementado verificando a diferença entre as imagens sucessivas capturadas pela câmera, e assim ativar um alarme.
+
 
 ---
 ### 3.1. Implementação
-Foi então implementado a adapatação do algoritmo
-* Código
+### Exercício 1: 
+A equalização de histograma pode ser implementada pela função ``` equalizeHist ``` do opencv, que recebe como parâmetro o histograma atual, e uma matriz que irá receber o histograma acumulado.
+
+* Código da equalização de histograma
+
+```
+#include <iostream>
+#include <opencv2/opencv.hpp>
+#include "camera.hpp"
+
+int main(int argc, char** argv) {
+  cv::Mat image, grayImage, equalizedImage;
+  int width, height;
+  int camera;
+  cv::VideoCapture cap;
+
+  // Iniciar a captura de vídeo
+  camera = cameraEnumerator();
+  cap.open(camera);
+
+  if (!cap.isOpened()) {
+    std::cout << "Câmera indisponível" << std::endl;
+    return -1;
+  }
+
+  // Configurar a resolução da câmera
+  cap.set(cv::CAP_PROP_FRAME_WIDTH, 640);
+  cap.set(cv::CAP_PROP_FRAME_HEIGHT, 480);
+  width = cap.get(cv::CAP_PROP_FRAME_WIDTH);
+  height = cap.get(cv::CAP_PROP_FRAME_HEIGHT);
+
+  std::cout << "Largura = " << width << std::endl;
+  std::cout << "Altura  = " << height << std::endl;
+
+  int key;
+  while (1) {
+    // Capturar a imagem
+    cap >> image;
+    if (image.empty()) {
+      std::cout << "Erro ao capturar a imagem" << std::endl;
+      break;
+    }
+
+    // Converter a imagem para tons de cinza
+    cv::cvtColor(image, grayImage, cv::COLOR_BGR2GRAY);
+
+    // Equalizar o histograma da imagem em tons de cinza
+    cv::equalizeHist(grayImage, equalizedImage);
+
+    // Exibir a imagem equalizada
+    cv::imshow("Imagem Equalizada", equalizedImage);
+
+    // Pressionar ESC para sair
+    key = cv::waitKey(30);
+    if (key == 27) break;
+  }
+
+  return 0;
+}
+
+
+```
+
+* Código do detector de movimento
 
 ```
 
@@ -45,11 +122,6 @@ Foi então implementado a adapatação do algoritmo
 
 ## 4. Resultados
 
-### Exercício 1:
-Equalização de histograma
-
-### Exercício 2: 
-Detector de movimento
 
 ![Imagem gerada pela função senoide](./imagens/imagem_periodica.png)
 
