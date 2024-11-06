@@ -114,6 +114,95 @@ int main(int argc, char** argv) {
 * Código do detector de movimento
 
 ```
+#include <iostream>
+#include <opencv2/opencv.hpp>
+#include "camera.hpp"
+
+int main(int argc, char** argv) {
+  cv::Mat frame, grayFrame;
+  cv::Mat histCurrent, histPrevious;
+  int camera;
+  cv::VideoCapture cap;
+  int nbins = 64;
+  float range[] = {0, 255};
+  const float* histRange = { range };
+  bool uniform = true;
+  bool accumulate = false;
+
+  double threshold = 50.0; // Limiar de diferença acumulada para detectar movimento (ajuste conforme necessário)
+  
+  // Iniciar captura de vídeo
+  camera = cameraEnumerator();
+  cap.open(camera);
+
+  if (!cap.isOpened()) {
+    std::cout << "Câmera indisponível" << std::endl;
+    return -1;
+  }
+
+  // Configurar resolução da câmera
+  cap.set(cv::CAP_PROP_FRAME_WIDTH, 640);
+  cap.set(cv::CAP_PROP_FRAME_HEIGHT, 480);
+
+  int key;
+
+  // Capturar o primeiro quadro para inicializar o histograma anterior
+  cap >> frame;
+  if (frame.empty()) {
+    std::cout << "Erro ao capturar a imagem" << std::endl;
+    return -1;
+  }
+
+  // Converter o quadro inicial para tons de cinza
+  cv::cvtColor(frame, grayFrame, cv::COLOR_BGR2GRAY);
+
+  // Calcular o histograma inicial (histograma anterior)
+  cv::calcHist(&grayFrame, 1, 0, cv::Mat(), histPrevious, 1, &nbins, &histRange, uniform, accumulate);
+  cv::normalize(histPrevious, histPrevious, 0, 1, cv::NORM_MINMAX);
+
+  while (1) {
+    // Capturar o próximo quadro
+    cap >> frame;
+    if (frame.empty()) {
+      std::cout << "Erro ao capturar a imagem" << std::endl;
+      break;
+    }
+
+    // Converter para tons de cinza
+    cv::cvtColor(frame, grayFrame, cv::COLOR_BGR2GRAY);
+
+    // Calcular o histograma atual
+    cv::calcHist(&grayFrame, 1, 0, cv::Mat(), histCurrent, 1, &nbins, &histRange, uniform, accumulate);
+    cv::normalize(histCurrent, histCurrent, 0, 1, cv::NORM_MINMAX);
+
+    // Calcular a diferença manualmente entre os bins dos histogramas
+    double totalDifference = 0.0;
+    for (int i = 0; i < nbins; i++) {
+      float binCurrent = histCurrent.at<float>(i);
+      float binPrevious = histPrevious.at<float>(i);
+      totalDifference += std::abs(binCurrent - binPrevious);
+    }
+
+    // Verificar se a diferença total ultrapassa o limiar
+    if (totalDifference > threshold) {
+      std::cout << "Movimento detectado!" << std::endl;
+      cv::putText(frame, "Movimento Detectado!", cv::Point(50, 50),
+                  cv::FONT_HERSHEY_SIMPLEX, 1, cv::Scalar(0, 0, 255), 2);
+    }
+
+    // Exibir o quadro
+    cv::imshow("Detector de Movimento", frame);
+
+    // Atualizar o histograma anterior para a próxima iteração
+    histPrevious = histCurrent.clone();
+
+    // Pressionar ESC para sair
+    key = cv::waitKey(30);
+    if (key == 27) break;
+  }
+
+  return 0;
+}
 
 
 
