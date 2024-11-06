@@ -113,12 +113,12 @@ int main(int argc, char** argv) {
 
 ### Exercício 2: 
 O detector de movimento pode ser implementado calculando a diferença em magnitude entre os histogramas e verificando se é maior que um certo valor
-```treshhold```, para então em caso afirmativo acionar um tipo de alarme.
+$$\sigma$$ chamado de ```treshhold``` , para então em caso afirmativo acionar um tipo de alarme.
 ou seja
 
 $$
 \begin{align}
-\textbf{se }|h^{i}[n] - h^{i-1}[n]| > ```treshhold``` \\
+\textbf{se }|h^{i}[n] - h^{i-1}[n]| > \sigma
 \textbf{ aciona_alarme()}
 \end{align}
 $$
@@ -142,7 +142,7 @@ int main(int argc, char** argv) {
   bool uniform = true;
   bool accumulate = false;
 
-  double threshold = 50.0; // Limiar de diferença acumulada para detectar movimento (ajuste conforme necessário)
+  double sigma = 2.0; // 
   
   // Iniciar captura de vídeo
   camera = cameraEnumerator();
@@ -197,7 +197,7 @@ int main(int argc, char** argv) {
     }
 
     // Verificar se a diferença total ultrapassa o limiar
-    if (totalDifference > threshold) {
+    if (totalDifference > sigma) {
       std::cout << "Movimento detectado!" << std::endl;
       cv::putText(frame, "Movimento Detectado!", cv::Point(50, 50),
                   cv::FONT_HERSHEY_SIMPLEX, 1, cv::Scalar(0, 0, 255), 2);
