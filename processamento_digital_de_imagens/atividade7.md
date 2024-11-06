@@ -40,6 +40,14 @@ um ajuste para regular a força de decaimento da região borrada;
 
 um ajuste para regular a posição vertical do centro da região que entrará em foco. Finalizado o programa, a imagem produzida deverá ser salva em arquivo.
 
+O efeito tiltshift pode ser observado quando ponderamos uma imagem por uma certa função e sua versão borrada por outra, criando um efeito em torno de algum ponto, normalmente a origem.
+Uma das funções de ponderação mais utilizadas são uma combinação linear de funções tangentes hiperbólicas, como
+
+$$
+\alfa (x) = \frac{1}{2}( tanh(\frac{x-l_1}{d} + tanh(\frac{x-l_2}{d})
+$$
+
+onde d é chamado de decaimento, que mede a força do decaimento ao longo da região da imagem borrada, e l_1 e l_2 são linhas cujo valor de $$\alfa$$ assume valor em torno de 0.5.
 
 
 ### Exercício 2: 
