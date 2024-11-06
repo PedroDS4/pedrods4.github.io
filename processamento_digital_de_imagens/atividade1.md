@@ -86,7 +86,7 @@ As funções implementadas estão mostradas abaixo:
 #include <iostream>
 #include <opencv2/opencv.hpp>
 
-
+//Classe ponto para facilitar a manipulação
 class point
 {
 
@@ -117,13 +117,14 @@ double point::getY() const{
     return y;
 }
 
-
+//Função que implementa a operação de negativo
 cv::Mat negative(point P1, point P2, cv::Mat imagem){
     double x1;
     double x2;
     double y1;
     double y2;
     cv::Mat image = imagem.clone();
+    //Comparação pra ver qual é o ponto da "esquerda"
     if (P1.getX()>P2.getX()){
         x1 = P2.getX();
         x2 = P1.getX();
@@ -149,6 +150,7 @@ cv::Mat negative(point P1, point P2, cv::Mat imagem){
         }
     }
 
+    //Implementação da operação de negativo
     for (int i = x1; i <x2 ; i++) {
         for (int j = y1 ; j < y2; j++) {
             image.at<uchar>(i, j) = 255 - image.at<uchar>(i,j) ;
@@ -202,12 +204,14 @@ int main(int, char**) {
 #include <opencv2/opencv.hpp>
 
 
+//Função que realiza a troca de quadrantes
 cv::Mat troca_regioes(cv::Mat imagem){
 
     cv::Mat imagem_nova = imagem.clone();
     int n = imagem_nova.rows/2;
     int m = imagem_nova.cols/2;
-  
+
+    //Troca de quadrantes em um único laço
     for(int i = 0;i<n;i++) {
       for(int j = 0;j<m;j++) {
         imagem_nova.at<uchar>(i,j) = imagem.at<uchar>(n+i,j+m);
