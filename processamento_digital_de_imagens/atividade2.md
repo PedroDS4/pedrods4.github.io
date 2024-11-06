@@ -37,11 +37,11 @@ Para recuperarmos a imagem escondida, criamos uma imagem vazia g(x,y) com as mes
 Exemplo: Sabendo que os bits menos significativos são os três últimos, nesse caso que estamos trabalhando com a intensidade do pixel como sendo o tipo unsigned char, podemos ver abaixo como essa operação funciona
 
 $$
-
+\begin{align}
 I = [ 1 0 0 0 1 1 1 0]
 I<<5
 I = [1 1 0 0 0 0 0 0]
-
+\end{align}
 $$
 
 
