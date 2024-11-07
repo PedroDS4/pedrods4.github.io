@@ -44,10 +44,10 @@ O efeito tiltshift pode ser observado quando ponderamos uma imagem por uma certa
 Uma das funções de ponderação mais utilizadas são uma combinação linear de funções tangentes hiperbólicas, como
 
 $$
-\alfa (x) = \frac{1}{2}( tanh(\frac{x-l_1}{d} + tanh(\frac{x-l_2}{d})
+\alpha (x) = \frac{1}{2}( tanh(\frac{x-l_1}{d} + tanh(\frac{x-l_2}{d})
 $$
 
-onde d é chamado de decaimento, que mede a força do decaimento ao longo da região da imagem borrada, e l_1 e l_2 são linhas cujo valor de $$\alfa$$ assume valor em torno de 0.5.
+onde d é chamado de decaimento, que mede a força do decaimento ao longo da região da imagem borrada, e l_1 e l_2 são linhas cujo valor de $$\alpha$$ assume valor em torno de 0.5.
 
 
 ### Exercício 2: 
