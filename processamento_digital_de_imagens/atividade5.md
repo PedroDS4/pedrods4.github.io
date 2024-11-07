@@ -224,8 +224,7 @@ int main(int argc, char** argv) {
 
 ## 4. Resultados
 
-Foi possível observar que a equalização de histograma foi feita corretamente, ao apontar a câmera para lugares claros, os histogramas ficavam saturados.
-O detector de movimento também funcionou corretamente, visto que que quando me movimentei na câmera, o arlame foi acionado, como mostra a imagem abaixo
+Por problemas técnicos por causa de uma webcam comprada porém de péssima qualidade que não funcionou, não se pode averiguar os códigos acima e comprar seu funcionamento.
 
 ---
 
