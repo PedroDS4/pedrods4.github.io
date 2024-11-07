@@ -341,7 +341,7 @@ A figura mostra o resultado da implementação dos 3 sliders para controlar a re
 ### Exercício 2:
 
 <video width="600" controls>
-  <source src="caminho/do/video.mp4" type="video/mp4">
+  <source src="./imagens/output.mp4" type="output/mp4">
   Seu navegador não suporta o elemento de vídeo.
 </video>
 *Vídeo 1: Efeito Tiltshift aplicado aos frames de um video
