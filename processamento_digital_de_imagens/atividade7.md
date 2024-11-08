@@ -344,7 +344,8 @@ A figura mostra o resultado da implementação dos 3 sliders para controlar a re
   <source src="./imagens/output.mp4" type="output/mp4">
   Seu navegador não suporta o elemento de vídeo.
 </video>
-*Vídeo 1: Efeito Tiltshift aplicado aos frames de um video
+
+*Vídeo 1: Efeito Tiltshift aplicado aos frames de um video*
 
 ---
 
