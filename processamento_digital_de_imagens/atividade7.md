@@ -4,7 +4,7 @@
 
 [Voltar para a página principal](../index.md)
 
-# **Relatório Atividade 6: Tiltshift **
+# ** Relatório Atividade 6: Tiltshift **
 
 # Universidade Federal do Rio Grande do Norte
 
