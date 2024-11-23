@@ -104,13 +104,13 @@ $$
 e a integral interna pode ser resolvida utilizando a noção de integrais com impulsos, e é dada por 
 
 $$
-\int_{-\infty}^{\infty} f(x,y) \delta(x - iT_m) e^{-2 \pi ux} dx = f(i,y) e^{-2 \pi uiT_m}
+\int_{-\infty}^{\infty} f(x,y) \delta(x - iT_m) e^{-2 \pi ux} dx = f(iT_m,y) e^{-2 \pi uiT_m}
 $$
 
 assim ficamos com 
 
 $$
-F(u,v) = \int_{-\infty}^{\infty} \sum_{n}^{} \delta(y - nT_n)  \sum_{i}^{} f(i,y) e^{-2 \pi uiT_m}  e^{-2 \pi vy}dy
+F(u,v) = \int_{-\infty}^{\infty} \sum_{n}^{} \delta(y - nT_n)  \sum_{i}^{} f(iT_m,y) e^{-2 \pi uiT_m}  e^{-2 \pi vy}dy
 $$
 
 agora reorganizando mais uma vez e trocando a ordem do somatório com a integral
@@ -122,10 +122,10 @@ $$
 e utilizando denovo o conceito de integrais com impulso, finalmente temos
 
 $$
-F(u,v) = \sum_{i}^{} e^{-2 \pi uiT_m}  \sum_{n}^{}  f(i,n) e^{-2 \pi vn} = \sum_{i}^{} \sum_{n}^{} f(i,n) e^{-2 \pi (uiT_m + vnT_n)}
+F(u,v) = \sum_{i}^{} e^{-2 \pi uiT_m}  \sum_{n}^{}  f(iT_m,nT_n) e^{-2 \pi v\frac{n}{N}} = \sum_{i}^{} \sum_{n}^{} f(iT_m,nT_n) e^{-2 \pi (uiT_m + vnT_n)}
 $$
 
-e a expressão final
+e a expressão final normalizada se torna
 
 $$
 F(u,v) = \frac{1}{M} \frac{1}{N} \sum_{i}^{} \sum_{n}^{} f(i,n) e^{-2 \pi (u\frac{i}{M} + v\frac{n}{N})}
