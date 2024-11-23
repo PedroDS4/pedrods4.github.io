@@ -135,6 +135,8 @@ que é conhecida como a transformada discreta de fourier bidimensional.
 
 
 ### 3.1. Implementação
+
+#### Questão 1: Transformada de fourier de uma senoide
 Foi então utilizado o código do professor como referência para as operações computacionais com a DFT, tendo toda a preparação da imagem para tal, e assim com as devidas alterações o código ficou 
 
 * Código
@@ -238,11 +240,118 @@ int main(int argc, char** argv) {
 
 ```
 
+#### Questão 2: Transformada de fourier de uma senoide em ponto flutuante(melhor aproximação)
+Foi então utilizado o código do professor como referência para as operações computacionais com a DFT, tendo toda a preparação da imagem para tal, e assim com as devidas alterações o código ficou 
+
+* Código
+
+```
+
+  
+```
+
 
 ## 4. Resultados
 
 ### Exibição da transformada de fourier 
-Percebeu-se que ao contrário do exemplo feito pelo professor, a imagem aqui requisitada era periódica nas linhas, pois dependia da i-ésima linha x (i).
+Percebeu-se que ao contrário do exemplo feito pelo professor, a imagem aqui requisitada era periódica nas linhas, pois dependia da i-ésima linha x (i), e seu espectro esperado teoricamente calculado pela transformada de fourier é um trem de impulsos, assim como na transformada de fourier bidimensional
+
+$$
+F(u,v) = \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} f(x,y)e^{-2 \pi (ux+vy)} dx dy = \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} Asen(2 \pi f x) e^{-2 \pi (ux+vy)} dx dy
+$$
+
+calculando a integral, temos
+
+$$
+F(u,v) = A \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} sen(2 \pi f x) e^{-2 \pi (ux+vy)} dx dy
+$$
+
+utilizando a identidade de euler, 
+
+$$
+sen(\2 \pi f x) = \frac{e^{2 \pi f x} - e^{-2 \pi f x}}{2}
+$$
+
+substituindo agora na expressão da transformada de fourier
+
+$$
+F(u,v) = \frac{A}{2} \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} (e^{2 \pi f x} - e^{-2 \pi f x}) e^{-2 \pi (ux+vy)} dx dy
+$$
+
+separando a soma, temos
+
+$$
+F(u,v) = \frac{A}{2} \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} e^{2 \pi f x} e^{-2 \pi (ux+vy)} dx dy  - \frac{A}{2} \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} e^{-2 \pi f x} e^{-2 \pi (ux+vy)} dx dy
+$$
+
+Somando os expoentes das exponenciais, temos
+
+$$
+F(u,v) = \frac{A}{2} \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} e^{2 \pi f x -2 \pi (ux+vy)} dx dy - \frac{A}{2} \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} e^{-2 \pi f x -2 \pi (ux+vy)} dx dy
+$$
+
+colocando o x em evidência nas exponenciais
+
+$$
+F(u,v) = \frac{A}{2} \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} e^{2 \pi (f - u)x - 2\pi vy} dx dy - \frac{A}{2} \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} e^{-2 \pi (f + u)x - 2\pi vy } dx dy
+$$
+
+Agora podemos integrar 
+
+$$
+
+\int_{-\infty}^{\infty} e^{2 \pi (f - u)x - 2 \pi vy} dx  = \left[ \frac{e^{2 \pi (f - u)x - 2 \pi vy}}{2 \pi (f - u)} \right]_{x = -\infty}^{x = \infty}
+
+$$
+
+e o segundo termo da soma
+
+$$
+
+\int_{-\infty}^{\infty} e^{-2 \pi (f + u)x - 2\pi vy } dx = \left[ \frac{e^{2 \pi (f + u)x - 2 \pi vy}}{2 \pi (f + u)} \right]_{x = -\infty}^{x = \infty}
+ 
+$$
+
+Aplicando os limites para a integral imprópria
+
+$$
+e^{2\pi vy } (\lim_{x \to \infty} \frac{e^{2 \pi (f - u)x }}{2 \pi (f - u)} - \lim_{x \to -\infty} \frac{e^{2 \pi (f - u)x }}{2 \pi (f - u)} )
+$$
+
+e
+
+$$
+e^{2\pi vy } (\lim_{x \to \infty} \frac{e^{2 \pi (f + u)x }}{2 \pi (f + u)} - \lim_{x \to -\infty} \frac{e^{2 \pi (f + u)x }}{2 \pi (f + u)} )
+$$
+
+podemos agora somar os dois termos
+
+$$
+e^{2\pi vy } ( \lim_{x \to \infty} \frac{e^{2 \pi (f - u)x }}{2 \pi (f - u)} - \lim_{x \to -\infty} \frac{e^{2 \pi (f - u)x }}{2 \pi (f - u)} - \lim_{x \to \infty} \frac{e^{2 \pi (f + u)x }}{2 \pi (f + u)} - \lim_{x \to -\infty} \frac{e^{2 \pi (f + u)x }}{2 \pi (f + u)} )
+$$
+
+agrupando os termos de mesmos limites
+
+$$
+e^{2\pi vy } ( \lim_{x \to \infty} \frac{e^{2 \pi (f - u)x }}{2 \pi (f - u)} - \lim_{x \to \infty} \frac{e^{2 \pi (f + u)x }}{2 \pi (f + u)} -\lim_{x \to -\infty} \frac{e^{2 \pi (f - u)x }}{2 \pi (f - u)}  + \lim_{x \to -\infty} \frac{e^{2 \pi (f + u)x }}{2 \pi (f + u)} )
+$$
+
+agora analisando os termos, vemos que os dois convergem para funções sinc's, e então
+
+$$
+\lim_{x \to \infty} \frac{e^{2 \pi (f - u)x }}{2 \pi (f - u)} - \lim_{x \to \infty} \frac{e^{2 \pi (f + u)x }}{2 \pi (f + u)} = 
+$$
+
+e
+
+$$
+\lim_{x \to -\infty} \frac{e^{2 \pi (f + u)x }}{2 \pi (f + u)}  - \lim_{x \to -\infty} \frac{e^{2 \pi (f - u)x }}{2 \pi (f - u)}
+$$
+
+
+
+
+
 
 ![Imagem gerada pela função senoide](./imagens/imagem_periodica.png)
 
