@@ -62,19 +62,62 @@ onde M e N são os números de linhas e colunas, respectivamente.
 A transformada de fourier sobre uma imagem é definida como uma integral dupla sobre o círculo unitário, dada por
 
 $$
-\int_{-\infinity}^{\infinity} \int_{-\infinity}^{\infinity} f(x,y)e^{2 \pi (ux+vy)} dx dy
+F(u,v) = \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} f(x,y)e^{-2 \pi (ux+vy)} dx dy
 $$
 
 porém as imagens são discretas, e uma discretização da expressão acima pode ser obtida, adimitindo a imagem como uma soma de um trem de impulsos de duas variáveis, tem-se
 
 $$
-f(x = mT_m, y = nT_n) = f(m,n) = \sum_{}^{} \sum_{}^{} f(x,y)\cdot \delta(x - T_m) \delta(x - T_n)
+f(x = mT_m, y = nT_n) = f(m,n) = \sum_{i}^{} \sum_{k}^{} f(x,y)\cdot \delta(x - i) \delta(x - k)
 $$
 
-substituindo agora essa função na integral temos
+e ainda simplificando temos
+
+$$
+f(m,n) = f(x,y) \sum_{i}^{} \sum_{k}^{} \delta(x - i) \delta(y - k)
+$$
+
+substituindo agora essa função na expressão da transformada de fourier temos
+
+$$
+F(u,v) = \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} \sum_{i}^{} \sum_{k}^{} f(x,y) \delta(x - i) \delta(y - k) e^{-2 \pi (ux+vy)} dx dy
+$$
+
+podemos rearranjar agora a integral e os somatórios, e a expressão acima se torna
+
+$$
+F(u,v) = \int_{-\infty}^{\infty} \sum_{k}^{} \delta(y - k)  \sum_{i}^{} \int_{-\infty}^{\infty} f(x,y) \delta(x - i) e^{-2 \pi ux} dx e^{-2 \pi vy}dy
+$$
+
+e a integral interna pode ser resolvida utilizando a noção de integrais com impulsos, e é dada por 
+
+$$
+\int_{-\infty}^{\infty} f(x,y) \delta(x - i) e^{-2 \pi ux} dx = f(i,y) e^{-2 \pi ui}
+$$
+
+assim ficamos com 
+
+$$
+F(u,v) = \int_{-\infty}^{\infty} \sum_{k}^{} \delta(y - k)  \sum_{i}^{} f(i,y) e^{-2 \pi ui}  e^{-2 \pi vy}dy
+$$
+
+agora reorganizando mais uma vez e trocando a ordem do somatório com a integral
+
+$$
+F(u,v) = \sum_{i}^{} e^{-2 \pi ui}  \sum_{k}^{}  \int_{-\infty}^{\infty} f(i,y) \delta(y - k) e^{-2 \pi vy}dy
+$$
+
+e utilizando denovo o conceito de integrais com impulso, finalmente temos
+
+$$
+F(u,v) = \sum_{i}^{} e^{-2 \pi ui}  \sum_{k}^{}  f(i,k) e^{-2 \pi vk} = \sum_{i}^{} \sum_{k}^{} f(i,k) e^{-2 \pi (ui + vk}
+$$
+
+que é conhecida como a transformada discreta de fourier bidimensional.
+
 
 ### 3.1. Implementação
-Foi então implementado como no exemplo mostrado pelo professor, uma imagem com uma função senoidal dependende das linhas, e construído o gráfico no erro para uma linha fixa x = 5 para fins de comparação. 
+Foi então utilizado o código do professor como referência para as operações computacionais com a DFT, tendo toda a preparação da imagem para tal, e assim com as devidas alterações o código ficou 
 
 * Código
 
@@ -92,9 +135,7 @@ Percebeu-se que ao contrário do exemplo feito pelo professor, a imagem aqui req
 
 ![Imagem gerada pela função senoide](./imagens/imagem_periodica.png)
 
-o gráfico do erro tem uma diferença que para ser notada, precisou ser multiplicada por 100, que é a diferença entre os números salvos em yml(float) e em png(uchar), percebeu-se que o erro foi constante ao longo da linha, o que pode significa um erro pequeno nas casas decimais.
 
-![Imagem do gráfico do erro em função da linha](./imagens/grafico_erro_linha.png)
 
 ---
 
