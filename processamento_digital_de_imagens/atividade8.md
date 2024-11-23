@@ -47,13 +47,13 @@ onde comumente z é um número entre 0 e 255, que são os números de bits(8) ne
 Uma função senoidal pode definir uma imagem periódica, especificamente, podemos ter uma função senoidal nas linhas ou nas colunas, definindo
 
 $$
-z = f(x, y) = Asen(\frac{2*\pi*f*x}{M}) + B
+z = f(x, y) = Asen(\frac{2 \pi f x}{M}) + D
 $$
 
 ou uma função senoidal periódica nas colunas
 
 $$
-z = f(x, y) = Asen(\frac{2*\pi*f*y}{N}) + B
+z = f(x, y) = Asen(\frac{2 \pi f y}{N}) + D
 $$
 
 onde M e N são os números de linhas e colunas, respectivamente.
@@ -65,52 +65,70 @@ $$
 F(u,v) = \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} f(x,y)e^{-2 \pi (ux+vy)} dx dy
 $$
 
-porém as imagens são discretas, e uma discretização da expressão acima pode ser obtida, adimitindo a imagem como uma soma de um trem de impulsos de duas variáveis, tem-se
+porém as imagens são discretas, e uma aproximação discretizada da expressão acima pode ser obtida, adimitindo a imagem como uma soma de um trem de impulsos contínuos de duas variáveis, tem-se
 
 $$
-f(x = mT_m, y = nT_n) = f(m,n) = \sum_{i}^{} \sum_{k}^{} f(x,y)\cdot \delta(x - i) \delta(x - k)
+f(x = iT_m, y = nT_n) = \overline{f}(x, y) = \sum_{i}^{} \sum_{n}^{} f(x,y)\cdot \delta(x - iT_m) \delta(y - nT_n)
 $$
 
-e ainda simplificando temos
+considerando um período constante e uniforme para as amostras da imagem, temos 
 
 $$
-f(m,n) = f(x,y) \sum_{i}^{} \sum_{k}^{} \delta(x - i) \delta(y - k)
+T_m = 1/M
+$$
+
+e
+
+$$
+T_n = 1/N
+$$
+
+e ainda simplificando a expressão temos
+
+$$
+\overline{f}(x, y) = f(x,y) \sum_{i}^{} \sum_{n}^{} \delta(x - iT_m) \delta(y - nT_n)
 $$
 
 substituindo agora essa função na expressão da transformada de fourier temos
 
 $$
-F(u,v) = \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} \sum_{i}^{} \sum_{k}^{} f(x,y) \delta(x - i) \delta(y - k) e^{-2 \pi (ux+vy)} dx dy
+F(u,v) = \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} \sum_{i}^{} \sum_{n}^{} f(x,y) \delta(x - iT_m) \delta(y - nT_n) e^{-2 \pi (ux+vy)} dx dy
 $$
 
 podemos rearranjar agora a integral e os somatórios, e a expressão acima se torna
 
 $$
-F(u,v) = \int_{-\infty}^{\infty} \sum_{k}^{} \delta(y - k)  \sum_{i}^{} \int_{-\infty}^{\infty} f(x,y) \delta(x - i) e^{-2 \pi ux} dx e^{-2 \pi vy}dy
+F(u,v) = \int_{-\infty}^{\infty} \sum_{n}^{} \delta(y - nT_n)  \sum_{i}^{} \int_{-\infty}^{\infty} f(x,y) \delta(x - iT_m) e^{-2 \pi ux} dx e^{-2 \pi vy} dy
 $$
 
 e a integral interna pode ser resolvida utilizando a noção de integrais com impulsos, e é dada por 
 
 $$
-\int_{-\infty}^{\infty} f(x,y) \delta(x - i) e^{-2 \pi ux} dx = f(i,y) e^{-2 \pi ui}
+\int_{-\infty}^{\infty} f(x,y) \delta(x - iT_m) e^{-2 \pi ux} dx = f(i,y) e^{-2 \pi uiT_m}
 $$
 
 assim ficamos com 
 
 $$
-F(u,v) = \int_{-\infty}^{\infty} \sum_{k}^{} \delta(y - k)  \sum_{i}^{} f(i,y) e^{-2 \pi ui}  e^{-2 \pi vy}dy
+F(u,v) = \int_{-\infty}^{\infty} \sum_{n}^{} \delta(y - nT_n)  \sum_{i}^{} f(i,y) e^{-2 \pi uiT_m}  e^{-2 \pi vy}dy
 $$
 
 agora reorganizando mais uma vez e trocando a ordem do somatório com a integral
 
 $$
-F(u,v) = \sum_{i}^{} e^{-2 \pi ui}  \sum_{k}^{}  \int_{-\infty}^{\infty} f(i,y) \delta(y - k) e^{-2 \pi vy}dy
+F(u,v) = \sum_{i}^{} e^{-2 \pi uiT_m}  \sum_{n}^{}  \int_{-\infty}^{\infty} f(iT_m,y) \delta(y - nT_m) e^{-2 \pi vy}dy
 $$
 
 e utilizando denovo o conceito de integrais com impulso, finalmente temos
 
 $$
-F(u,v) = \sum_{i}^{} e^{-2 \pi ui}  \sum_{k}^{}  f(i,k) e^{-2 \pi vk} = \sum_{i}^{} \sum_{k}^{} f(i,k) e^{-2 \pi (ui + vk}
+F(u,v) = \sum_{i}^{} e^{-2 \pi uiT_m}  \sum_{n}^{}  f(i,n) e^{-2 \pi vn} = \sum_{i}^{} \sum_{n}^{} f(i,n) e^{-2 \pi (uiT_m + vnT_n)}
+$$
+
+e a expressão final
+
+$$
+F(u,v) = \frac{1}{M} \frac{1}{N} \sum_{i}^{} \sum_{n}^{} f(i,n) e^{-2 \pi (u\frac{i}{M} + v\frac{n}{N})}
 $$
 
 que é conhecida como a transformada discreta de fourier bidimensional.
