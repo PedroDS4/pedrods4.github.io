@@ -325,25 +325,25 @@ $$
 podemos agora somar os dois termos
 
 $$
-e^{2\pi vy } ( \lim_{x \to \infty} \frac{e^{2 \pi (f - u)x }}{2 \pi (f - u)} - \lim_{x \to -\infty} \frac{e^{2 \pi (f - u)x }}{2 \pi (f - u)} - \lim_{x \to \infty} \frac{e^{2 \pi (f + u)x }}{2 \pi (f + u)} - \lim_{x \to -\infty} \frac{e^{2 \pi (f + u)x }}{2 \pi (f + u)} )
+e^{2\pi vy } ( \lim_{x \to \infty} \frac{e^{j 2 \pi (f - u)x }}{2 \pi (f - u)} - \lim_{x \to -\infty} \frac{e^{j 2 \pi (f - u)x }}{2 \pi (f - u)} - \lim_{x \to \infty} \frac{e^{j 2 \pi (f + u)x }}{j 2 \pi (f + u)} - \lim_{x \to -\infty} \frac{e^{j 2 \pi (f + u)x }}{2 \pi (f + u)} )
 $$
 
 agrupando os termos de mesmos limites
 
 $$
-e^{2\pi vy } ( \lim_{x \to \infty} \frac{e^{2 \pi (f - u)x }}{2 \pi (f - u)} - \lim_{x \to \infty} \frac{e^{2 \pi (f + u)x }}{2 \pi (f + u)} -\lim_{x \to -\infty} \frac{e^{2 \pi (f - u)x }}{2 \pi (f - u)}  + \lim_{x \to -\infty} \frac{e^{2 \pi (f + u)x }}{2 \pi (f + u)} )
+e^{2\pi vy } ( \lim_{x \to \infty} \frac{e^{ j 2 \pi (f - u)x }}{2 \pi (f - u)} - \lim_{x \to \infty} \frac{e^{j 2 \pi (f + u)x }}{2 \pi (f + u)} -\lim_{x \to -\infty} \frac{e^{j 2 \pi (f - u)x }}{2 \pi (f - u)}  + \lim_{x \to -\infty} \frac{e^{j 2 \pi (f + u)x }}{2 \pi (f + u)} )
 $$
 
 agora analisando os termos, vemos que os dois convergem para funções sinc's, e então
 
 $$
-\lim_{x \to \infty} \frac{e^{2 \pi (f - u)x }}{2 \pi (f - u)} - \lim_{x \to -\infty} \frac{e^{2 \pi (f - u)x }}{2 \pi (f - u)} = sinc(2 \pi (f - u)
+\lim_{x \to \infty} \frac{e^{j 2 \pi (f - u)x }}{j 2 \pi (f - u)} - \lim_{x \to -\infty} \frac{e^{j 2 \pi (f - u)x }}{2 \pi (f - u)} = sinc(2 \pi (f - u)
 $$
 
 e
 
 $$
-\lim_{x \to -\infty} \frac{e^{2 \pi (f + u)x }}{2 \pi (f + u)}  - \lim_{x \to \infty} \frac{e^{2 \pi (f + u)x }}{2 \pi (f + u)} 
+\lim_{x \to -\infty} \frac{e^{j 2 \pi (f + u)x }}{2 \pi (f + u)}  - \lim_{x \to \infty} \frac{e^{j 2 \pi (f + u)x }}{2 \pi (f + u)} 
 $$
 
 ou seja
