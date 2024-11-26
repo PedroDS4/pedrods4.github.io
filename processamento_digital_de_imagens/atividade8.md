@@ -257,71 +257,69 @@ Foi então utilizado o código do professor como referência para as operações
 Percebeu-se que ao contrário do exemplo feito pelo professor, a imagem aqui requisitada era periódica nas linhas, pois dependia da i-ésima linha x (i), e seu espectro esperado teoricamente calculado pela transformada de fourier é um trem de impulsos, assim como na transformada de fourier bidimensional
 
 $$
-F(u,v) = \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} f(x,y)e^{-2 \pi (ux+vy)} dx dy = \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} Asen(2 \pi f x) e^{-2 \pi (ux+vy)} dx dy
+F(u,v) = \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} f(x,y)e^{-2 \pi j(ux+vy)} dx dy = \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} Asen(2 \pi f x) e^{-2 \pi (ux+vy)} dx dy
 $$
 
 calculando a integral, temos
 
 $$
-F(u,v) = A \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} sen(2 \pi f x) e^{-2 \pi (ux+vy)} dx dy
+F(u,v) = A \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} sen(2 \pi f x) e^{-2 \pi j (ux+vy)} dx dy
 $$
 
 utilizando a identidade de euler, 
 
 $$
-sen(\2 \pi f x) = \frac{e^{2 \pi f x} - e^{-2 \pi f x}}{2}
+sen(\2 \pi f x) = \frac{e^{j 2 \pi f x} - e^{-j 2 \pi f x}}{2j}
 $$
 
 substituindo agora na expressão da transformada de fourier
 
 $$
-F(u,v) = \frac{A}{2} \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} (e^{2 \pi f x} - e^{-2 \pi f x}) e^{-2 \pi (ux+vy)} dx dy
+F(u,v) = \frac{A}{2j} \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} (e^{j 2 \pi f x} - e^{-j 2 \pi f x}) e^{-2 \pi (ux+vy)} dx dy
 $$
 
 separando a soma, temos
 
 $$
-F(u,v) = \frac{A}{2} \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} e^{2 \pi f x} e^{-2 \pi (ux+vy)} dx dy  - \frac{A}{2} \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} e^{-2 \pi f x} e^{-2 \pi (ux+vy)} dx dy
+F(u,v) = \frac{A}{2j} \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} e^{j 2 \pi f x} e^{-j 2 \pi (ux+vy)} dx dy  - \frac{A}{2} \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} e^{-j 2 \pi f x} e^{-j 2 \pi (ux+vy)} dx dy
 $$
 
 Somando os expoentes das exponenciais, temos
 
 $$
-F(u,v) = \frac{A}{2} \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} e^{2 \pi f x -2 \pi (ux+vy)} dx dy - \frac{A}{2} \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} e^{-2 \pi f x -2 \pi (ux+vy)} dx dy
+F(u,v) = \frac{A}{2j} \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} e^{j 2 \pi f x - j 2 \pi (ux+vy)} dx dy - \frac{A}{2} \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} e^{-j 2 \pi f x -j 2 \pi (ux+vy)} dx dy
 $$
 
 colocando o x em evidência nas exponenciais
 
 $$
-F(u,v) = \frac{A}{2} \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} e^{2 \pi (f - u)x - 2\pi vy} dx dy - \frac{A}{2} \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} e^{-2 \pi (f + u)x - 2\pi vy } dx dy
+F(u,v) = \frac{A}{2j} \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} e^{j 2 \pi (f - u)x - 2\pi vy} dx dy - \frac{A}{2} \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} e^{-j 2 \pi (f + u)x - j 2 \pi vy } dx dy
 $$
 
 Agora podemos integrar 
 
 $$
 
-\int_{-\infty}^{\infty} e^{2 \pi (f - u)x - 2 \pi vy} dx  = \left[ \frac{e^{2 \pi (f - u)x - 2 \pi vy}}{2 \pi (f - u)} \right]_{x = -\infty}^{x = \infty}
+\int_{-\infty}^{\infty} e^{j 2 \pi (f - u)x - j 2 \pi vy} dx  = \left[ \frac{e^{j 2 \pi (f - u)x - j 2 \pi vy}}{j 2 \pi (f - u)} \right]_{x = -\infty}^{x = \infty}
 
 $$
 
 e o segundo termo da soma
 
 $$
-
-\int_{-\infty}^{\infty} e^{-2 \pi (f + u)x - 2\pi vy } dx = \left[ \frac{e^{2 \pi (f + u)x - 2 \pi vy}}{2 \pi (f + u)} \right]_{x = -\infty}^{x = \infty}
- 
+\int_{-\infty}^{\infty} e^{-j 2 \pi (f + u)x - j 2 \pi vy } dx = \left[ \frac{e^{j 2 \pi (f + u)x - j 2 \pi vy}}{j 2 \pi (f + u)} \right]_{x = -\infty}^{x = \infty}
 $$
 
 Aplicando os limites para a integral imprópria
 
 $$
-e^{2\pi vy } (\lim_{x \to \infty} \frac{e^{2 \pi (f - u)x }}{2 \pi (f - u)} - \lim_{x \to -\infty} \frac{e^{2 \pi (f - u)x }}{2 \pi (f - u)} )
+e^{j 2 \pi vy } (\lim_{x \to \infty} \frac{e^{j 2 \pi (f - u)x }}{j 2 \pi (f - u)} - \lim_{x \to -\infty} \frac{e^{j 2 \pi (f - u)x }}{2 \pi (f - u)} )
 $$
 
 e
 
 $$
-e^{2\pi vy } (\lim_{x \to \infty} \frac{e^{2 \pi (f + u)x }}{2 \pi (f + u)} - \lim_{x \to -\infty} \frac{e^{2 \pi (f + u)x }}{2 \pi (f + u)} )
+e^{2\pi vy } (\lim_{x \to \infty} \frac{e^{j 2 \pi (f + u)x }}{2 \pi (f + u)} - \lim_{x \to -\infty} \frac{e^{j 2 \pi (f + u)x }}{2 \pi (f + u)} )
 $$
 
 podemos agora somar os dois termos
@@ -339,22 +337,27 @@ $$
 agora analisando os termos, vemos que os dois convergem para funções sinc's, e então
 
 $$
-\lim_{x \to \infty} \frac{e^{2 \pi (f - u)x }}{2 \pi (f - u)} - \lim_{x \to \infty} \frac{e^{2 \pi (f + u)x }}{2 \pi (f + u)} = 
+\lim_{x \to \infty} \frac{e^{2 \pi (f - u)x }}{2 \pi (f - u)} - \lim_{x \to -\infty} \frac{e^{2 \pi (f - u)x }}{2 \pi (f - u)} = sinc(2 \pi (f - u)
 $$
 
 e
 
 $$
-\lim_{x \to -\infty} \frac{e^{2 \pi (f + u)x }}{2 \pi (f + u)}  - \lim_{x \to -\infty} \frac{e^{2 \pi (f - u)x }}{2 \pi (f - u)}
+\lim_{x \to -\infty} \frac{e^{2 \pi (f + u)x }}{2 \pi (f + u)}  - \lim_{x \to \infty} \frac{e^{2 \pi (f + u)x }}{2 \pi (f + u)} 
 $$
 
+ou seja
 
 
 
 
+![Imagem da transformada de fourier teorica do seno](./imagens/espectro_real_seno.png)
+*Figura 1: Resultado da transformada de fourier teórica calculada analiticamente.*
 
-![Imagem gerada pela função senoide](./imagens/imagem_periodica.png)
 
+
+![Imagem da transformada discreta de fourier do seno](./imagens/espectro_seno_uchar.png)
+*Figura 2: Resultado da transformada discreta de fourier utilizando os pixels em uchar.*
 
 
 ---
