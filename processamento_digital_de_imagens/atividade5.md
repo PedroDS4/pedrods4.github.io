@@ -224,7 +224,7 @@ int main(int argc, char** argv) {
 
 ## 4. Resultados
 
-Por problemas técnicos por causa de uma webcam comprada porém de péssima qualidade que não funcionou, não se pode averiguar os códigos acima e comprar seu funcionamento.
+Por problemas técnicos por causa de uma webcam comprada porém de péssima qualidade que não funcionou, não se pode averiguar os códigos acima e comprovar seu funcionamento.
 
 ---
 
