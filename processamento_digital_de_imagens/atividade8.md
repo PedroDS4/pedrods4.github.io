@@ -62,7 +62,7 @@ onde M e N são os números de linhas e colunas, respectivamente.
 A transformada de fourier sobre uma imagem é definida como uma integral dupla sobre o círculo unitário, dada por
 
 $$
-F(u,v) = \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} f(x,y)e^{-2 \pi (ux+vy)} dx dy
+F(u,v) = \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} f(x,y)e^{-j 2 \pi (ux+vy)} dx dy
 $$
 
 porém as imagens são discretas, e uma aproximação discretizada da expressão acima pode ser obtida, adimitindo a imagem como uma soma de um trem de impulsos contínuos de duas variáveis, tem-se
@@ -92,13 +92,13 @@ $$
 substituindo agora essa função na expressão da transformada de fourier temos
 
 $$
-F(u,v) = \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} \sum_{i}^{} \sum_{n}^{} f(x,y) \delta(x - iT_m) \delta(y - nT_n) e^{-2 \pi (ux+vy)} dx dy
+F(u,v) = \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} \sum_{i}^{} \sum_{n}^{} f(x,y) \delta(x - iT_m) \delta(y - nT_n) e^{-j 2 \pi (ux+vy)} dx dy
 $$
 
 podemos rearranjar agora a integral e os somatórios, e a expressão acima se torna
 
 $$
-F(u,v) = \int_{-\infty}^{\infty} \sum_{n}^{} \delta(y - nT_n)  \sum_{i}^{} \int_{-\infty}^{\infty} f(x,y) \delta(x - iT_m) e^{-2 \pi ux} dx e^{-2 \pi vy} dy
+F(u,v) = \int_{-\infty}^{\infty} \sum_{n}^{} \delta(y - nT_n)  \sum_{i}^{} \int_{-\infty}^{\infty} f(x,y) \delta(x - iT_m) e^{-j 2 \pi ux} dx e^{-j 2 \pi vy} dy
 $$
 
 e a integral interna pode ser resolvida utilizando a noção de integrais com impulsos, e é dada por 
@@ -110,25 +110,25 @@ $$
 assim ficamos com 
 
 $$
-F(u,v) = \int_{-\infty}^{\infty} \sum_{n}^{} \delta(y - nT_n)  \sum_{i}^{} f(iT_m,y) e^{-2 \pi uiT_m}  e^{-2 \pi vy}dy
+F(u,v) = \int_{-\infty}^{\infty} \sum_{n}^{} \delta(y - nT_n)  \sum_{i}^{} f(iT_m,y) e^{-j 2 \pi uiT_m}  e^{-j 2 \pi vy}dy
 $$
 
 agora reorganizando mais uma vez e trocando a ordem do somatório com a integral
 
 $$
-F(u,v) = \sum_{i}^{} e^{-2 \pi uiT_m}  \sum_{n}^{}  \int_{-\infty}^{\infty} f(iT_m,y) \delta(y - nT_m) e^{-2 \pi vy}dy
+F(u,v) = \sum_{i}^{} e^{-j 2 \pi uiT_m}  \sum_{n}^{}  \int_{-\infty}^{\infty} f(iT_m,y) \delta(y - nT_m) e^{-j 2 \pi vy}dy
 $$
 
 e utilizando denovo o conceito de integrais com impulso, finalmente temos
 
 $$
-F(u,v) = \sum_{i}^{} e^{-2 \pi uiT_m}  \sum_{n}^{}  f(iT_m,nT_n) e^{-2 \pi v\frac{n}{N}} = \sum_{i}^{} \sum_{n}^{} f(iT_m,nT_n) e^{-2 \pi (uiT_m + vnT_n)}
+F(u,v) = \sum_{i}^{} e^{-2 \pi uiT_m}  \sum_{n}^{}  f(iT_m,nT_n) e^{-j 2 \pi v\frac{n}{N}} = \sum_{i}^{} \sum_{n}^{} f(iT_m,nT_n) e^{-j 2 \pi (uiT_m + vnT_n)}
 $$
 
 e a expressão final normalizada se torna
 
 $$
-F(u,v) = \frac{1}{M} \frac{1}{N} \sum_{i}^{} \sum_{n}^{} f[i,n] e^{-2 \pi (u\frac{i}{M} + v\frac{n}{N})}
+F(u,v) = \frac{1}{M} \frac{1}{N} \sum_{i}^{} \sum_{n}^{} f[i,n] e^{-j 2 \pi (u\frac{i}{M} + v\frac{n}{N})}
 $$
 
 que é conhecida como a transformada discreta de fourier bidimensional.
@@ -257,13 +257,13 @@ Foi então utilizado o código do professor como referência para as operações
 Percebeu-se que ao contrário do exemplo feito pelo professor, a imagem aqui requisitada era periódica nas linhas, pois dependia da i-ésima linha x (i), e seu espectro esperado teoricamente calculado pela transformada de fourier é um trem de impulsos, assim como na transformada de fourier bidimensional
 
 $$
-F(u,v) = \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} f(x,y)e^{-2 \pi j(ux+vy)} dx dy = \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} Asen(2 \pi f x) e^{-2 \pi (ux+vy)} dx dy
+F(u,v) = \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} f(x,y)e^{-2 \pi j(ux+vy)} dx dy = \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} Asen(2 \pi f x) e^{-j 2 \pi (ux+vy)} dx dy
 $$
 
 calculando a integral, temos
 
 $$
-F(u,v) = A \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} sen(2 \pi f x) e^{-2 \pi j (ux+vy)} dx dy
+F(u,v) = A \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} sen(2 \pi f x) e^{-j 2 \pi (ux+vy)} dx dy
 $$
 
 utilizando a identidade de euler, 
@@ -307,19 +307,19 @@ $$
 e o segundo termo da soma
 
 $$
-\int_{-\infty}^{\infty} e^{-j 2 \pi (f + u)x - j 2 \pi vy } dx = \left[ \frac{e^{j 2 \pi (f + u)x - j 2 \pi vy}}{j 2 \pi (f + u)} \right]_{x = -\infty}^{x = \infty}
+\int_{-\infty}^{\infty} e^{-j 2 \pi (f + u)x - j 2 \pi vy } dx = \left[ \frac{e^{-j 2 \pi (f + u)x - j 2 \pi vy}}{-j 2 \pi (f + u)} \right]_{x = -\infty}^{x = \infty}
 $$
 
 Aplicando os limites para a integral imprópria
 
 $$
-e^{j 2 \pi vy } (\lim_{x \to \infty} \frac{e^{j 2 \pi (f - u)x }}{j 2 \pi (f - u)} - \lim_{x \to -\infty} \frac{e^{j 2 \pi (f - u)x }}{2 \pi (f - u)} )
+e^{j 2 \pi vy } (\lim_{x \to \infty} \frac{e^{j 2 \pi (f - u)x }}{j 2 \pi (f - u)} - \lim_{x \to -\infty} \frac{e^{j 2 \pi (f - u)x }}{-j 2 \pi (f - u)} )
 $$
 
 e
 
 $$
-e^{2\pi vy } (\lim_{x \to \infty} \frac{e^{j 2 \pi (f + u)x }}{2 \pi (f + u)} - \lim_{x \to -\infty} \frac{e^{j 2 \pi (f + u)x }}{2 \pi (f + u)} )
+e^{2\pi vy } (\lim_{x \to \infty} \frac{e^{j 2 \pi (f + u)x }}{j 2 \pi (f + u)} - \lim_{x \to -\infty} \frac{e^{j 2 \pi (f + u)x }}{2 \pi (f + u)} )
 $$
 
 podemos agora somar os dois termos
