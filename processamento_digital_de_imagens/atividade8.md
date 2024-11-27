@@ -293,15 +293,13 @@ $$
 colocando o x em evidência nas exponenciais
 
 $$
-F(u,v) = \frac{A}{2j} \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} e^{j 2 \pi (f - u)x - 2\pi vy} dx dy - \frac{A}{2} \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} e^{-j 2 \pi (f + u)x - j 2 \pi vy } dx dy
+F(u,v) = \frac{A}{2j} \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} e^{j 2 \pi (f - u)x - j 2\pi vy} dx dy - \frac{A}{2} \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} e^{-j 2 \pi (f + u)x - j 2 \pi vy } dx dy
 $$
 
 Agora podemos integrar 
 
 $$
-
 \int_{-\infty}^{\infty} e^{j 2 \pi (f - u)x - j 2 \pi vy} dx  = \left[ \frac{e^{j 2 \pi (f - u)x - j 2 \pi vy}}{j 2 \pi (f - u)} \right]_{x = -\infty}^{x = \infty}
-
 $$
 
 e o segundo termo da soma
@@ -313,43 +311,63 @@ $$
 Aplicando os limites para a integral imprópria
 
 $$
-e^{j 2 \pi vy } (\lim_{x \to \infty} \frac{e^{j 2 \pi (f - u)x }}{j 2 \pi (f - u)} - \lim_{x \to -\infty} \frac{e^{j 2 \pi (f - u)x }}{-j 2 \pi (f - u)} )
+e^{-j 2 \pi vy } (\lim_{x \to \infty} \frac{e^{j 2 \pi (f - u)x }}{j 2 \pi (f - u)} - \lim_{x \to -\infty} \frac{e^{j 2 \pi (f - u)x }}{j 2 \pi (f - u)} )
 $$
 
 e
 
 $$
-e^{2\pi vy } (\lim_{x \to \infty} \frac{e^{j 2 \pi (f + u)x }}{j 2 \pi (f + u)} - \lim_{x \to -\infty} \frac{e^{j 2 \pi (f + u)x }}{2 \pi (f + u)} )
+e^{-j 2\pi vy } (\lim_{x \to \infty} \frac{e^{j 2 \pi (f + u)x }}{-j 2 \pi (f + u)} - \lim_{x \to -\infty} \frac{e^{j 2 \pi (f + u)x }}{-j 2 \pi (f + u)} )
 $$
 
 podemos agora somar os dois termos
 
 $$
-e^{2\pi vy } ( \lim_{x \to \infty} \frac{e^{j 2 \pi (f - u)x }}{2 \pi (f - u)} - \lim_{x \to -\infty} \frac{e^{j 2 \pi (f - u)x }}{2 \pi (f - u)} - \lim_{x \to \infty} \frac{e^{j 2 \pi (f + u)x }}{j 2 \pi (f + u)} - \lim_{x \to -\infty} \frac{e^{j 2 \pi (f + u)x }}{2 \pi (f + u)} )
+e^{-j 2\pi vy } ( \lim_{x \to \infty} \frac{e^{j 2 \pi (f - u)x }}{2 \pi (f - u)} - \lim_{x \to -\infty} \frac{e^{j 2 \pi (f - u)x }}{2 \pi (f - u)} - \lim_{x \to \infty} \frac{e^{j 2 \pi (f + u)x }}{j 2 \pi (f + u)} - \lim_{x \to -\infty} \frac{e^{j 2 \pi (f + u)x }}{2 \pi (f + u)} )
 $$
 
-agrupando os termos de mesmos limites
+agora analisando os termos da soma, vemos que as duas parcelas convergem para funções sinc's
 
 $$
-e^{2\pi vy } ( \lim_{x \to \infty} \frac{e^{ j 2 \pi (f - u)x }}{2 \pi (f - u)} - \lim_{x \to \infty} \frac{e^{j 2 \pi (f + u)x }}{2 \pi (f + u)} -\lim_{x \to -\infty} \frac{e^{j 2 \pi (f - u)x }}{2 \pi (f - u)}  + \lim_{x \to -\infty} \frac{e^{j 2 \pi (f + u)x }}{2 \pi (f + u)} )
-$$
-
-agora analisando os termos, vemos que os dois convergem para funções sinc's, e então
-
-$$
-\lim_{x \to \infty} \frac{e^{j 2 \pi (f - u)x }}{j 2 \pi (f - u)} - \lim_{x \to -\infty} \frac{e^{j 2 \pi (f - u)x }}{2 \pi (f - u)} = sinc(2 \pi (f - u)
+\lim_{x \to \infty} \frac{e^{j 2 \pi (f - u)x }}{j 2 \pi (f - u)} - \lim_{x \to -\infty} \frac{e^{j 2 \pi (f - u)x }}{j 2 \pi (f - u)} = \lim_{x \to \infty} \frac{e^{j 2 \pi (f - u)x -e^{- j 2 \pi (f - u)x }}{j 2 \pi (f - u)}  = \lim_{x \to \infty} \frac{sin(2 \pi (f - u) x}{ \pi (f-u)}
 $$
 
 e
 
 $$
-\lim_{x \to -\infty} \frac{e^{j 2 \pi (f + u)x }}{2 \pi (f + u)}  - \lim_{x \to \infty} \frac{e^{j 2 \pi (f + u)x }}{2 \pi (f + u)} 
+\lim_{x \to -\infty} \frac{e^{-j 2 \pi (f + u)x }}{-j 2 \pi (f + u)}  - \lim_{x \to \infty} \frac{e^{-j 2 \pi (f + u)x }}{-j 2 \pi (f + u)} = \lim_{x \to \infty} \frac{e^{-j 2 \pi (f + u)x -e^{ j 2 \pi (f + u)x }}{j 2 \pi (f + u)}  = \lim_{x \to \infty} -\frac{sin(2 \pi (f + u) x}{ \pi (f+u)}
 $$
 
-ou seja
+e esses dois limites são conhecidos por resultarem em funções impulsos
+
+$$
+\lim_{x \to \infty} -\frac{sin(2 \pi (f + u) x}{ \pi (f+u)} = -\delta (f+u)
+$$
+
+e
+
+$$
+\lim_{x \to \infty} \frac{sin(2 \pi (f - u) x}{ \pi (f-u)} = \delta (f-u)
+$$
+
+agora substituindo de volta na integral temos
 
 
+$$
+F(u,v) = \frac{A}{2j} \int_{-\infty}^{\infty} (\delta (f-u)-\delta (f+u)) e^{-j 2\pi vy } dy
+$$
 
+agora as funções de u podem sair da integral, e temos
+
+$$
+F(u,v) = \frac{A}{2j}(\delta (f-u)-\delta (f+u))\int_{-\infty}^{\infty} e^{-j 2\pi vy } dy = \frac{A}{2j}(\delta (f-u)-\delta (f+u)) \left[ \frac{e^{-j 2 \pi vy}}{-j 2 \pi v} \right]_{y = -\infty}^{y = \infty}
+$$
+
+aplicando o limite, chegamos que
+
+$$
+\left[ \frac{e^{-j 2 \pi vy}}{-j 2 \pi v} \right]_{y = -\infty}^{y = \infty} = 
+$$
 
 ![Imagem da transformada de fourier teorica do seno](./imagens/espectro_real_seno.png)
 *Figura 1: Resultado da transformada de fourier teórica calculada analiticamente.*
