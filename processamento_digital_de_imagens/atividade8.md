@@ -104,7 +104,7 @@ $$
 e a integral interna pode ser resolvida utilizando a noção de integrais com impulsos, e é dada por 
 
 $$
-\int_{-\infty}^{\infty} f(x,y) \delta(x - iT_m) e^{-2 \pi ux} dx = f(iT_m,y) e^{-2 \pi uiT_m}
+\int_{-\infty}^{\infty} f(x,y) \delta(x - iT_m) e^{-j 2 \pi ux} dx = f(iT_m,y) e^{- j 2 \pi uiT_m}
 $$
 
 assim ficamos com 
