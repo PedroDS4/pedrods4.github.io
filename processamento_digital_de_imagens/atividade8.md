@@ -393,8 +393,13 @@ $$
 |F(u,v)| = |jA (\delta (f+u) \delta (v) - \delta(f-u) \delta(v))| = |A| |\delta (f+u) \delta (v) - \delta(f-u) \delta(v)| = |A|\delta (f+u) \delta (v)  +  |A|\delta (f-u) \delta (v) 
 $$
 
-ou seja, a transformada de uma senoide pode ser vista como dois pontos, um na frequência (u,v) = (u,0) e um na frequência (-u,0), além do ponto da origem
-, ou seja, são três pontos, como mostra a figura abaixo
+por simetria podemos dizer o mesmo da transformada de fourier do seno dependente de y, como sendo
+
+$$
+\mscrF [ Asen(2 \pi f y ] = |A|\delta (f+v) \delta (u)  +  |A|\delta (f-v) \delta (u) 
+$$
+
+ou seja, a transformada de uma senoide pode ser vista como dois pontos, um na frequência (u,v) = (0,v) e um na frequência (0,-v), além do ponto da origem, ou seja, são três pontos, como mostra a figura abaixo
 
 ![Imagem da transformada de fourier teorica do seno](./imagens/espectro_real_seno.png)
 *Figura 1: Resultado da transformada de fourier teórica calculada analiticamente.*
