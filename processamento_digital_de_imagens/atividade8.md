@@ -269,7 +269,7 @@ $$
 utilizando a identidade de euler, 
 
 $$
-sen(\2 \pi f x) = \frac{e^{j 2 \pi f x} - e^{-j 2 \pi f x}}{2j}
+sen(2 \pi f x) = \frac{e^{j 2 \pi f x} - e^{-j 2 \pi f x}}{2j}
 $$
 
 substituindo agora na expressão da transformada de fourier
