@@ -329,13 +329,13 @@ $$
 agora analisando os termos da soma, vemos que as duas parcelas convergem para funções sinc's
 
 $$
-\lim_{x \to \infty} \frac{e^{j 2 \pi (f - u)x }}{j 2 \pi (f - u)} - \lim_{x \to -\infty} \frac{e^{j 2 \pi (f - u)x }}{j 2 \pi (f - u)} = \lim_{x \to \infty} \frac{e^{j 2 \pi (f - u)x -e^{- j 2 \pi (f - u)x }}{j 2 \pi (f - u)}  = \lim_{x \to \infty} \frac{sin(2 \pi (f - u) x}{ \pi (f-u)}
+\lim_{x \to \infty} \frac{e^{j 2 \pi (f - u)x }}{j 2 \pi (f - u)} - \lim_{x \to -\infty} \frac{e^{j 2 \pi (f - u)x }}{j 2 \pi (f - u)} = \lim_{x \to \infty} \frac{e^{j 2 \pi (f - u)x -e^{- j 2 \pi (f - u)x }}{j 2 \pi (f - u)}  = \lim_{x \to \infty} \frac{sin(2 \pi (f - u) x}{\pi (f-u)}
 $$
 
 e
 
 $$
-\lim_{x \to -\infty} \frac{e^{-j 2 \pi (f + u)x }}{-j 2 \pi (f + u)}  - \lim_{x \to \infty} \frac{e^{-j 2 \pi (f + u)x }}{-j 2 \pi (f + u)} = \lim_{x \to \infty} \frac{e^{-j 2 \pi (f + u)x -e^{ j 2 \pi (f + u)x }}{j 2 \pi (f + u)}  = \lim_{x \to \infty} -\frac{sin(2 \pi (f + u) x}{ \pi (f+u)}
+\lim_{x \to -\infty} \frac{e^{-j 2 \pi (f + u)x }}{-j 2 \pi (f + u)}  - \lim_{x \to \infty} \frac{e^{-j 2 \pi (f + u)x }}{-j 2 \pi (f + u)} = \lim_{x \to \infty} \frac{e^{-j 2 \pi (f + u)x -e^{ j 2 \pi (f + u)x }}{j 2 \pi (f + u)}  = \lim_{x \to \infty} -\frac{sin(2 \pi (f + u) x}{\pi (f+u)}
 $$
 
 e esses dois limites são conhecidos por resultarem em funções impulsos
@@ -366,8 +366,35 @@ $$
 aplicando o limite, chegamos que
 
 $$
-\left[ \frac{e^{-j 2 \pi vy}}{-j 2 \pi v} \right]_{y = -\infty}^{y = \infty} = 
+\left[ \frac{e^{-j 2 \pi vy}}{-j 2 \pi v} \right]_{y = -\infty}^{y = \infty} = \lim_{y \to \infty} \frac{e^{-j 2 \pi vy }}{-j 2 \pi v} - \lim_{y \to -\infty} \frac{e^{-j 2 \pi vy }}{-j 2 \pi v}
 $$
+
+podemos verificar mais uma vez que converge para uma sinc, e uma sinc com argumento tendendo ao infinito tende a um impulso, sendo assim
+
+$$
+\lim_{y \to \infty} \frac{e^{-j 2 \pi vy }}{-j 2 \pi v} - \lim_{y \to -\infty} \frac{e^{-j 2 \pi vy }}{-j 2 \pi v} = \lim_{y \to \infty} \frac{e^{j 2 \pi vy } - e^{-j 2 \pi vy }}{j 2 \pi v} = \lim_{y \to \infty} \frac{sin(2\pi vy)}{\pi v} = 2 \delta (v)
+$$
+
+agora substituindo de volta na integral por fim
+
+$$
+F(u,v) = \frac{A}{2j} (\delta (f-u)-\delta (f+u)) \int_{-\infty}^{\infty}  e^{-j 2\pi vy } dy =  \frac{A}{2j} (\delta (f-u)-\delta (f+u)) \cdot 2 \delta (v) 
+$$
+
+e por fim
+
+$$
+F(u,v) = jA \delta (f+u) \delta (v) - jA \delta(f-u) \delta(v)
+$$
+
+Agora calculando o módulo
+
+$$
+|F(u,v)| = |jA (\delta (f+u) \delta (v) - \delta(f-u) \delta(v))| = |A| |\delta (f+u) \delta (v) - \delta(f-u) \delta(v)| = |A|\delta (f+u) \delta (v)  +  |A|\delta (f-u) \delta (v) 
+$$
+
+ou seja, a transformada de uma senoide pode ser vista como dois pontos, um na frequência (u,v) = (u,0) e um na frequência (-u,0), além do ponto da origem
+, ou seja, são três pontos, como mostra a figura abaixo
 
 ![Imagem da transformada de fourier teorica do seno](./imagens/espectro_real_seno.png)
 *Figura 1: Resultado da transformada de fourier teórica calculada analiticamente.*
