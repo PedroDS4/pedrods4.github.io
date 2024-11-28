@@ -329,13 +329,13 @@ $$
 agora analisando os termos da soma, vemos que as duas parcelas convergem para funções sinc's
 
 $$
-\lim_{x \to \infty} \frac{e^{j 2 \pi (f - u)x }}{j 2 \pi (f - u)} - \lim_{x \to -\infty} \frac{e^{j 2 \pi (f - u)x }}{j 2 \pi (f - u)} = \lim_{x \to \infty} \frac{e^{j 2 \pi (f - u)x -e^{- j 2 \pi (f - u)x }}{j 2 \pi (f - u)}  = \lim_{x \to \infty} \frac{sin(2 \pi (f - u) x}{\pi (f-u)}
+\lim_{x \to \infty} \frac{e^{j 2 \pi (f - u)x }}{j 2 \pi (f - u)} - \lim_{x \to -\infty} \frac{e^{j 2 \pi (f - u)x }}{j 2 \pi (f - u)} = \lim_{x \to \infty} \frac{e^{j 2 \pi (f - u)x} - e^{- j 2 \pi (f - u)x }}{j 2 \pi (f - u)}  = \lim_{x \to \infty} \frac{\sin(2 \pi (f - u) x)}{\pi (f-u)}
 $$
 
 e
 
 $$
-\lim_{x \to -\infty} \frac{e^{-j 2 \pi (f + u)x }}{-j 2 \pi (f + u)}  - \lim_{x \to \infty} \frac{e^{-j 2 \pi (f + u)x }}{-j 2 \pi (f + u)} = \lim_{x \to \infty} \frac{e^{-j 2 \pi (f + u)x -e^{ j 2 \pi (f + u)x }}{j 2 \pi (f + u)}  = \lim_{x \to \infty} -\frac{sin(2 \pi (f + u) x}{\pi (f+u)}
+\lim_{x \to -\infty} \frac{e^{-j 2 \pi (f + u)x }}{-j 2 \pi (f + u)}  - \lim_{x \to \infty} \frac{e^{-j 2 \pi (f + u)x }}{-j 2 \pi (f + u)} = \lim_{x \to \infty} \frac{e^{-j 2 \pi (f + u)x} - e^{j 2 \pi (f + u)x }}{j 2 \pi (f + u)}  = \lim_{x \to \infty} -\frac{\sin(2 \pi (f + u) x)}{\pi (f+u)}
 $$
 
 e esses dois limites são conhecidos por resultarem em funções impulsos
