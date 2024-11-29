@@ -14,5 +14,6 @@ Aqui estão os projetos relacionados à disciplina:
 - [Atividade 5: Manipulação de histograma](atividade5.md)
 - [Atividade 6: Filtragem no domínio especial](atividade6.md)
 - [Atividade 7: Tiltshift](atividade7.md)
-- [Atividade 8: Transformada de Fourier Discreta Espacial](atividade8.md) 
+- [Atividade 8: Transformada de Fourier Discreta Espacial](atividade8.md)
+- [Atividade 9: Filtragem homomórfica no domínio da frequência](atividade9.md) 
 - [Voltar para a página principal](../index.md)
