@@ -241,7 +241,7 @@ int main(int argc, char** argv) {
 ```
 
 #### Questão 2: Transformada de fourier de uma senoide em ponto flutuante(melhor aproximação)
-Foi então utilizado o código do professor como referência para as operações computacionais com a DFT, tendo toda a preparação da imagem para tal, e assim com as devidas alterações o código ficou 
+Foi então utilizado o código do professor como referência para as operações computacionais com a DFT, e dessa vez foi utilizado o arquivo em .yml, o que resultou numa melhor precisão da aproximação da DFT.
 
 * Código
 
@@ -546,7 +546,7 @@ Salvando a imagem em .yml, a precisão e a continuidade da senoide melhoram drá
 
 ## 5. Conclusão
 
-A manipulação e a serialização de dados é muito importante no processamento digital de imagens e nos pode dar uma noção das possíveis manipulações e formatos que podemos definir para uma imagem, e a implementação da imagem como uma função de duas variáveis também é capaz de nos dar uma melhor intuição ao trabalhar com imagens como se fosse funções de duas variáveis.
+A transformada de fourier é uma ferramenta fundamental no processamento de imagens, e a preparação para a aplicação dessa transformação e os ajustes de precisão nos arquivos são muito importantes, como mostram os resultados dessa atividade que não seguir os passos fundamentais pode acabar até mesmo adicionando harmônicos no seu espectro, quando na verdade eles nem existem. 
 
 ---
 
