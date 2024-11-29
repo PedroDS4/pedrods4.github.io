@@ -373,8 +373,14 @@ int main(int argc, char** argv) {
 
 ## 4. Resultados
 
-### Exibição da transformada de fourier 
-Percebeu-se que ao contrário do exemplo feito pelo professor, a imagem aqui requisitada era periódica nas linhas, pois dependia da i-ésima linha x (i), e seu espectro esperado teoricamente calculado pela transformada de fourier é um trem de impulsos, assim como na transformada de fourier bidimensional
+### Transformada de fourierr Analítica vs DFT
+Para comparativo da transformada de fourier calculada pela expressão da DFT utilizando o opencv, será calculada abaixo a transformada de fourier real de uma imagem da senoide dada por
+
+$$
+F(u,v) = ℱ[ Asen(2 \pi f x) ]
+$$
+
+Aplicando a definição da transformada de fourier, temos
 
 $$
 F(u,v) = \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} f(x,y)e^{-2 \pi j(ux+vy)} dx dy = \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} Asen(2 \pi f x) e^{-j 2 \pi (ux+vy)} dx dy
@@ -516,19 +522,25 @@ $$
 por simetria podemos dizer o mesmo da transformada de fourier do seno dependente de y, como sendo
 
 $$
-\mscrF [ Asen(2 \pi f y ] = |A|\delta (f+v) \delta (u)  +  |A|\delta (f-v) \delta (u) 
+ℱ[ Asen(2 \pi f y) ] = |A|\delta (f+v) \delta (u)  +  |A|\delta (f-v) \delta (u) 
 $$
 
-ou seja, a transformada de uma senoide pode ser vista como dois pontos, um na frequência (u,v) = (0,v) e um na frequência (0,-v), além do ponto da origem, ou seja, são três pontos, como mostra a figura abaixo
+ou seja, a transformada de uma senoide pode ser vista como dois pontos, um na frequência (u,v) = (0,v) e um na frequência (0,-v), além do ponto da origem, ou seja, são três pontos.
 
-![Imagem da transformada de fourier teorica do seno](./imagens/espectro_real_seno.png)
-*Figura 1: Resultado da transformada de fourier teórica calculada analiticamente.*
-
-
+A figura abaixo mostra o resultado da DFT da imagem utilizando o tipo de dado uchar.
 
 ![Imagem da transformada discreta de fourier do seno](./imagens/espectro_seno_uchar.png)
-*Figura 2: Resultado da transformada discreta de fourier utilizando os pixels em uchar.*
+*Figura 1: Resultado da transformada discreta de fourier utilizando os pixels em uchar.*
 
+É possível perceber que devido a arredondamentos e uma diferença grande das amostras, surgiram outros harmônicos e isso os fez aparecerem no módulo do espectro. 
+
+
+### Transformada de fourier da imagem salva em yml.
+Salvando a imagem em .yml, a precisão e a continuidade da senoide melhoram drásticamente e é possível obter um espectro muito próximo do espectro esperado analiticamente, como mostra a imagem abaixo
+
+
+![Imagem da transformada discreta de fourier do seno](./imagens/espectro_real_seno.png)
+*Figura 2: Resultado da transformada discreta de fourier utilizando a imagem em .yml.*
 
 ---
 
