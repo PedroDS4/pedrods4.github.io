@@ -26,7 +26,7 @@ No processamento digital de imagens ela também é uma ferramenta fundamental, u
 ## 2. Objetivo
 
 
-O Objetivo dessa atividade é trabalhar como é feito o cálculo da transformada de fourier sobre uma imagem e quais os passos necessários para a exibição e manipulação.
+O Objetivo dessa atividade é trabalhar como é feito o cálculo da transformada de fourier sobre uma imagem e quais os passos necessários para a exibição e manipulação das imagens no domínio da frequência.
 
 ---
 
@@ -373,7 +373,7 @@ int main(int argc, char** argv) {
 
 ## 4. Resultados
 
-### Transformada de fourierr Analítica vs DFT
+### Transformada de fourier Analítica vs DFT
 Para comparativo da transformada de fourier calculada pela expressão da DFT utilizando o opencv, será calculada abaixo a transformada de fourier real de uma imagem da senoide dada por
 
 $$
@@ -525,7 +525,7 @@ $$
 ℱ[ Asen(2 \pi f y) ] = |A|\delta (f+v) \delta (u)  +  |A|\delta (f-v) \delta (u) 
 $$
 
-ou seja, a transformada de uma senoide pode ser vista como dois pontos, um na frequência (u,v) = (0,v) e um na frequência (0,-v), além do ponto da origem, ou seja, são três pontos.
+ou seja, a transformada de uma senoide pode ser vista como dois pontos, um na frequência $$(u,v) = (0,f)$$ e um na frequência $$(u,v) = (0,-f)$$, além do ponto da origem, ou seja, são três pontos.
 
 A figura abaixo mostra o resultado da DFT da imagem utilizando o tipo de dado uchar.
 
