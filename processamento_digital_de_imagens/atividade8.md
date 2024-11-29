@@ -530,6 +530,7 @@ ou seja, a transformada de uma senoide pode ser vista como dois pontos, um na fr
 A figura abaixo mostra o resultado da DFT da imagem utilizando o tipo de dado uchar.
 
 ![Imagem da transformada discreta de fourier do seno](./imagens/espectro_seno_uchar.png)
+
 *Figura 1: Resultado da transformada discreta de fourier utilizando os pixels em uchar.*
 
 É possível perceber que devido a arredondamentos e uma diferença grande das amostras, surgiram outros harmônicos e isso os fez aparecerem no módulo do espectro. 
@@ -540,6 +541,7 @@ Salvando a imagem em .yml, a precisão e a continuidade da senoide melhoram drá
 
 
 ![Imagem da transformada discreta de fourier do seno](./imagens/espectro_real_seno.png)
+
 *Figura 2: Resultado da transformada discreta de fourier utilizando a imagem em .yml.*
 
 ---
