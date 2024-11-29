@@ -69,12 +69,25 @@ $$
 onde H(u,v) é o filtro homomórfico, dado matematicamente por
 
 $$
-H(u,v) = \gamma_L + (\gamma_H - \gamma_L)(1 - e^{-c{\frac{D(u,v)}{D_0}}^2 })
+H(u,v) = \gamma_L + (\gamma_H - \gamma_L)(1 - e^{-c\frac{D(u,v)^2}{D_0^2} })
+$$
+
+e então para obter de volta a imagem, basta fazermos
+
+$$
+s(x,y) = IFFT(S(u,v))
+$$
+
+e finalmente
+
+$$
+f_{filtrada}(x,y) = exp(s(x,y))
 $$
 
 foi então adquirida uma cena com má iluminação, que é a imagem mostrada abaixo em tons
 
 ![Imagem má iluminada](./imagens/imagem_ma_iluminada.png)
+
 *Figura 1: Imagem que será aplicada o filtro homomórfico para corrigir iluminação.*
 
 
@@ -206,6 +219,7 @@ Para comparativo da transformada de fourier calculada pela expressão da DFT uti
 
 
 ![Imagem corrigida pelo filtro](./imagens/imagem_filtrada.png)
+
 *Figura 2: Resultado da Filtragem homomórfica para corrigir iluminação.*
 
 ---
