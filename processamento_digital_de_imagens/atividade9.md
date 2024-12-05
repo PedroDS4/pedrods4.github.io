@@ -72,7 +72,7 @@ $$
 H(u,v) = \gamma_L + (\gamma_H - \gamma_L)(1 - e^{-c\frac{D(u,v)^2}{D_0^2} })
 $$
 
-é um filtro multiparamétrico, e por isso os valores dos parâmetros $\gamma_L$, $\gamma_H$, $\D_0$ e $c$ precisam ser ajustados cuidadosamente.
+é um filtro multiparamétrico, e por isso os valores dos parâmetros $\gamma_L$, $\gamma_H$, $D_0$ e $c$ precisam ser ajustados cuidadosamente.
 e agora para obter de volta a imagem, agora filtrada, basta fazermos
 
 $$
