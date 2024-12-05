@@ -72,7 +72,8 @@ $$
 H(u,v) = \gamma_L + (\gamma_H - \gamma_L)(1 - e^{-c\frac{D(u,v)^2}{D_0^2} })
 $$
 
-e então para obter de volta a imagem, basta fazermos
+é um filtro multiparamétrico, e por isso os valores dos parâmetros $\gamma_L$, $\gamma_H$, $\D_0$ e $c$ precisam ser ajustados cuidadosamente.
+e agora para obter de volta a imagem, agora filtrada, basta fazermos
 
 $$
 s(x,y) = IFFT(S(u,v))
@@ -258,7 +259,7 @@ $$
 c = 13
 $$
 
-e a imagem obtida é mostrada abaixo
+e a imagem filtrada obtida é mostrada abaixo, com a correção da iluminação.
 
 ![Imagem corrigida pelo filtro](./imagens/imagem_filtrada.png)
 
@@ -268,7 +269,7 @@ e a imagem obtida é mostrada abaixo
 
 ## 5. Conclusão
 
-A Filtragem homomórfica pode ser muito útil, por mais que ela não seja igual as outras filtragens no domínio da frequência, que focam mais em ruídos periódicos, sua aplicação pode ser também muito usada em muitas áreas do processamento de imagens principalmente para corrigir a iluminação de cenas.
+Vimos que a Filtragem homomórfica foi um sucesso, e conseguiu ajustar a iluminação da imagem com poucas mudanças de parâmetros, por mais que essa seja a desvantagem do filtro. Essa abordagem de filtragem pode ser muito útil, por mais que ela não seja igual as outras filtragens no domínio da frequência, que focam mais em ruídos periódicos, sua aplicação pode ser também muito usada em muitas áreas do processamento de imagens principalmente para corrigir a iluminação de cenas.
 
 ---
 
