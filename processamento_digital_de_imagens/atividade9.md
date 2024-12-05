@@ -84,6 +84,27 @@ $$
 f_{filtrada}(x,y) = exp(s(x,y))
 $$
 
+computacionalmente o filtro pode ser implementado como um laço for duplo, como é mostrado na função abaixo
+
+```
+/ Cria o filtro homomórfico
+void HomoFilter(const cv::Mat& image, cv::Mat& filter) {
+    cv::Mat_<float> filter2D(image.rows, image.cols);
+    int centerX = image.cols / 2;
+    int centerY = image.rows / 2;
+
+    for (int i = 0; i < image.rows; i++) {
+        for (int j = 0; j < image.cols; j++) {
+            float D = sqrt(pow(i - centerY, 2) + pow(j - centerX, 2));
+            filter2D.at<float>(i, j) = gama_L + (gama_H - gama_L) * (1 - exp(-c * pow(D, 2) / pow(D_0, 2)));
+        }
+    }
+
+    cv::Mat planes[] = {filter2D, cv::Mat::zeros(filter2D.size(), CV_32F)};
+    cv::merge(planes, 2, filter);
+}
+```
+
 foi então adquirida uma cena com má iluminação, que é a imagem mostrada abaixo em tons
 
 ![Imagem má iluminada](./imagens/imagem_ma_iluminada.png)
@@ -98,125 +119,124 @@ Foi então utilizado o código do professor como referência para as operações
 
 ```
 #include <iostream>
-#include <vector>
 #include <opencv2/opencv.hpp>
+#include <cmath>
 
+int gama_L = 1;
+int gama_H = 2;
+int D_0 = 5;
+int c = 1;
+
+cv::Mat originalImage, paddedImage, resultImage;
+
+// Troca os quadrantes da transformada de Fourier
 void swapQuadrants(cv::Mat& image) {
-  cv::Mat tmp, A, B, C, D;
+    cv::Mat tmp, A, B, C, D;
 
-  // se a imagem tiver tamanho impar, recorta a regiao para o maior
-  // tamanho par possivel (-2 = 1111...1110)
-  image = image(cv::Rect(0, 0, image.cols & -2, image.rows & -2));
+    image = image(cv::Rect(0, 0, image.cols & -2, image.rows & -2));
 
-  int centerX = image.cols / 2;
-  int centerY = image.rows / 2;
+    int centerX = image.cols / 2;
+    int centerY = image.rows / 2;
 
-  // rearranja os quadrantes da transformada de Fourier de forma que 
-  // a origem fique no centro da imagem
-  // A B   ->  D C
-  // C D       B A
-  A = image(cv::Rect(0, 0, centerX, centerY));
-  B = image(cv::Rect(centerX, 0, centerX, centerY));
-  C = image(cv::Rect(0, centerY, centerX, centerY));
-  D = image(cv::Rect(centerX, centerY, centerX, centerY));
+    A = image(cv::Rect(0, 0, centerX, centerY));
+    B = image(cv::Rect(centerX, 0, centerX, centerY));
+    C = image(cv::Rect(0, centerY, centerX, centerY));
+    D = image(cv::Rect(centerX, centerY, centerX, centerY));
 
-  // swap quadrants (Top-Left with Bottom-Right)
-  A.copyTo(tmp);
-  D.copyTo(A);
-  tmp.copyTo(D);
+    A.copyTo(tmp);
+    D.copyTo(A);
+    tmp.copyTo(D);
 
-  // swap quadrant (Top-Right with Bottom-Left)
-  C.copyTo(tmp);
-  B.copyTo(C);
-  tmp.copyTo(B);
+    C.copyTo(tmp);
+    B.copyTo(C);
+    tmp.copyTo(B);
 }
 
-void makeFilter(const cv::Mat &image, cv::Mat &filter){
-  cv::Mat_<float> filter2D(image.rows, image.cols);
-  int centerX = image.cols / 2;
-  int centerY = image.rows / 2;
-  int radius = 20;
+// Cria o filtro homomórfico
+void HomoFilter(const cv::Mat& image, cv::Mat& filter) {
+    cv::Mat_<float> filter2D(image.rows, image.cols);
+    int centerX = image.cols / 2;
+    int centerY = image.rows / 2;
 
-  for (int i = 0; i < image.rows; i++) {
-    for (int j = 0; j < image.cols; j++) {
-      if (pow(i - centerY, 2) + pow(j - centerX, 2) <= pow(radius, 2)) {
-        filter2D.at<float>(i, j) = 1;
-      } else {
-        filter2D.at<float>(i, j) = 0;
-      }
+    for (int i = 0; i < image.rows; i++) {
+        for (int j = 0; j < image.cols; j++) {
+            float D = sqrt(pow(i - centerY, 2) + pow(j - centerX, 2));
+            filter2D.at<float>(i, j) = gama_L + (gama_H - gama_L) * (1 - exp(-c * pow(D, 2) / pow(D_0, 2)));
+        }
     }
-  }
 
-  cv::Mat planes[] = {cv::Mat_<float>(filter2D), cv::Mat::zeros(filter2D.size(), CV_32F)};
-  cv::merge(planes, 2, filter);
+    cv::Mat planes[] = {filter2D, cv::Mat::zeros(filter2D.size(), CV_32F)};
+    cv::merge(planes, 2, filter);
+}
+
+// Função callback dos trackbars
+void onTrackbarChange(int, void*) {
+    cv::Mat complexImage;
+    std::vector<cv::Mat> planos;
+
+    // Prepara a matriz complexa
+    planos.clear();
+    planos.push_back(cv::Mat_<float>(paddedImage));
+    planos.push_back(cv::Mat::zeros(paddedImage.size(), CV_32F));
+    cv::merge(planos, complexImage);
+
+    // Calcula a DFT
+    cv::dft(complexImage, complexImage);
+    swapQuadrants(complexImage);
+
+    // Cria e aplica o filtro
+    cv::Mat filter;
+    HomoFilter(complexImage, filter);
+    cv::mulSpectrums(complexImage, filter, complexImage, 0);
+
+    // Calcula a DFT inversa
+    swapQuadrants(complexImage);
+    cv::idft(complexImage, complexImage);
+    cv::split(complexImage, planos);
+
+    // Recorta a imagem para o tamanho original
+    cv::Rect roi(0, 0, originalImage.cols, originalImage.rows);
+    resultImage = planos[0](roi);
+
+    // Normaliza para exibição
+    cv::normalize(resultImage, resultImage, 0, 1, cv::NORM_MINMAX);
+    cv::imshow("Filtros Homomórficos", resultImage);
 }
 
 int main(int argc, char** argv) {
-  cv::Mat image, padded, complexImage;
-  std::vector<cv::Mat> planos; 
+    originalImage = cv::imread(argv[1], cv::IMREAD_GRAYSCALE);
+    if (originalImage.empty()) {
+        std::cerr << "Erro ao abrir a imagem: " << argv[1] << std::endl;
+        return EXIT_FAILURE;
+    }
 
-  image = imread(argv[1], cv::IMREAD_GRAYSCALE);
-  if (image.empty()) {
-    std::cout << "Erro abrindo imagem" << argv[1] << std::endl;
-    return EXIT_FAILURE;
-  }
+    // Expande a imagem para o melhor tamanho para DFT
+    int dft_M = cv::getOptimalDFTSize(originalImage.rows);
+    int dft_N = cv::getOptimalDFTSize(originalImage.cols);
+    cv::copyMakeBorder(originalImage, paddedImage, 0, dft_M - originalImage.rows, 0, dft_N - originalImage.cols, cv::BORDER_CONSTANT, cv::Scalar::all(0));
 
-  // expande a imagem de entrada para o melhor tamanho no qual a DFT pode ser
-  // executada, preenchendo com zeros a lateral inferior direita.
-  int dft_M = cv::getOptimalDFTSize(image.rows);
-  int dft_N = cv::getOptimalDFTSize(image.cols); 
-  cv::copyMakeBorder(image, padded, 0, dft_M - image.rows, 0, dft_N - image.cols, cv::BORDER_CONSTANT, cv::Scalar::all(0));
+    // Cria a janela e os trackbars
+    cv::namedWindow("Filtros Homomórficos", cv::WINDOW_NORMAL);
+    cv::createTrackbar("Gama_L", "Filtros Homomórficos", &gama_L, 100, onTrackbarChange);
+    cv::createTrackbar("Gama_H", "Filtros Homomórficos", &gama_H, 100, onTrackbarChange);
+    cv::createTrackbar("D_0", "Filtros Homomórficos", &D_0, 500, onTrackbarChange);
+    cv::createTrackbar("c", "Filtros Homomórficos", &c, 100, onTrackbarChange);
 
-  // prepara a matriz complexa para ser preenchida
-  // primeiro a parte real, contendo a imagem de entrada
-  planos.push_back(cv::Mat_<float>(padded)); 
-  // depois a parte imaginaria com valores nulos
-  planos.push_back(cv::Mat::zeros(padded.size(), CV_32F));
+    // Atualiza a imagem inicialmente
+    onTrackbarChange(0, nullptr);
+    cv::waitKey(0);
 
-  // combina os planos em uma unica estrutura de dados complexa
-  cv::merge(planos, complexImage);  
-
-  // calcula a DFT
-  cv::dft(complexImage, complexImage); 
-  swapQuadrants(complexImage);
-
-  // cria o filtro ideal e aplica a filtragem de frequencia
-  cv::Mat filter;
-  makeFilter(complexImage, filter);
-  cv::mulSpectrums(complexImage, filter, complexImage, 0);
-
-  // calcula a DFT inversa
-  swapQuadrants(complexImage);
-  cv::idft(complexImage, complexImage);
-
-  // planos[0] : Re(DFT(image)
-  // planos[1] : Im(DFT(image)
-  cv::split(complexImage, planos);
-
-  // recorta a imagem filtrada para o tamanho original
-  // selecionando a regiao de interesse (roi)
-  cv::Rect roi(0, 0, image.cols, image.rows);
-  cv::Mat result = planos[0](roi);
-
-  // normaliza a parte real para exibicao
-  cv::normalize(result, result, 0, 1, cv::NORM_MINMAX);
-
-  cv::imshow("image", result);
-  cv::imwrite("dft-filter.png", result * 255);
-
-  cv::waitKey();
-  return EXIT_SUCCESS;
+    return EXIT_SUCCESS;
 }
+
 
 ```
 
 
 ## 4. Resultados
 
-### Transformada de fourier Analítica vs DFT
-Para comparativo da transformada de fourier calculada pela expressão da DFT utilizando o opencv, será calculada abaixo a transformada de fourier real de uma imagem da senoide dada por
-
-
+### Resultado da filtragem homomórfica no domínio da frequência
+O filtro foi aplicado à imagem feita as devidas preparações necessárias, e a imagem obtida é mostrada abaixo
 
 ![Imagem corrigida pelo filtro](./imagens/imagem_filtrada.png)
 
