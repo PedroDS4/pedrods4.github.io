@@ -107,7 +107,7 @@ void HomoFilter(const cv::Mat& image, cv::Mat& filter) {
 
 foi então adquirida uma cena com má iluminação, que é a imagem mostrada abaixo em tons
 
-![Imagem má iluminada](./imagens/imagem_ma_iluminada.png)
+![Imagem má iluminada](./imagens/imagem_ma_iluminada.jpg)
 
 *Figura 1: Imagem que será aplicada o filtro homomórfico para corrigir iluminação.*
 
