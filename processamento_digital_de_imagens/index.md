@@ -16,5 +16,5 @@ Aqui estão os projetos relacionados à disciplina:
 - [Atividade 7: Tiltshift](atividade7.md)
 - [Atividade 8: Transformada de Fourier Discreta Espacial](atividade8.md)
 - [Atividade 9: Filtragem homomórfica no domínio da frequência](atividade9.md)
-- [Atividade 9: Arte usando Processamento digital de imagens: Pontilhismo](atividade10.md) 
+- [Atividade 10: Arte usando Processamento digital de imagens: Pontilhismo](atividade10.md) 
 - [Voltar para a página principal](../index.md)
