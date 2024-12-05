@@ -236,7 +236,29 @@ int main(int argc, char** argv) {
 ## 4. Resultados
 
 ### Resultado da filtragem homomórfica no domínio da frequência
-O filtro foi aplicado à imagem feita as devidas preparações necessárias, e a imagem obtida é mostrada abaixo
+O filtro foi aplicado à imagem feita as devidas preparações necessárias, os parâmetros do filtros usados foram
+
+Treshold inferior
+$$
+\gamma_L = 3
+$$
+
+Treshold superior
+$$
+\gamma_H = 42
+$$
+
+Frequência/raio de corte
+$$
+D_0 = 75
+$$
+
+fator de atenuação 
+$$
+c = 13
+$$
+
+e a imagem obtida é mostrada abaixo
 
 ![Imagem corrigida pelo filtro](./imagens/imagem_filtrada.png)
 
