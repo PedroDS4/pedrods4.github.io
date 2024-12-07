@@ -4,7 +4,10 @@
 
 [Voltar para a página principal](../index.md)
 
+
 # Universidade Federal do Rio Grande do Norte
+
+#**Relatório Atividade 1: Negativo e Inversão de Quadrantes**
 
 **Engenharia Mecatrônica**  
 **Disciplina: Processamento Digital de Imagens**
