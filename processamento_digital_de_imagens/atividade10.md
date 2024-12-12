@@ -33,203 +33,182 @@ e bonitos em uma imagem, e aplicar uma técnica que gere uma imagem pointilhista
 
 ## 3. Metodologia
 
-### Componentes de uma imagem
-O modelo matemático mais simples para fazer a descrição de imagens é o que utiliza os conceitos de iluminação e reflectância, 
-podemos dizer que uma imagem é dada pelo produto
-
-$$
-f(x,y) = i(x,y) \cdot r(x,y)
-$$
-
-onde i e r são a iluminação e a reflectância, respectivamente.
-e podemos inferir que a componente de iluminação, que representa a luz da cena, é uma componente que varia suavemente(frequências baixas), enquanto a componente da reflectância
-tem frequências mais altas.
-Com isso é foi desenvolvida uma estratégia para separar os sinais de alta e baixa frequência em uma soma, e então podemos aplicar um filtro passa-baixas para filtrar a imagem.
-
-### Cepstrum complexo
-O cepstrum complexo é um domínio aonde levamos nossa imagem, a viagem até esse domínio tem como ponto final de passagem o domínio da frequência ja conhecido que somos levados pela transformada de fourier, depois basta pegarmos o logaritmo desse resultado e teremos nossos sinais separados, teoricamente.
-Esse processo pode ser descrito matematicamente como
-
-$$
-Ln( f(x,y) = i(x,y) \cdot r(x,y) ) => z(x,y) = Ln(i(x,y)) + Ln(r(x,y))
-$$
-
-aplicando agora a transformada de fourier
-
-$$
-Z(u,v) = FFT ( Ln(i(x,y)) + Ln(r(x,y)) ) = FFT(Ln(i(x,y))) + FFT(Ln(r(x,y)))
-$$
-
-### Filtro homomórfico
-Por fim aplicamos o filtro à imagem $$Z(u,v)$$
-
-$$
-S(u,v) = H(u,v) \cdot Z(u,v)
-$$
-
-onde H(u,v) é o filtro homomórfico, dado matematicamente por
-
-$$
-H(u,v) = \gamma_L + (\gamma_H - \gamma_L)(1 - e^{-c\frac{D(u,v)^2}{D_0^2} })
-$$
-
-é um filtro multiparamétrico, e por isso os valores dos parâmetros $\gamma_L$, $\gamma_H$, $D_0$ e $c$ precisam ser ajustados cuidadosamente.
-e agora para obter de volta a imagem, agora filtrada, basta fazermos
-
-$$
-s(x,y) = IFFT(S(u,v))
-$$
-
-e finalmente
-
-$$
-f_{filtrada}(x,y) = exp(s(x,y))
-$$
-
-computacionalmente o filtro pode ser implementado como um laço for duplo, como é mostrado na função abaixo
-
-```
-/ Cria o filtro homomórfico
-void HomoFilter(const cv::Mat& image, cv::Mat& filter) {
-    cv::Mat_<float> filter2D(image.rows, image.cols);
-    int centerX = image.cols / 2;
-    int centerY = image.rows / 2;
-
-    for (int i = 0; i < image.rows; i++) {
-        for (int j = 0; j < image.cols; j++) {
-            float D = sqrt(pow(i - centerY, 2) + pow(j - centerX, 2));
-            filter2D.at<float>(i, j) = gama_L + (gama_H - gama_L) * (1 - exp(-c * pow(D, 2) / pow(D_0, 2)));
-        }
-    }
-
-    cv::Mat planes[] = {filter2D, cv::Mat::zeros(filter2D.size(), CV_32F)};
-    cv::merge(planes, 2, filter);
-}
-```
-
-foi então adquirida uma cena com má iluminação, que é a imagem mostrada abaixo em tons
-
-![Imagem má iluminada](./imagens/imagem_ma_iluminada.jpg)
-
-*Figura 1: Imagem que será aplicada o filtro homomórfico para corrigir iluminação.*
+### Descrevendo minha técnica
 
 
-### 3.1. Implementação do filtro homomórfico
+### 3.1. Implementação da técnica
 Foi então utilizado o código do professor como referência para as operações computacionais com a DFT e aplicação da função de filtro, e foi feito uma função para aplicar o filtro homomórfico. 
 
 * Código 
 
 ```
+#include <algorithm>
+#include <cstdlib>
+#include <ctime>
+#include <fstream>
+#include <iomanip>
 #include <iostream>
+#include <numeric>
 #include <opencv2/opencv.hpp>
-#include <cmath>
+#include <vector>
+#include <chrono>
+#include <random>
 
-int gama_L = 1;
-int gama_H = 2;
-int D_0 = 5;
-int c = 1;
-
-cv::Mat originalImage, paddedImage, resultImage;
-
-// Troca os quadrantes da transformada de Fourier
-void swapQuadrants(cv::Mat& image) {
-    cv::Mat tmp, A, B, C, D;
-
-    image = image(cv::Rect(0, 0, image.cols & -2, image.rows & -2));
-
-    int centerX = image.cols / 2;
-    int centerY = image.rows / 2;
-
-    A = image(cv::Rect(0, 0, centerX, centerY));
-    B = image(cv::Rect(centerX, 0, centerX, centerY));
-    C = image(cv::Rect(0, centerY, centerX, centerY));
-    D = image(cv::Rect(centerX, centerY, centerX, centerY));
-
-    A.copyTo(tmp);
-    D.copyTo(A);
-    tmp.copyTo(D);
-
-    C.copyTo(tmp);
-    B.copyTo(C);
-    tmp.copyTo(B);
-}
-
-// Cria o filtro homomórfico
-void HomoFilter(const cv::Mat& image, cv::Mat& filter) {
-    cv::Mat_<float> filter2D(image.rows, image.cols);
-    int centerX = image.cols / 2;
-    int centerY = image.rows / 2;
-
-    for (int i = 0; i < image.rows; i++) {
-        for (int j = 0; j < image.cols; j++) {
-            float D = sqrt(pow(i - centerY, 2) + pow(j - centerX, 2));
-            filter2D.at<float>(i, j) = gama_L + (gama_H - gama_L) * (1 - exp(-c * pow(D, 2) / pow(D_0, 2)));
-        }
-    }
-
-    cv::Mat planes[] = {filter2D, cv::Mat::zeros(filter2D.size(), CV_32F)};
-    cv::merge(planes, 2, filter);
-}
-
-// Função callback dos trackbars
-void onTrackbarChange(int, void*) {
-    cv::Mat complexImage;
-    std::vector<cv::Mat> planos;
-
-    // Prepara a matriz complexa
-    planos.clear();
-    planos.push_back(cv::Mat_<float>(paddedImage));
-    planos.push_back(cv::Mat::zeros(paddedImage.size(), CV_32F));
-    cv::merge(planos, complexImage);
-
-    // Calcula a DFT
-    cv::dft(complexImage, complexImage);
-    swapQuadrants(complexImage);
-
-    // Cria e aplica o filtro
-    cv::Mat filter;
-    HomoFilter(complexImage, filter);
-    cv::mulSpectrums(complexImage, filter, complexImage, 0);
-
-    // Calcula a DFT inversa
-    swapQuadrants(complexImage);
-    cv::idft(complexImage, complexImage);
-    cv::split(complexImage, planos);
-
-    // Recorta a imagem para o tamanho original
-    cv::Rect roi(0, 0, originalImage.cols, originalImage.rows);
-    resultImage = planos[0](roi);
-
-    // Normaliza para exibição
-    cv::normalize(resultImage, resultImage, 0, 1, cv::NORM_MINMAX);
-    cv::imshow("Filtros Homomórficos", resultImage);
-}
+#define STEP 5
+#define JITTER 3
 
 int main(int argc, char** argv) {
-    originalImage = cv::imread(argv[1], cv::IMREAD_GRAYSCALE);
-    if (originalImage.empty()) {
-        std::cerr << "Erro ao abrir a imagem: " << argv[1] << std::endl;
-        return EXIT_FAILURE;
+  std::vector<int> yrange;
+  std::vector<int> xrange;
+
+  cv::Mat image, frame, points;
+  cv::Mat border;
+  int width, height, gray;
+  int x, y;
+  int RAIO;
+  image = cv::imread(argv[1], cv::IMREAD_GRAYSCALE);
+
+  std::srand(std::time(0));
+
+  if (image.empty()) {
+    std::cout << "Could not open or find the image" << std::endl;
+    return -1;
+  }
+    
+  width = image.cols;
+  height = image.rows;
+
+  xrange.resize(height / STEP);
+  yrange.resize(width / STEP);
+
+  std::iota(xrange.begin(), xrange.end(), 0);
+  std::iota(yrange.begin(), yrange.end(), 0);
+
+  for (uint i = 0; i < xrange.size(); i++) {
+    xrange[i] = xrange[i] * STEP + STEP / 2;
+  }
+
+  for (uint i = 0; i < yrange.size(); i++) {
+    yrange[i] = yrange[i] * STEP + STEP / 2;
+  }
+
+  points = cv::Mat(height, width, CV_8U, cv::Scalar(255));
+
+  unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+  std::shuffle(xrange.begin(), xrange.end(), std::default_random_engine(seed));
+
+  for (auto i : xrange) {
+  std::shuffle(yrange.begin(), yrange.end(), std::default_random_engine(seed));
+    for (auto j : yrange) {
+
+      int T = std::rand() % (JITTER) - JITTER + 1;
+      cv::Canny(image, border, T, 3*T);
+      RAIO = 2*std::rand()%(JITTER)+1;
+      x = i + std::rand() % (2 * JITTER) - JITTER + 1;
+      y = j + std::rand() % (2 * JITTER) - JITTER + 1;
+      gray = image.at<uchar>(x, y);
+      cv::circle(points, cv::Point(y, x), RAIO, CV_RGB(gray, gray, gray), cv::FILLED, cv::LINE_AA);
+      cv::add(points, border, points);
+
+
     }
+  }
 
-    // Expande a imagem para o melhor tamanho para DFT
-    int dft_M = cv::getOptimalDFTSize(originalImage.rows);
-    int dft_N = cv::getOptimalDFTSize(originalImage.cols);
-    cv::copyMakeBorder(originalImage, paddedImage, 0, dft_M - originalImage.rows, 0, dft_N - originalImage.cols, cv::BORDER_CONSTANT, cv::Scalar::all(0));
-
-    // Cria a janela e os trackbars
-    cv::namedWindow("Filtros Homomórficos", cv::WINDOW_NORMAL);
-    cv::createTrackbar("Gama_L", "Filtros Homomórficos", &gama_L, 100, onTrackbarChange);
-    cv::createTrackbar("Gama_H", "Filtros Homomórficos", &gama_H, 100, onTrackbarChange);
-    cv::createTrackbar("D_0", "Filtros Homomórficos", &D_0, 500, onTrackbarChange);
-    cv::createTrackbar("c", "Filtros Homomórficos", &c, 100, onTrackbarChange);
-
-    // Atualiza a imagem inicialmente
-    onTrackbarChange(0, nullptr);
-    cv::waitKey(0);
-
-    return EXIT_SUCCESS;
+  cv::imwrite("pontos.jpg", points);
+  return 0;
 }
+
+
+
+
+```
+
+
+
+### Segunda técnica
+
+Código
+
+
+```
+
+#include <algorithm>
+#include <cstdlib>
+#include <ctime>
+#include <fstream>
+#include <iomanip>
+#include <iostream>
+#include <numeric>
+#include <opencv2/opencv.hpp>
+#include <vector>
+#include <chrono>
+#include <random>
+
+#define STEP 5
+#define JITTER 3
+#define RAIO 3
+
+int main(int argc, char** argv) {
+  std::vector<int> yrange;
+  std::vector<int> xrange;
+
+  cv::Mat image, frame, points;
+  cv::Mat border;
+  int width, height, gray;
+  int x, y;
+
+  image = cv::imread(argv[1], cv::IMREAD_GRAYSCALE);
+
+  std::srand(std::time(0));
+
+  if (image.empty()) {
+    std::cout << "Could not open or find the image" << std::endl;
+    return -1;
+  }
+    
+  width = image.cols;
+  height = image.rows;
+
+  xrange.resize(height / STEP);
+  yrange.resize(width / STEP);
+
+  std::iota(xrange.begin(), xrange.end(), 0);
+  std::iota(yrange.begin(), yrange.end(), 0);
+
+  for (uint i = 0; i < xrange.size(); i++) {
+    xrange[i] = xrange[i] * STEP + STEP / 2;
+  }
+
+  for (uint i = 0; i < yrange.size(); i++) {
+    yrange[i] = yrange[i] * STEP + STEP / 2;
+  }
+
+  points = cv::Mat(height, width, CV_8U, cv::Scalar(255));
+
+  unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+  std::shuffle(xrange.begin(), xrange.end(), std::default_random_engine(seed));
+
+  for (auto i : xrange) {
+  std::shuffle(yrange.begin(), yrange.end(), std::default_random_engine(seed));
+    for (auto j : yrange) {
+
+      int T = std::rand() % (2 * JITTER) - JITTER + 1;
+      cv::Canny(image, border, T, 3*T);
+        
+      x = i + std::rand() % (2 * JITTER) - JITTER + 1;
+      y = j + std::rand() % (2 * JITTER) - JITTER + 1;
+      gray = image.at<uchar>(x, y);
+      cv::circle(points, cv::Point(y, x), RAIO, CV_RGB(gray, gray, gray), cv::FILLED, cv::LINE_AA);
+      cv::add(points, border, points);
+
+
+    }
+  }
+
+  cv::imwrite("pontos.jpg", points);
+  return 0;
+}
+
 
 
 ```
@@ -237,40 +216,21 @@ int main(int argc, char** argv) {
 
 ## 4. Resultados
 
-### Resultado da filtragem homomórfica no domínio da frequência
-O filtro foi aplicado à imagem feita as devidas preparações necessárias, os parâmetros do filtros usados foram
+### Resultado da implementação da técnica de arte
+Podemos ver que ao somar a borda a imagem continuamente, criou-se um efeito visual de borda forte e um expressionismo na imagem, causando
+uma certa sensação estranha.
 
-Treshold inferior
-$$
-\gamma_L = 3
-$$
 
-Treshold superior
-$$
-\gamma_H = 42
-$$
+![Imagem da arte implementada](./imagens/arte.png)
 
-Frequência/raio de corte
-$$
-D_0 = 75
-$$
-
-fator de atenuação 
-$$
-c = 13
-$$
-
-e a imagem filtrada obtida é mostrada abaixo, com a correção da iluminação.
-
-![Imagem corrigida pelo filtro](./imagens/imagem_filtrada.png)
-
-*Figura 2: Resultado da Filtragem homomórfica para corrigir iluminação.*
+*Figura 1: Resultado da técnica desenvolvida.*
 
 ---
 
 ## 5. Conclusão
 
-Vimos que a Filtragem homomórfica foi um sucesso, e conseguiu ajustar a iluminação da imagem com poucas mudanças de parâmetros, por mais que essa seja a desvantagem do filtro. Essa abordagem de filtragem pode ser muito útil, por mais que ela não seja igual as outras filtragens no domínio da frequência, que focam mais em ruídos periódicos, sua aplicação pode ser também muito usada em muitas áreas do processamento de imagens principalmente para corrigir a iluminação de cenas.
+Vimos que a técnica desenvolvida, apesar de estranha a priori, produziu um efeito curioso, como muitas técnicas de arte, que tem o poder de encantar nosso cérebro e
+nos dar uma percepção da beleza das coisas.
 
 ---
 
