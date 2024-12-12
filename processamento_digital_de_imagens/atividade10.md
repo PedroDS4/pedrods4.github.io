@@ -34,14 +34,22 @@ e bonitos em uma imagem, e aplicar uma técnica que gere uma imagem pointilhista
 ## 3. Metodologia
 
 ### Descrevendo minha técnica
+Para cada pixel da imagem
+- Escolher um treshhold aleatório pro algorítmo de canny para aquela iteração
+- Aplicar o algorítmo de canny para obter as bordas naquela iteração
+- Gerar assim como o professor uma localização aleatória em torno do pixel para desenhar o circulo de perturbação
+- Desenhar o círculo na localização perturbada calculada anteriormente
+- Somar a imagem de pontos atual com as bordas dessa iteração
 
 
 ### 3.1. Implementação da técnica
-Foi então utilizado o código do professor como referência para as operações computacionais com a DFT e aplicação da função de filtro, e foi feito uma função para aplicar o filtro homomórfico. 
+Foi então utilizado o código do professor como referência para a extração das bordas com o algorítmo de canny e também para a implementação da técnica pontilhista, e finalmente feito a adaptação para a técnica descrita acima, que utiliza números aleatórios e as bordas para deixar a imagem com um efeito visual de borda forte.
 
 * Código 
 
 ```
+
+
 #include <algorithm>
 #include <cstdlib>
 #include <ctime>
@@ -65,7 +73,7 @@ int main(int argc, char** argv) {
   cv::Mat border;
   int width, height, gray;
   int x, y;
-  int RAIO;
+  //int RAIO;
   image = cv::imread(argv[1], cv::IMREAD_GRAYSCALE);
 
   std::srand(std::time(0));
@@ -103,7 +111,7 @@ int main(int argc, char** argv) {
 
       int T = std::rand() % (JITTER) - JITTER + 1;
       cv::Canny(image, border, T, 3*T);
-      RAIO = 2*std::rand()%(JITTER)+1;
+      double RAIO = std::rand()%(JITTER)+1;
       x = i + std::rand() % (2 * JITTER) - JITTER + 1;
       y = j + std::rand() % (2 * JITTER) - JITTER + 1;
       gray = image.at<uchar>(x, y);
@@ -123,95 +131,6 @@ int main(int argc, char** argv) {
 
 ```
 
-
-
-### Segunda técnica
-
-Código
-
-
-```
-
-#include <algorithm>
-#include <cstdlib>
-#include <ctime>
-#include <fstream>
-#include <iomanip>
-#include <iostream>
-#include <numeric>
-#include <opencv2/opencv.hpp>
-#include <vector>
-#include <chrono>
-#include <random>
-
-#define STEP 5
-#define JITTER 3
-#define RAIO 3
-
-int main(int argc, char** argv) {
-  std::vector<int> yrange;
-  std::vector<int> xrange;
-
-  cv::Mat image, frame, points;
-  cv::Mat border;
-  int width, height, gray;
-  int x, y;
-
-  image = cv::imread(argv[1], cv::IMREAD_GRAYSCALE);
-
-  std::srand(std::time(0));
-
-  if (image.empty()) {
-    std::cout << "Could not open or find the image" << std::endl;
-    return -1;
-  }
-    
-  width = image.cols;
-  height = image.rows;
-
-  xrange.resize(height / STEP);
-  yrange.resize(width / STEP);
-
-  std::iota(xrange.begin(), xrange.end(), 0);
-  std::iota(yrange.begin(), yrange.end(), 0);
-
-  for (uint i = 0; i < xrange.size(); i++) {
-    xrange[i] = xrange[i] * STEP + STEP / 2;
-  }
-
-  for (uint i = 0; i < yrange.size(); i++) {
-    yrange[i] = yrange[i] * STEP + STEP / 2;
-  }
-
-  points = cv::Mat(height, width, CV_8U, cv::Scalar(255));
-
-  unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
-  std::shuffle(xrange.begin(), xrange.end(), std::default_random_engine(seed));
-
-  for (auto i : xrange) {
-  std::shuffle(yrange.begin(), yrange.end(), std::default_random_engine(seed));
-    for (auto j : yrange) {
-
-      int T = std::rand() % (2 * JITTER) - JITTER + 1;
-      cv::Canny(image, border, T, 3*T);
-        
-      x = i + std::rand() % (2 * JITTER) - JITTER + 1;
-      y = j + std::rand() % (2 * JITTER) - JITTER + 1;
-      gray = image.at<uchar>(x, y);
-      cv::circle(points, cv::Point(y, x), RAIO, CV_RGB(gray, gray, gray), cv::FILLED, cv::LINE_AA);
-      cv::add(points, border, points);
-
-
-    }
-  }
-
-  cv::imwrite("pontos.jpg", points);
-  return 0;
-}
-
-
-
-```
 
 
 ## 4. Resultados
@@ -221,7 +140,7 @@ Podemos ver que ao somar a borda a imagem continuamente, criou-se um efeito visu
 uma certa sensação estranha.
 
 
-![Imagem da arte implementada](./imagens/arte.png)
+![Imagem da arte implementada](./imagens/pontos.jpg)
 
 *Figura 1: Resultado da técnica desenvolvida.*
 
