@@ -4,7 +4,7 @@
 
 [Voltar para a página principal](../index.md)
 
-#**Relatório Atividade 9: Arte com Processamento digital de imagens: O Pointilhismo**
+#**Relatório Atividade 10: Arte com Processamento digital de imagens: O Pointilhismo**
 
 # Universidade Federal do Rio Grande do Norte
 
