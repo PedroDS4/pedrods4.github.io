@@ -4,7 +4,7 @@
 
 [Voltar para a página principal](../index.md)
 
-#**Relatório Atividade 9: Arte com Processamento digital de imagens: Quantização Vetorial e separação**
+#**Relatório Atividade 11: Quantização Vetorial e Separação**
 
 # Universidade Federal do Rio Grande do Norte
 
@@ -13,7 +13,7 @@
 
 **Aluno(a):** Pedro Arthur Oliveira dos Santos  
 **Professor(a):** Agostinho Brito Junior  
-**Data:** 12/12/2024
+**Data:** 10/01/2025
 
 ## 1. Introdução
 
@@ -34,11 +34,8 @@ utilizando esse algorítmo consegue separar bem as classes.
 
 ## 3. Metodologia
 
-### Algorítmo de quantização vetorial
+###  3.1. Algorítmo de quantização vetorial
 
-
-### 3.1. Implementação da técnica
-Foi então utilizado o código do professor como referência para a extração das bordas com o algorítmo de canny e também para a implementação da técnica pontilhista, e finalmente feito a adaptação para a técnica descrita acima, que utiliza números aleatórios e as bordas para deixar a imagem com um efeito visual de borda forte.
 
 * Código
 
@@ -50,21 +47,15 @@ Foi então utilizado o código do professor como referência para a extração d
 
 ## 4. Resultados
 
-### Resultado da implementação da técnica de arte
+### Gif resultante com as 10 iterações
 Podemos ver que ao somar a borda a imagem continuamente, criou-se um efeito visual de borda forte e um expressionismo na imagem, causando
 uma certa sensação estranha.
-
-
-![Imagem da arte implementada](./imagens/pontos.jpg)
-
-*Figura 1: Resultado da técnica desenvolvida.*
 
 ---
 
 ## 5. Conclusão
 
-Vimos que a técnica desenvolvida, apesar de estranha a priori, produziu um efeito curioso, como muitas técnicas de arte, que tem o poder de encantar nosso cérebro e
-nos dar uma percepção da beleza das coisas.
+Vemos que o algorítmo k-means não é determinístico, uma vez que cada execução acaba gerando resultados ligeiramente diferentes, revelando a natureza estocástica do algorítmo, mas ainda é possível ver que ficam próximos uns dos outros.
 
 ---
 
