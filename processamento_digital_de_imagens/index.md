@@ -20,5 +20,5 @@ Aqui estão os projetos relacionados à disciplina:
 - [Atividade 11: Classificação usando o algorítmo k-means](atividade11.md)
 - [Atividade 12: Extração de contornos](atividade12.md)
 - [Atividade 13: Extração de características: Momentos de Hu para regiões](atividade13.md)
-- [Atividade 13: Extração de características: Momentos de Hu para contornos](atividade14.md)
+- [Atividade 14: Extração de características: Momentos de Hu para contornos](atividade14.md)
 - [Voltar para a página principal](../index.md)
