@@ -97,6 +97,7 @@ int main(int argc, char** argv) {
 
 
 ![Imagem utilizada como entrada pro algorítmo](./imagens/retangulos.png)
+
 *Figura 1: Imagem em que foi aplicada a extração de contornos.*
 
 
@@ -105,15 +106,22 @@ int main(int argc, char** argv) {
 ### Resultado utilizando cv::CHAIN_APPROX_NONE
 Foi obtido um contorno com 746 pontos pontos para essa abordagem.
 
+
 ![Imagem utilizada como entrada pro algorítmo](./imagens/retangulos1.png)
+
 *Figura 2: Imagem do contorno resultante pela primeira abordagem.*
+
 
 
 ### Resultado utilizando cv::CHAIN_APPROX_SIMPLE
 Ja utilizando essa abordagem, foi obtido um contorno com 10 pontos nessa segunda abordagem.
 
+
 ![Imagem utilizada como entrada pro algorítmo](./imagens/retangulos2.png)
+
 *Figura 3: Imagem do contorno resultante pela segunda abordagem.*
+
+
 
 Com a primeira abordagem é fácil perceber que o algorítmo armazena todos os pontos da borda, ja com a segunda abordagem os pontos são filtrados e só sobram os essenciais, que nesse caso são os vértices do retângulo e pontos auxiliares, melhorando a eficiência de armazenamento pro algorítmo.
 
