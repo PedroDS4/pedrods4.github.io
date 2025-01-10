@@ -115,12 +115,13 @@ Ja utilizando essa abordagem, foi obtido um contorno com 10 pontos nessa segunda
 ![Imagem utilizada como entrada pro algorítmo](./imagens/retangulos2.png)
 *Figura 3: Imagem do contorno resultante pela segunda abordagem.*
 
+Com a primeira abordagem é fácil perceber que o algorítmo armazena todos os pontos da borda, ja com a segunda abordagem os pontos são filtrados e só sobram os essenciais, que nesse caso são os vértices do retângulo e pontos auxiliares, melhorando a eficiência de armazenamento pro algorítmo.
 
 ---
 
 ## 5. Conclusão
 
-Vemos que o algorítmo de extração de contornos não da o melhor resultado sempre, as vezes é preciso mudar alguns parâmetros, por exemplo a sequência da cadeia de pontos, como foi visto acima, para obter um melhor resultado dependedo do tipo de imagem. 
+Vemos que o algorítmo de extração de contornos não da o melhor resultado sempre, as vezes é preciso mudar alguns parâmetros, por exemplo a disposição da cadeia de pontos, como foi visto acima, para obter um resultado mais otimizado dependedo do tipo de imagem. 
 
 ---
 
