@@ -111,12 +111,18 @@ int main(int argc, char** argv) {
 ```
 
 
+![Imagem utilizada como entrada pro algorítmo](./imagens/flor.jpg)
+*Figura 1: Imagem em que foi aplicada o k-means.*
+
 
 ## 4. Resultados
 
 ### Gif resultante com as 10 iterações
 Podemos ver que ao somar a borda a imagem continuamente, criou-se um efeito visual de borda forte e um expressionismo na imagem, causando
 uma certa sensação estranha.
+
+![Imagem utilizada como entrada pro algorítmo](./imagens/kmeans.gif)
+*Figura 2: Gif resultante das 10 aplicações do kmeans.*
 
 ---
 
