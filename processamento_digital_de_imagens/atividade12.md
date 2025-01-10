@@ -96,7 +96,7 @@ int main(int argc, char** argv) {
 ```
 
 
-![Imagem utilizada como entrada pro algorítmo](./imagens/retangulos.jpg)
+![Imagem utilizada como entrada pro algorítmo](./imagens/retangulos.png)
 *Figura 1: Imagem em que foi aplicada a extração de contornos.*
 
 
@@ -106,7 +106,7 @@ int main(int argc, char** argv) {
 Podemos ver que ao somar a borda a imagem continuamente, criou-se um efeito visual de borda forte e um expressionismo na imagem, causando
 uma certa sensação estranha.
 
-![Imagem utilizada como entrada pro algorítmo](./imagens/retangulos1.jpg)
+![Imagem utilizada como entrada pro algorítmo](./imagens/retangulos1.png)
 *Figura 2: Imagem do contorno resultante pela primeira abordagem.*
 
 
@@ -114,7 +114,7 @@ uma certa sensação estranha.
 Podemos ver que ao somar a borda a imagem continuamente, criou-se um efeito visual de borda forte e um expressionismo na imagem, causando
 uma certa sensação estranha.
 
-![Imagem utilizada como entrada pro algorítmo](./imagens/retangulos1.jpg)
+![Imagem utilizada como entrada pro algorítmo](./imagens/retangulos2.png)
 *Figura 3: Imagem do contorno resultante pela segunda abordagem.*
 
 
