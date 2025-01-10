@@ -4,7 +4,7 @@
 
 [Voltar para a página principal](../index.md)
 
-#**Relatório Atividade 11: Quantização Vetorial e Separação**
+#**Relatório Atividade 12: Extração de contornos**
 
 # Universidade Federal do Rio Grande do Norte
 
@@ -17,118 +17,112 @@
 
 ## 1. Introdução
 
-Hoje em dia problemas de classificação são cada vez mais comuns de se ver, e desde o início do surgimento do aprendizado de maquina, muitos algoritmos
-se popularizaram.
-No processamento digital de imagens, também há a necessidade da separação de elementos em uma imagem, que seguem uma classificação, por exemplo objetos
-de uma certa cor, ou de um certo formato, ainda.
+A extração de contornos é necessária em diversas aplicações do dia a dia e pode ser muito útil, existem vários algorítmos para extração de contornos, alguns mais custosos e outros não.
+O algorítmo utilizado nesse relatório será um dos algorítmos prontos ja implementados no opencv, para achar os contornos de uma imagem binária.
 
 ---
 
 ## 2. Objetivo
 
-O Objetivo dessa atividade é utilizar o algorítmo de quantização vetorial k-means para separar as cores de uma imagem, e assim verificar se o processo de classificação
-utilizando esse algorítmo consegue separar bem as classes.
+O Objetivo dessa atividade é utilizar o algorítmo de extração de contornos para marcar os contornos de várias figuras em uma imagem binária, e assim verificar a eficiẽncia do algorítmo.
 
 ---
 
 
 ## 3. Metodologia
 
-###  3.1. Algorítmo de quantização vetorial 
-
-* Escolha k
- como o número de classes para os vetores xi
- de N
- amostras, i=1,2,⋯,N
-
-* Escolha m1,m2,⋯,mk
- como aproximações iniciais para os centros das classes.
-
-* Classifique cada amostra xi
- usando, por exemplo, um classificador de distância mínima (distância euclideana).
-
-* Recalcule as médias mj
- usando o resultado do passo anterior.
-
-Se as novas médias são consistentes (não mudam consideravelmente), finalize o algoritmo. Caso contrário, recalcule os centros e refaça a classificação.
-
+###  3.1. Algorítmo de extração de contornos
+Aplicamos diretamente o algorítmo "Find_contours" fornecido pelo OPENCV, dado abaixo
 
 
 * Código
 
 ```
-#include <cstdlib>
+
+#include <fstream>
+#include <iostream>
 #include <opencv2/opencv.hpp>
 
 int main(int argc, char** argv) {
-  int nClusters = 8, nRodadas = 1;  // nRodadas = 1 para uma única execução do k-means por rodada
+  cv::Mat image, gray;
+  std::ofstream file;
 
-  if (argc != 2) {
-    std::cout << "Uso: kmeans_aleatorio entrada.jpg\n";
-    exit(0);
+  image = cv::imread(argv[1], cv::IMREAD_GRAYSCALE);
+
+  if (!image.data) {
+    std::cout << "nao abriu " << argv[1] << std::endl;
+    return 0;
   }
 
-  cv::Mat img = cv::imread(argv[1], cv::IMREAD_COLOR);
-  if (img.empty()) {
-    std::cerr << "Erro ao carregar a imagem.\n";
-    return -1;
+  cv::threshold(image, image, 1, 255, cv::THRESH_BINARY + cv::THRESH_OTSU);
+
+  std::vector<std::vector<cv::Point> > contours;
+  std::vector<cv::Vec4i> hierarchy;
+
+  cv::findContours(image, contours, hierarchy, cv::RETR_EXTERNAL,
+                   cv::CHAIN_APPROX_NONE);
+
+  //cv::findContours(image, contours, hierarchy, cv::RETR_EXTERNAL,
+    //               cv::CHAIN_APPROX_SIMPLE);
+
+  cv::cvtColor(image, image, cv::COLOR_GRAY2BGR);
+
+  file.open("contornos.svg");
+  if (!file.is_open()) {
+    std::cout << "nao abriu contornos.svg" << std::endl;
+    return 0;
   }
 
-  cv::Mat samples(img.rows * img.cols, 3, CV_32F);
-  for (int y = 0; y < img.rows; y++) {
-    for (int x = 0; x < img.cols; x..++) {
-      for (int z = 0; z < 3; z++) {
-        samples.at<float>(y + x * img.rows, z) = img.at<cv::Vec3b>(y, x)[z];
-      }
+  file << "<svg height=\"" << image.rows << "\" width=\"" << image.cols
+       << "\" xmlns=\"http://www.w3.org/2000/svg\"> " << std::endl;
+
+  for (size_t i = 0; i < contours.size(); i++) {
+    file << "<path d=\"M " << contours[i][0].x << " " << contours[i][0].y
+         << " ";
+    for (size_t j = 1; j < contours[i].size(); j++) {
+      file << "L" << contours[i][j].x << " " << contours[i][j].y << " ";
     }
+    file << "Z\" fill=\"#cccccc\" stroke=\"black\" stroke-width=\"1\" />"
+         << std::endl;
+    cv::drawContours(image, contours, i, CV_RGB(255, 0, 0));
   }
+  file << "</svg>" << std::endl;
 
-  for (int rodada = 0; rodada < 10; rodada++) {  // Executa 10 rodadas
-    cv::Mat rotulos, centros;
-    cv::kmeans(samples, nClusters, rotulos,
-               cv::TermCriteria(cv::TermCriteria::EPS | cv::TermCriteria::COUNT, 10000, 0.0001),
-               nRodadas, cv::KMEANS_RANDOM_CENTERS, centros);
-
-    cv::Mat rotulada(img.size(), img.type());
-    for (int y = 0; y < img.rows; y++) {
-      for (int x = 0; x < img.cols; x++) {
-        int indice = rotulos.at<int>(y + x * img.rows, 0);
-        rotulada.at<cv::Vec3b>(y, x)[0] = (uchar)centros.at<float>(indice, 0);
-        rotulada.at<cv::Vec3b>(y, x)[1] = (uchar)centros.at<float>(indice, 1);
-        rotulada.at<cv::Vec3b>(y, x)[2] = (uchar)centros.at<float>(indice, 2);
-      }
-    }
-
-    // Salva a imagem da rodada atual
-    std::string nomeArquivo = "saida_" + std::to_string(rodada + 1) + ".jpg";
-    cv::imwrite(nomeArquivo, rotulada);
-  }
-
-  std::cout << "Imagens segmentadas salvas como saida_1.jpg, saida_2.jpg, ..., saida_10.jpg.\n";
+  cv::imshow("imagem", image);
+  cv::waitKey();
   return 0;
 }
 
 ```
 
 
-![Imagem utilizada como entrada pro algorítmo](./imagens/flor.jpg)
-*Figura 1: Imagem em que foi aplicada o k-means.*
+![Imagem utilizada como entrada pro algorítmo](./imagens/retangulos.jpg)
+*Figura 1: Imagem em que foi aplicada a extração de contornos.*
 
 
 ## 4. Resultados
 
-### Gif resultante com as 10 iterações
+### Resultado utilizando cv::CHAIN_APPROX_NONE
 Podemos ver que ao somar a borda a imagem continuamente, criou-se um efeito visual de borda forte e um expressionismo na imagem, causando
 uma certa sensação estranha.
 
-![Imagem utilizada como entrada pro algorítmo](./imagens/kmeans.gif)
-*Figura 2: Gif resultante das 10 aplicações do kmeans.*
+![Imagem utilizada como entrada pro algorítmo](./imagens/retangulos1.jpg)
+*Figura 2: Imagem do contorno resultante pela primeira abordagem.*
+
+
+### Resultado utilizando cv::CHAIN_APPROX_SIMPLE
+Podemos ver que ao somar a borda a imagem continuamente, criou-se um efeito visual de borda forte e um expressionismo na imagem, causando
+uma certa sensação estranha.
+
+![Imagem utilizada como entrada pro algorítmo](./imagens/retangulos1.jpg)
+*Figura 3: Imagem do contorno resultante pela segunda abordagem.*
+
 
 ---
 
 ## 5. Conclusão
 
-Vemos que o algorítmo k-means não é determinístico, uma vez que cada execução acaba gerando resultados ligeiramente diferentes, revelando a natureza estocástica do algorítmo, mas ainda é possível ver que ficam próximos uns dos outros.
+Vemos que o algorítmo de extração de contornos não da o melhor resultado sempre, as vezes é preciso mudar alguns parâmetros, por exemplo a sequência da cadeia de pontos, como foi visto acima, para obter um melhor resultado dependedo do tipo de imagem. 
 
 ---
 
