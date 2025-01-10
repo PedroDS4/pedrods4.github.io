@@ -103,16 +103,14 @@ int main(int argc, char** argv) {
 ## 4. Resultados
 
 ### Resultado utilizando cv::CHAIN_APPROX_NONE
-Podemos ver que ao somar a borda a imagem continuamente, criou-se um efeito visual de borda forte e um expressionismo na imagem, causando
-uma certa sensação estranha.
+Foi obtido um contorno com 746 pontos pontos para essa abordagem.
 
 ![Imagem utilizada como entrada pro algorítmo](./imagens/retangulos1.png)
 *Figura 2: Imagem do contorno resultante pela primeira abordagem.*
 
 
 ### Resultado utilizando cv::CHAIN_APPROX_SIMPLE
-Podemos ver que ao somar a borda a imagem continuamente, criou-se um efeito visual de borda forte e um expressionismo na imagem, causando
-uma certa sensação estranha.
+Ja utilizando essa abordagem, foi obtido um contorno com 10 pontos nessa segunda abordagem.
 
 ![Imagem utilizada como entrada pro algorítmo](./imagens/retangulos2.png)
 *Figura 3: Imagem do contorno resultante pela segunda abordagem.*
