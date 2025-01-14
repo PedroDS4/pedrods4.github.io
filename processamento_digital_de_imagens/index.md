@@ -21,4 +21,5 @@ Aqui estão os projetos relacionados à disciplina:
 - [Atividade 12: Extração de contornos](atividade12.md)
 - [Atividade 13: Extração de características: Momentos de Hu para regiões](atividade13.md)
 - [Atividade 14: Extração de características: Momentos de Hu para contornos](atividade14.md)
+- [Projeto Final: Deconvolução de imagens por estimação](ProjetoFinal.md)
 - [Voltar para a página principal](../index.md)
