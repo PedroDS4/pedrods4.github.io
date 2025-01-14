@@ -14,7 +14,7 @@
 
 **Aluno(a):** Pedro Arthur Oliveira dos Santos  
 **Professor(a):** Agostinho Brito Junior  
-**Data:** 25/10
+**Data:** 25/10/2024
 
 ## 1. Introdução
 
