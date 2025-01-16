@@ -18,7 +18,7 @@
 
 ## Introdução
 
-O objetivo deste projeto é desenvolver uma técnica de deconvolução de imagens no domínio da frequência para estimar a imagem original borrada a partir de uma imagem observada $$ Y $$. A abordagem adotada envolve o uso de máscaras gaussianas como função de borramento, modeladas como uma combinação de funções de base radial. O problema central é estimar a imagem $$ X $$ original, além dos parâmetros da máscara de borramento, como os coeficientes de amplitude, centros e desvio padrão das gaussianas.
+O objetivo deste projeto é desenvolver uma técnica de deconvolução de imagens no domínio da frequência para estimar a imagem original borrada a partir de uma imagem observada $ Y $. A abordagem adotada envolve o uso de máscaras gaussianas como função de borramento, modeladas como uma combinação de funções de base radial. O problema central é estimar a imagem $ X $ original, além dos parâmetros da máscara de borramento, como os coeficientes de amplitude, centros e desvio padrão das gaussianas.
 
 A deconvolução é realizada através da minimização de um erro entre a imagem observada $$ Y $$ e a imagem estimada $$ G * X $$, onde $$ G $$ é o filtro de borramento e $$ X $$ é a imagem original.
 
@@ -26,7 +26,7 @@ A deconvolução é realizada através da minimização de um erro entre a image
 
 ### Definição do Problema
 
-O problema de deconvolução pode ser formulado como a minimização da seguinte função de erro \( E(X, G) \):
+O problema de deconvolução pode ser formulado como a minimização da seguinte função de erro $ E(X, G) $:
 
 $$
 E(X, G) = || Y - G * X ||^2
