@@ -118,8 +118,23 @@ int main(int argc, char** argv) {
 ## 4. Resultados
 
 ### Gif resultante com as 10 iterações
-Podemos ver que ao somar a borda a imagem continuamente, criou-se um efeito visual de borda forte e um expressionismo na imagem, causando
-uma certa sensação estranha.
+Para obter o gif das 10 imagens, utilizou-se o seguinte comando no linux ubuntu
+Primeiro para instalar o módulo 
+
+```
+
+sudo apt install graphicsmagick-imagemagick-compat # version 1.4+really1.3.38-1ubuntu0.1
+
+```
+
+
+Depois para gerar o arquivo .gif
+
+```
+
+convert -delay 100 -loop 0 saida_*.jpg kmeans.gif
+
+```
 
 ![Imagem utilizada como entrada pro algorítmo](./imagens/kmeans.gif)
 *Figura 2: Gif resultante das 10 aplicações do kmeans.*
