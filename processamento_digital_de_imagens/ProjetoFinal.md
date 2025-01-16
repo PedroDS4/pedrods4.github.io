@@ -124,10 +124,165 @@ No código em C++:
 O código resultante inclui a normalização da imagem, a criação do kernel gaussiano, a aplicação do borramento e a estimativa da PSF.
 
 ```cpp
-Mat error = Y - convolve(X, G);
-double grad_w = -2.0 * sum(error.mul(convolve(X, kernel)));
-Point2f grad_c = -2.0 * ... // Gradiente para os centros.
 
+#include <opencv2/opencv.hpp>
+#include <vector>
+#include <cmath>
+#include <iostream>
+
+using namespace cv;
+using namespace std;
+
+// Função gaussiana bidimensional
+double gaussian(double x, double y, double sigma) {
+    return std::exp(-(x * x + y * y) / (2.0 * sigma * sigma));
+}
+
+// Convolução 2D simples
+cv::Mat convolve(const cv::Mat& input, const cv::Mat& kernel) {
+    cv::Mat output;
+    cv::filter2D(input, output, -1, kernel, cv::Point(-1, -1), 0, cv::BORDER_CONSTANT);
+    return output;
+}
+
+// Estimar a PSF com base no gradiente descendente
+cv::Mat estimatePSF(const cv::Mat& blurred, const cv::Mat& original, int N, double learning_rate, int iterations) {
+    int rows = original.rows;
+    int cols = original.cols;
+
+    // Inicializar pesos e centros aleatoriamente
+    std::vector<double> weights(N, 1.0 / N); // Pesos inicializados uniformemente
+    std::vector<cv::Point2d> centers(N);
+    double sigma = 5.0;
+
+    for (int i = 0; i < N; i++) {
+        centers[i] = cv::Point2d(rand() % cols, rand() % rows);
+    }
+
+    for (int iter = 0; iter < iterations; iter++) {
+        cv::Mat G(rows, cols, CV_64F, cv::Scalar(0));
+        std::vector<cv::Mat> gaussian_kernels(N);
+
+        for (int i = 0; i < N; i++) {
+            cv::Mat kernel(rows, cols, CV_64F, cv::Scalar(0));
+            for (int y = 0; y < rows; y++) {
+                for (int x = 0; x < cols; x++) {
+                    double dx = x - centers[i].x;
+                    double dy = y - centers[i].y;
+                    kernel.at<double>(y, x) = gaussian(dx, dy, sigma);
+                }
+            }
+            gaussian_kernels[i] = kernel;
+            G += weights[i] * convolve(original, kernel); // PSF gerada
+        }
+
+        cv::Mat error = blurred - convolve(original, G);
+
+        // Gradientes
+        std::vector<double> grad_weights(N, 0.0);
+        std::vector<cv::Point2d> grad_centers(N, cv::Point2d(0.0, 0.0));
+
+        for (int i = 0; i < N; i++) {
+            cv::Mat conv_gX = convolve(original, gaussian_kernels[i]);
+
+            // Gradiente em relação ao peso
+            for (int y = 0; y < rows; y++) {
+                for (int x = 0; x < cols; x++) {
+                    grad_weights[i] += -2.0 * error.at<double>(y, x) * conv_gX.at<double>(y, x);
+                }
+            }
+
+            // Gradiente em relação aos centros
+            cv::Mat partial_g(rows, cols, CV_64F, cv::Scalar(0));
+            for (int y = 0; y < rows; y++) {
+                for (int x = 0; x < cols; x++) {
+                    double dx = x - centers[i].x;
+                    double dy = y - centers[i].y;
+                    partial_g.at<double>(y, x) = gaussian(dx, dy, sigma) * dx / (sigma * sigma);
+                }
+            }
+
+            cv::Mat conv_partial_gX = convolve(original, partial_g);
+
+            for (int y = 0; y < rows; y++) {
+                for (int x = 0; x < cols; x++) {
+                    grad_centers[i].x += -2.0 * error.at<double>(y, x) * conv_partial_gX.at<double>(y, x);
+                    grad_centers[i].y += -2.0 * error.at<double>(y, x) * conv_partial_gX.at<double>(y, x);
+                }
+            }
+        }
+
+        // Atualiza pesos e centros
+        for (int i = 0; i < N; i++) {
+            weights[i] -= learning_rate * grad_weights[i];
+            centers[i].x -= learning_rate * grad_centers[i].x;
+            centers[i].y -= learning_rate * grad_centers[i].y;
+        }
+    }
+
+    // Gerar a PSF final
+    cv::Mat PSF(rows, cols, CV_64F, cv::Scalar(0));
+    for (int i = 0; i < N; i++) {
+        cv::Mat kernel(rows, cols, CV_64F, cv::Scalar(0));
+        for (int y = 0; y < rows; y++) {
+            for (int x = 0; x < cols; x++) {
+                double dx = x - centers[i].x;
+                double dy = y - centers[i].y;
+                kernel.at<double>(y, x) = gaussian(dx, dy, sigma);
+            }
+        }
+        PSF += weights[i] * kernel;
+    }
+
+    return PSF;
+}
+
+// Função principal
+int main(int argc, char** argv) {
+    if (argc < 2) {
+        cout << "Uso: " << argv[0] << " <caminho_da_imagem>" << endl;
+        return -1;
+    }
+
+    Mat img = imread(argv[1], IMREAD_GRAYSCALE);
+    if (img.empty()) {
+        cout << "Não foi possível carregar a imagem." << endl;
+        return -1;
+    }
+
+    img.convertTo(img, CV_64F, 1.0 / 255); // Normalizar a imagem
+
+    // Criar uma máscara gaussiana para borramento
+    Mat gaussian_kernel = getGaussianKernel(21, 5, CV_64F) * getGaussianKernel(21, 5, CV_64F).t();
+    Mat blurred;
+    filter2D(img, blurred, -1, gaussian_kernel);
+
+    // Estimar a PSF
+    int N = 4; // Número de gaussianas
+    double learning_rate = 0.01;
+    int iterations = 40;
+    Mat estimated_PSF = estimatePSF(blurred, img, N, learning_rate, iterations);
+    
+    // Verificar se o borramento ficou parecido ou não
+    Mat estimated_blur;
+    filter2D(img, estimated_blur, -1, estimated_PSF);
+
+    // Salvar e exibir os resultados
+    imwrite("blurred_image.png", blurred * 255);
+    imwrite("estimated_psf.png", estimated_PSF * 255);
+    imwrite("estimated_blurred_image.png", estimated_blur * 255);
+
+    imshow("Imagem Original", img);
+    imshow("Imagem Borrada", blurred);
+    imshow("PSF Estimada", estimated_PSF);
+    imshow("Imagem borrada com a PSF Estimada", estimated_blur);
+    waitKey(0);
+
+    return 0;
+}
+
+
+```
 
 ## Resultados
 
