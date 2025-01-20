@@ -17,9 +17,9 @@
 
 ## Introdução
 
-Neste projeto, abordamos a recuperação de uma imagem limpa \( X \) a partir de uma imagem borrada \( B \) e de uma máscara de borramento \( G \) conhecida. Este é um problema típico de deconvolução no processamento de imagens, no qual o objetivo é reconstruir \( X \) de forma precisa, minimizando artefatos e ruídos.
+Neste projeto, abordamos a recuperação de uma imagem limpa $X$ a partir de uma imagem borrada $B$ e de uma máscara de borramento $G$ conhecida. Este é um problema típico de deconvolução no processamento de imagens, no qual o objetivo é reconstruir $X$ de forma precisa, minimizando artefatos e ruídos.
 
-A abordagem utiliza a minimização de um erro médio quadrático entre \( B \) e a convolução \( G * X \), adicionando uma regularização Laplaciana para suavizar a imagem recuperada.  
+A abordagem utiliza a minimização de um erro médio quadrático entre $B$ e a convolução $G * X$, adicionando uma regularização Laplaciana para suavizar a imagem recuperada.  
 
 ## Metodologia
 
@@ -27,58 +27,58 @@ A abordagem utiliza a minimização de um erro médio quadrático entre \( B \) 
 
 O problema de deconvolução é formulado como a minimização da seguinte função de custo:
 
-\[
+$$
 E(X) = \frac{1}{2} \sum_{i,j} \left[ B(i,j) - (G * X)(i,j) \right]^2 + \lambda \sum_{i,j} || \nabla^2 X(i,j) ||^2
-\]
+$$
 
 Onde:
-- \( B(i,j) \): Pixel da imagem borrada.
-- \( G * X \): Convolução da máscara \( G \) com a imagem \( X \).
-- \( \nabla^2 X(i,j) \): Laplaciano do pixel \( X(i,j) \).
-- \( \lambda \): Fator de regularização que controla o peso da suavização.
+- $B(i,j)$: Pixel da imagem borrada.
+- $G * X$: Convolução da máscara $G$ com a imagem $X$.
+- $\nabla^2 X(i,j)$: Laplaciano do pixel $X(i,j)$.
+- $\lambda$: Fator de regularização que controla o peso da suavização.
 
 ### Gradiente da Função de Custo
 
-O gradiente da função de custo em relação a \( X \) é dado por:
+O gradiente da função de custo em relação a $X$ é dado por:
 
-\[
+$$
 \frac{\partial E}{\partial X} = G^T * (G * X - B) - \lambda \nabla^2 X
-\]
+$$
 
-Onde \( G^T \) é o kernel transposto de \( G \).
+Onde $G^T$ é o kernel transposto de $G$.
 
 ### Algoritmo de Otimização
 
 1. **Inicialização**:
-   - Definir \( X_0 \) como uma aproximação inicial (por exemplo, a imagem borrada \( B \)).
+   - Definir $X_0$ como uma aproximação inicial (por exemplo, a imagem borrada $B$).
 2. **Iteração**:
-   - Calcular o gradiente \( \frac{\partial E}{\partial X} \).
-   - Atualizar \( X \) usando descida de gradiente:
-     \[
+   - Calcular o gradiente $\frac{\partial E}{\partial X}$.
+   - Atualizar $X$ usando descida de gradiente:
+     $$
      X^{(k+1)} = X^{(k)} - \eta \frac{\partial E}{\partial X}
-     \]
-     Onde \( \eta \) é a taxa de aprendizado.
+     $$
+     Onde $\eta$ é a taxa de aprendizado.
 3. **Convergência**:
-   - Parar quando \( ||X^{(k+1)} - X^{(k)}|| \) for menor que um limiar predefinido.
+   - Parar quando $||X^{(k+1)} - X^{(k)}||$ for menor que um limiar predefinido.
 
 ### Regularização Laplaciana
 
-A regularização Laplaciana é implementada aplicando um filtro Laplaciano 3x3 à imagem \( X \), definido como:
+A regularização Laplaciana é implementada aplicando um filtro Laplaciano 3x3 à imagem $X$, definido como:
 
-\[
+$$
 \text{Kernel Laplaciano} =
 \begin{bmatrix}
 0 & -1 & 0 \\
 -1 & 4 & -1 \\
 0 & -1 & 0
 \end{bmatrix}
-\]
+$$
 
 ### Implementação
 
 O algoritmo foi implementado em C++ usando a biblioteca OpenCV. A função principal realiza as seguintes etapas:
-1. Carregar a imagem borrada \( B \) e a máscara \( G \).
-2. Inicializar a imagem \( X \) com \( B \).
+1. Carregar a imagem borrada $B$ e a máscara $G$.
+2. Inicializar a imagem $X$ com $B$.
 3. Executar o loop de descida de gradiente até a convergência.
 
 ## Código C++
@@ -146,6 +146,7 @@ int main() {
     
     return 0;
 }
+
 ```
 
 
