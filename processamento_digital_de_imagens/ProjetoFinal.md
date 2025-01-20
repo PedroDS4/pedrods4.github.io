@@ -17,7 +17,7 @@
 
 ## Introdução
 
-Neste projeto, abordamos a recuperação de uma imagem limpa $$X$$ a partir de uma imagem borrada $$B$$ e de uma máscara de borramento $$G$$ conhecida. Este é um problema típico de deconvolução no processamento de imagens, no qual o objetivo é reconstruir $X$ de forma precisa, minimizando artefatos e ruídos.
+Neste projeto, abordamos a recuperação de uma imagem limpa $$X$$ a partir de uma imagem borrada $$B$$ e de uma máscara de borramento $$G$$ conhecida. Este é um problema típico de deconvolução no processamento de imagens, no qual o objetivo é reconstruir $$X$$ de forma precisa, minimizando artefatos e ruídos.
 
 A abordagem utiliza a minimização de um erro médio quadrático entre $$B$$ e a convolução $$G * X$$, adicionando uma regularização Laplaciana para suavizar a imagem recuperada.  
 
@@ -59,7 +59,7 @@ Onde $$G^T$$ é o kernel transposto de $$G$$.
      $$
      Onde $$\eta$$ é a taxa de aprendizado.
 3. **Convergência**:
-   - Parar quando $||X^{(k+1)} - X^{(k)}||$ for menor que um limiar predefinido.
+   - Parar quando $$||X^{(k+1)} - X^{(k)}||$$ for menor que um limiar predefinido.
 
 ### Regularização Laplaciana
 
@@ -217,7 +217,7 @@ posto e ter uma solução mais "suave".
 A figura abaixo mostra o resultado para um borramento de $$N = 11$$
 
 
-![Imagem da lena recuperada de um borramento N = 11](./imagens/imagem_lena_recuparada_vs_original_N_11.png)
+![Imagem da lena recuperada de um borramento N = 11](./imagens/imagem_lena_recuperada_vs_original_N_11.png)
 
 *Figura 3: Imagem da lena recuperada de um borramento $$N = 11$$.*
 
