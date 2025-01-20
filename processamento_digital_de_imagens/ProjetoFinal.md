@@ -146,3 +146,9 @@ int main() {
     
     return 0;
 }
+```
+
+
+## Referências
+GONZALEZ, Rafael C.; WOODS, Richard E. Processamento Digital de Imagens. Pearson Prentice Hall, 2008.
+OpenCV Documentation: https://docs.opencv.org/
