@@ -87,67 +87,137 @@ O algoritmo foi implementado em C++ usando a biblioteca OpenCV. A função princ
 #include <opencv2/opencv.hpp>
 #include <iostream>
 
-using namespace cv;
-using namespace std;
-
-// Função para calcular a convolução de uma imagem com um kernel
-Mat convolve(const Mat& image, const Mat& kernel) {
-    Mat result;
-    filter2D(image, result, -1, kernel, Point(-1, -1), 0, BORDER_CONSTANT);
+// Função para aplicar a convolução
+cv::Mat convolve(const cv::Mat& image, const cv::Mat& kernel) {
+    cv::Mat result;
+    cv::filter2D(image, result, -1, kernel, cv::Point(-1, -1), 0, cv::BORDER_CONSTANT);
     return result;
 }
 
-// Função principal para deconvolução
-Mat deconvolve(const Mat& B, const Mat& G, double lambda, double eta, int max_iters) {
-    // Inicializar X com a imagem borrada
-    Mat X = B.clone();
+// Função para calcular o Laplaciano da imagem
+cv::Mat computeLaplacian(const cv::Mat& image) {
+    cv::Mat laplacian;
+    cv::Laplacian(image, laplacian, CV_32F, 1, 1, 0, cv::BORDER_CONSTANT);
+    return laplacian;
+}
+
+// Função principal para deblurring
+cv::Mat deblurImage(const cv::Mat& blurred, const cv::Mat& kernel, float lambda, int iterations, float learning_rate) {
+    // Inicialize a imagem limpa como a imagem borrada
+    cv::Mat clean = blurred.clone();
+    clean.convertTo(clean, CV_32F);
     
-    // Criar o kernel Laplaciano
-    Mat laplacian_kernel = (Mat_<float>(3, 3) << 0, -1, 0, -1, 4, -1, 0, -1, 0);
-    
-    for (int iter = 0; iter < max_iters; ++iter) {
-        // Calcular G * X
-        Mat GX = convolve(X, G);
-        
-        // Calcular o erro
-        Mat error = GX - B;
-        
-        // Gradiente da função de custo
-        Mat grad = convolve(error, G.t()) - lambda * convolve(X, laplacian_kernel);
-        
-        // Atualizar X
-        X -= eta * grad;
+    // Garantir que o kernel esteja no formato adequado
+    cv::Mat kernelFlipped;
+    kernel.convertTo(kernel, CV_32F);
+    cv::flip(kernel, kernelFlipped, -1);  // Inverte o kernel para a convolução inversa
+
+    for (int iter = 0; iter < iterations; ++iter) {
+        // Convolução de G * F
+        cv::Mat blurredEstimate = convolve(clean, kernel);
+        cv::normalize(blurredEstimate, blurredEstimate, 0, 255, cv::NORM_MINMAX);
+
+        // Gradiente da função de erro
+        cv::Mat grad = convolve(blurredEstimate - blurred, kernelFlipped);
+
+        // Regularização Laplaciana
+        cv::Mat laplacian = computeLaplacian(clean);
+
+        // Atualize a imagem limpa
+        clean -= learning_rate * (grad + lambda * laplacian);
     }
-    return X;
+
+    // Converta a imagem de volta para o formato original
+    clean.convertTo(clean, blurred.type());
+    cv::normalize(clean,clean,0,255,cv::NORM_MINMAX);
+    return clean;
 }
 
 int main() {
-    // Carregar a imagem borrada (B) e a máscara de borramento (G)
-    Mat B = imread("blurred_image.jpg", IMREAD_GRAYSCALE);
-    Mat G = getGaussianKernel(9, 1, CV_32F); // Exemplo de kernel gaussiano
-    
-    if (B.empty() || G.empty()) {
-        cerr << "Erro ao carregar imagem ou kernel!" << endl;
+    // Carregar a imagem limpa (em tons de cinza)
+    cv::Mat clean = cv::imread("lena.png", cv::IMREAD_GRAYSCALE);
+    if (clean.empty()) {
+        std::cerr << "Erro ao carregar a imagem limpa!" << std::endl;
         return -1;
     }
+
+    clean.convertTo(clean, CV_32F);
+
+    // Criar a máscara (kernel de borramento) - pode ser personalizada
+    int kernelSize = 5;
+    cv::Mat mask = cv::getGaussianKernel(kernelSize, -1, CV_32F) *
+                     cv::getGaussianKernel(kernelSize, -1, CV_32F).t();
+
+    // Aplicar o borramento sintético
+    cv::Mat blurred = convolve(clean, mask);
+    cv::normalize(blurred, blurred, 0, 255, cv::NORM_MINMAX);
+
+    // Parâmetros do algoritmo
+    float lambda = 0.01;          // Fator de regularização
+    int iterations = 700;        // Número de iterações
+    float learning_rate = 0.1f;  // Taxa de aprendizado
+
+    // Recuperar a imagem limpa a partir da imagem borrada
+    cv::Mat recovered = deblurImage(blurred, mask, lambda, iterations, learning_rate);
     
-    // Configurações da deconvolução
-    double lambda = 0.1; // Peso da regularização
-    double eta = 0.01;   // Taxa de aprendizado
-    int max_iters = 100; // Número máximo de iterações
-    
-    // Recuperar a imagem original
-    Mat X = deconvolve(B, G, lambda, eta, max_iters);
-    
-    // Salvar e exibir o resultado
-    imwrite("recovered_image.jpg", X);
-    imshow("Imagem Recuperada", X);
-    waitKey(0);
-    
+
+    // Convertendo para uchar para exibir    
+    recovered.convertTo(recovered,CV_8U);
+    clean.convertTo(clean, CV_8U);
+    blurred.convertTo(blurred, CV_8U);  // Convertendo para tipo adequado para exibição
+    // Salvar e exibir as imagens
+    cv::imwrite("recovered_image.jpg", recovered);
+    cv::imshow("Clean Image", clean);
+    cv::imshow("Blurred Image", blurred);
+    cv::imshow("Recovered Image", recovered);
+    cv::waitKey(0);
+
     return 0;
 }
 
+
 ```
+
+## Resultados e discussões
+Aplicando a deconvolução a imagem da lena mostrada abaixo, com um borramento de uma máscara gaussiana de fórmula
+
+$$
+G(x,y) = e^{-\frac{x^2 + y²}{2 \sigma ²}}
+$$
+
+onde $$x = {-2,-1,0,1,2} e y = {-2,-1,0,1,2}$$, pela imagem
+
+
+![Imagem da lena](./imagens/lena.png)
+
+*Figura 1: Imagem a ser borrada pelo filtro gaussiano.*
+
+Foi aplicada a deconvolução com os seguintes parâmetros
+
+$$
+\begin{bmatrix}
+lambda = 0.01 \\
+n_{iterações} = 700\\
+taxa de aprendizagem = 0.1
+\end{bmatrix}
+$$
+
+observou-se que a imagem recuperada ficou muito próxima da imagem limpa, a não ser por um ganho nos tons de cinza, como é possível ver abaixo
+
+![Imagem da lena recuperada](./imagens/imagem_lena_recuparada_vs_original_N_5.png)
+*Figura 2: Imagem recuperada pela deconvolução.*
+
+
+Porém ao aumentar a intensidade do borramento, fica cada vez mais difícil conseguir recuperar a imagem
+com um borramento de $$N = 11$$, a recuperação ja ficou bem prejudicada
+A solução para isso pode ser encontrada usando outra função de custo para os pixels da imagem, e talvez algum fator de restrição/regularização para o problema ficar melhor
+posto e ter uma solução mais "suave".
+
+A figura abaixo mostra o resultado para um borramento de $$N = 11$$
+
+![Imagem da lena recuperada de um borramento N = 11](./imagens/imagem_lena_recuparada_vs_original_N_11.png)
+
+*Figura 3: Imagem da lena recuperada de um borramento $$N = 11$$.*
 
 
 ## Referências
