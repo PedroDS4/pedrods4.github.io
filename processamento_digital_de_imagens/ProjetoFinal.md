@@ -28,8 +28,8 @@ A abordagem utiliza a minimização de um erro médio quadrático entre $$B$$ e 
 O problema de deconvolução é formulado como a minimização da seguinte função de custo:
 
 $$
-E(X) = \frac{1}{2} \sum_{i,j} \left[ B(i,j) - (G * X)(i,j) \right]^2 + \lambda \sum_{i,j} || \nabla^2 X(i,j) ||^2
-$$
+E(X)  =  \sum_{i,j} ( B(i,j) - (G * X)(i,j) )^2 = \sum_{i,j}  ( B(i,j) - \sum_{u} \sum_{v} G(u,v) F(i-u,j-v) )^2 = 
+$$k
 
 Onde:
 - $$B(i,j)$$: Pixel da imagem borrada.
@@ -39,7 +39,21 @@ Onde:
 
 ### Gradiente da Função de Custo
 
+Calculando o gradiente da função custo analiticamente, temos que
+
+$$
+\frac{\partial }{\partial X(i,j)} E(X) = \frac{\partial }{\partial X(i,j)} \sum_{i,j} ( B(i,j) -  ( B(i,j) - \sum_{u} \sum_{v} G(u,v) F(i-u,j-v) )^ )^2 
+$$
+
+Desenvolvendo a convolução
+
+$$
+\frac{\partial }{\partial X(i,j)} E( X(i,j) ) =  \frac{\partial }{\partial X(i,j)}    
+$$
+
+
 O gradiente da função de custo em relação a $$X$$ é dado por:
+
 
 $$
 \frac{\partial E}{\partial X} = G^T * (G * X - B) - \lambda \nabla^2 X
@@ -47,19 +61,27 @@ $$
 
 Onde $$G^T$$ é o kernel transposto de $$G$$.
 
+
+
 ### Algoritmo de Otimização
 
 1. **Inicialização**:
-   - Definir $$X_0$$ como uma aproximação inicial (por exemplo, a imagem borrada $B$).
+   - Definir $$X_0$$ como um chute inicial (por exemplo, a imagem borrada $B$ ou uma imagem aleatória).
 2. **Iteração**:
    - Calcular o gradiente $$\frac{\partial E}{\partial X}$$.
-   - Atualizar $X$ usando descida de gradiente:
+   - Atualizar $$X$$ usando descida de gradiente:
      $$
      X^{(k+1)} = X^{(k)} - \eta \frac{\partial E}{\partial X}
      $$
      Onde $$\eta$$ é a taxa de aprendizado.
 3. **Convergência**:
-   - Parar quando $$||X^{(k+1)} - X^{(k)}||$$ for menor que um limiar predefinido.
+   - Parar quando
+    $$
+    ||X^{(k+1)} - X^{(k)}||
+    $$
+
+   for menor que um limiar predefinido ou quando um certo número de iterações for atingoido.
+
 
 ### Regularização Laplaciana
 
