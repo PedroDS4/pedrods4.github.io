@@ -21,14 +21,25 @@ Neste projeto, abordamos a recuperação de uma imagem limpa $$X$$ a partir de u
 
 A abordagem utiliza a minimização de um erro médio quadrático entre $$B$$ e a convolução $$G * F$$, adicionando uma regularização Laplaciana para suavizar a imagem recuperada.  
 
+A deconvolução é um processo matemático que busca reverter o resultado de uma convolução, dado um sistema da forma
+$$
+Y = X \ast G
+$$
+
+procura-se obter um dos sinais $$X$$ ou $$G$$.
+Quando apenas o sinal $$Y$$ é conhecido e queremos obter um dos sinais que foram convoluídos, dizemos que a deconvolução é cega
+Já quando temos a saída da convolução e um dos sinais $$X$$ ou $$G$$, e queremos obter o que falta, dizemos que a deconvolução é determinística, e é o caso que será tratado nesse projeto.
+
 ## Metodologia
+O cenário abordado nesse projeto é um cenário onde capturamos uma imagem borrada e temos o modelo da máscara que fez o borramento da imagem, e queremos obter a imagem limpa a partir das outras duas.
+
 
 ### Formulação do Problema
 
 O problema de deconvolução é formulado como a minimização da seguinte função de custo:
 
 $$
-E(F(i,j))  =  \sum_{i,j} ( B(i,j) - (G \ast F)(i,j) )^2 = \sum_{i,j}  ( B(i,j) - \sum_{u} \sum_{v} G(u,v) F(i-u,j-v) )^2 + \lambda \nabla^2 F(i,j)
+E(F(i,j))  =  \sum_{i,j} ( B(i,j) - (G \ast F)(i,j) )^2 = \sum_{i,j}  ( B(i,j) - \sum_{u} \sum_{v} F(u,v) G(i-u,j-v) )^2 + \lambda \nabla^2 F(i,j)
 $$
 
 que representa o erro médio quadrático entre os pixels da imagem borrada e da imagem modelada pela convolução com a máscara de borramento.
@@ -36,48 +47,59 @@ que representa o erro médio quadrático entre os pixels da imagem borrada e da 
 Onde:
 - $$B(i,j)$$: Pixel da imagem borrada.
 - $$G \ast F$$: Convolução da máscara $$G$$ com a imagem limpa $$F$$.
-- $$\nabla^2 X(i,j)$$: Laplaciano do pixel $$F(i,j)$$.
+- $$\nabla^2 F(i,j)$$: Laplaciano do pixel $$F(i,j)$$.
 - $$\lambda$$: Fator de regularização que controla o peso da suavização.
 
 ### Gradiente da Função de Custo
 
-Calculando o gradiente da função custo analiticamente, temos que
+Calculando o gradiente da função custo em relação a cada pixel $$(x,y)$$, temos que
 
 $$
-\frac{\partial }{\partial F(i,j)} E(F(i,j)) = \frac{\partial }{\partial X(i,j)} \sum_{i,j} ( B(i,j) -  ( B(i,j) - \sum_{u} \sum_{v} G(u,v) F(i-u,j-v) ) )^2 
+\frac{\partial }{\partial F(x,y)} E(F(x,y)) = \frac{\partial }{\partial F(x,y)} \sum_{i,j} ( B(i,j) -  \sum_{u} \sum_{v} G(u,v) F(i-u,j-v) )^2 
 $$
 
 utilizando a regra da cadeia, temos
 
 $$
-\frac{\partial }{\partial F(i,j)} E( F(i,j) ) =  2 \cdot    \sum_{i,j}  B(i,j) -  ( B(i,j) - \sum_{u} \sum_{v} G(u,v) F(i-u,j-v) )  \cdot 
-\frac{\partial }{\partial F(i,j)} - \sum_{u} \sum_{v} G(u,v) F(i-u,j-v) 
+\frac{\partial }{\partial F(x,y)} E( F(x,y) ) =  2 \cdot \sum_{i,j} ( B(i,j)  - \sum_{u} \sum_{v} G(u,v) F(i-u,j-v) )  \cdot 
+\frac{\partial }{\partial F(x,y)} (- \sum_{u} \sum_{v} G(u,v) F(i-u,j-v) ) 
 $$
 
-
-e finalmente temos que O gradiente da função de custo em relação a imagem a ser recuperada $$F(i,j)$$ é dado por:
-
+e a derivada abaixo pode ser calculada $$i - u = x$$ e $$j - v = y$$.
 
 $$
-\frac{\partial E}{\partial F} = G^T \ast (G \ast F - B) - \lambda \nabla^2 F
+\frac{\partial }{\partial F(x,y)} (- \sum_{u} \sum_{v} G(i-x,j-y) F(x,y) ) = G(i -x, j - y)
 $$
 
-Onde $$G^T$$ é o kernel transposto de $$G$$.
+substituindo na derivada total
+
+$$
+\frac{\partial }{\partial F(x,y)} E( F(x,y) ) =  -2 \cdot \sum_{i,j} [  ( B(i,j)  - \sum_{u} \sum_{v} G(u,v) F(i-u,j-v) ) \cdot G(i -x, j - y) ]
+$$
+
+e isso pode ainda ser escrito como a convolução do resultado da subtração pela máscara G espelhada, ou transposte,
+e finalmente temos que o gradiente da função de custo em relação a imagem a ser recuperada $$F(i,j)$$ é dado por:
+
+$$
+\frac{\partial E}{\partial F} = 2 G^T \ast (G \ast F - B) - \lambda \nabla^2 F
+$$
+
+Onde $$G^T$$ é a máscara $$G$$ transposta ou refletida.
 
 
 
 ### Algoritmo de Otimização
 
 1. **Inicialização**:
-   - Definir $$X_0$$ como um chute inicial (por exemplo, a imagem borrada $B$ ou uma imagem aleatória).
+   - Definir $$F_0$$ como um chute inicial (por exemplo, a imagem borrada $$B$$ ou uma imagem aleatória).
      
 2. **Iteração**:
-   - Calcular o gradiente $$\frac{\partial E}{\partial X}$$.
-   - Atualizar $$X$$ usando descida de gradiente:
+   - Calcular o gradiente $$\frac{\partial E}{\partial F}$$.
+   - Atualizar $$F$$ usando descida de gradiente:
      $$
-     X^{(k+1)} = X^{(k)} - \eta \frac{\partial E}{\partial X}
+     F^{(k+1)} = F^{(k)} - \eta \frac{\partial E}{\partial F^k}
      $$
-     Onde $$\eta$$ é a taxa de aprendizado.
+     Onde $$\eta$$ é a taxa de aprendizado ou passo do gradiente.
      
 3. **Convergência**:
    - Parar quando
@@ -105,8 +127,8 @@ e serve para buscar uma solução mais suave para o problema, em busca das borda
 
 ### Implementação
 O algoritmo foi implementado em C++ usando a biblioteca OpenCV. A função principal realiza as seguintes etapas:
-1. Carregar a imagem borrada $$B$$ e a máscara $G$.
-2. Inicializar a imagem $$X$$ com $$B$$.
+1. Carregar a imagem borrada $$B$$ e a máscara $$G$$.
+2. Inicializar a imagem $$F$$ com $$B$$.
 3. Executar o loop de descida de gradiente até a convergência.
 
 ## Código C++
@@ -115,7 +137,7 @@ O algoritmo foi implementado em C++ usando a biblioteca OpenCV. A função princ
 #include <opencv2/opencv.hpp>
 #include <iostream>
 
-// Função para aplicar a convolução
+// Função direto para a convolução
 cv::Mat convolve(const cv::Mat& image, const cv::Mat& kernel) {
     cv::Mat result;
     cv::filter2D(image, result, -1, kernel, cv::Point(-1, -1), 0, cv::BORDER_CONSTANT);
@@ -129,16 +151,19 @@ cv::Mat computeLaplacian(const cv::Mat& image) {
     return laplacian;
 }
 
-// Função principal para deblurring
+// Função principal que faz a deconvolução da imagem e retorna a imagem estimada
 cv::Mat deblurImage(const cv::Mat& blurred, const cv::Mat& kernel, float lambda, int iterations, float learning_rate) {
-    // Inicialize a imagem limpa como a imagem borrada
+    // Inicialização da imagem a ser recuperada como a imagem borrada(chute inicial)
     cv::Mat clean = blurred.clone();
+
+    //Conversão para float para fazer as operações matemáticas
     clean.convertTo(clean, CV_32F);
     
-    // Garantir que o kernel esteja no formato adequado
+    // Espelhamento do Kernel 
     cv::Mat kernelFlipped;
     kernel.convertTo(kernel, CV_32F);
     cv::flip(kernel, kernelFlipped, -1);  // Inverte o kernel para a convolução inversa
+
 
     for (int iter = 0; iter < iterations; ++iter) {
         // Convolução de G * F
@@ -155,7 +180,7 @@ cv::Mat deblurImage(const cv::Mat& blurred, const cv::Mat& kernel, float lambda,
         clean -= learning_rate * (grad + lambda * laplacian);
     }
 
-    // Converta a imagem de volta para o formato original
+    // Converta a imagem de volta para o formato original para exibição
     clean.convertTo(clean, blurred.type());
     cv::normalize(clean,clean,0,255,cv::NORM_MINMAX);
     return clean;
@@ -183,7 +208,7 @@ int main() {
     // Parâmetros do algoritmo
     float lambda = 0.01;          // Fator de regularização
     int iterations = 700;        // Número de iterações
-    float learning_rate = 0.1f;  // Taxa de aprendizado
+    float learning_rate = 0.1f;  // Taxa de aprendizado ou passo do gradiente
 
     // Recuperar a imagem limpa a partir da imagem borrada
     cv::Mat recovered = deblurImage(blurred, mask, lambda, iterations, learning_rate);
@@ -251,5 +276,7 @@ A figura abaixo mostra o resultado para um borramento de $$N = 11$$
 
 
 ## Referências
-GONZALEZ, Rafael C.; WOODS, Richard E. Processamento Digital de Imagens. Pearson Prentice Hall, 2008.
+[1] GONZALEZ, Rafael C.; WOODS, Richard E. Processamento Digital de Imagens. Pearson Prentice Hall, 2008.
 OpenCV Documentation: https://docs.opencv.org/
+[2] FERREIRA, L. V.; KASZKUREWICZ, E.; BHAYA, A. Image Restoration Using L1-Norm Regularization and a Gradient-Based Neural Network with Discontinuous Activation Functions. Título do Periódico ou Evento (se houver), Local, Volume, Páginas, Ano.
+
