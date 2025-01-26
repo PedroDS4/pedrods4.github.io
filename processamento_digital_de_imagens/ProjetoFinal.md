@@ -18,17 +18,13 @@
 ## Introdução
 
 Neste projeto, abordamos a recuperação de uma imagem limpa $$X$$ a partir de uma imagem borrada $$B$$ e de uma máscara de borramento $$G$$ conhecida. Este é um problema típico de deconvolução no processamento de imagens, no qual o objetivo é reconstruir $$F$$ de forma precisa, minimizando artefatos e ruídos.
-
-A abordagem utiliza a minimização de um erro médio quadrático entre $$B$$ e a convolução $$G * F$$, adicionando uma regularização Laplaciana para suavizar a imagem recuperada.  
-
 A deconvolução é um processo matemático que busca reverter o resultado de uma convolução, dado um sistema da forma
 $$
 Y = X \ast G
 $$
 
 procura-se obter um dos sinais $$X$$ ou $$G$$.
-Quando apenas o sinal $$Y$$ é conhecido e queremos obter um dos sinais que foram convoluídos, dizemos que a deconvolução é cega
-Já quando temos a saída da convolução e um dos sinais $$X$$ ou $$G$$, e queremos obter o que falta, dizemos que a deconvolução é determinística, e é o caso que será tratado nesse projeto.
+Quando apenas o sinal $$Y$$ é conhecido e queremos obter um dos sinais que foram convoluídos, dizemos que a deconvolução é cega, já quando temos a saída da convolução e um dos sinais $$X$$ ou $$G$$, e queremos obter o que falta, dizemos que a deconvolução é determinística, e é o caso que será tratado nesse projeto.
 
 ## Metodologia
 O cenário abordado nesse projeto é um cenário onde capturamos uma imagem borrada e temos o modelo da máscara que fez o borramento da imagem, e queremos obter a imagem limpa a partir das outras duas.
@@ -36,7 +32,7 @@ O cenário abordado nesse projeto é um cenário onde capturamos uma imagem borr
 
 ### Formulação do Problema
 
-O problema de deconvolução é formulado como a minimização da seguinte função de custo:
+O problema de deconvolução é formulado como um problema de otimização que busca a minimização da seguinte função de custo:
 
 $$
 E(F(i,j))  =  \sum_{i,j} ( B(i,j) - (G \ast F)(i,j) )^2 = \sum_{i,j}  ( B(i,j) - \sum_{u} \sum_{v} F(u,v) G(i-u,j-v) )^2 + \lambda \nabla^2 F(i,j)
@@ -65,13 +61,13 @@ $$
 \frac{\partial }{\partial F(x,y)} (- \sum_{u} \sum_{v} G(u,v) F(i-u,j-v) ) 
 $$
 
-e a derivada abaixo pode ser calculada $$i - u = x$$ e $$j - v = y$$.
+e a derivada abaixo pode ser calculada quando $$i - u = x$$ e $$j - v = y$$.
 
 $$
 \frac{\partial }{\partial F(x,y)} (- \sum_{u} \sum_{v} G(i-x,j-y) F(x,y) ) = G(i -x, j - y)
 $$
 
-substituindo na derivada total
+substituindo na derivada total, finalmente temos o gradiente em relação ao pixel $$(x,y)$$ da imagem a ser recuperada, e podemos usar um método de descida para achar a melhor solução computacionalmente.
 
 $$
 \frac{\partial }{\partial F(x,y)} E( F(x,y) ) =  -2 \cdot \sum_{i,j} [  ( B(i,j)  - \sum_{u} \sum_{v} G(u,v) F(i-u,j-v) ) \cdot G(i -x, j - y) ]
@@ -95,7 +91,7 @@ Onde $$G^T$$ é a máscara $$G$$ transposta ou refletida.
      
 2. **Iteração**:
    - Calcular o gradiente $$\frac{\partial E}{\partial F}$$.
-   - Atualizar $$F$$ usando descida de gradiente:
+   - Atualizar $$F$$ usando o método de descida do gradiente para minimizar a função objetivo:
      $$
      F^{(k+1)} = F^{(k)} - \eta \frac{\partial E}{\partial F^k}
      $$
@@ -278,5 +274,6 @@ A figura abaixo mostra o resultado para um borramento de $$N = 11$$
 ## Referências
 [1] GONZALEZ, Rafael C.; WOODS, Richard E. Processamento Digital de Imagens. Pearson Prentice Hall, 2008.
 OpenCV Documentation: https://docs.opencv.org/
+
 [2] FERREIRA, L. V.; KASZKUREWICZ, E.; BHAYA, A. Image Restoration Using L1-Norm Regularization and a Gradient-Based Neural Network with Discontinuous Activation Functions. Título do Periódico ou Evento (se houver), Local, Volume, Páginas, Ano.
 
