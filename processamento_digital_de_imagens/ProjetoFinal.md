@@ -17,9 +17,9 @@
 
 ## Introdução
 
-Neste projeto, abordamos a recuperação de uma imagem limpa $$X$$ a partir de uma imagem borrada $$B$$ e de uma máscara de borramento $$G$$ conhecida. Este é um problema típico de deconvolução no processamento de imagens, no qual o objetivo é reconstruir $$X$$ de forma precisa, minimizando artefatos e ruídos.
+Neste projeto, abordamos a recuperação de uma imagem limpa $$X$$ a partir de uma imagem borrada $$B$$ e de uma máscara de borramento $$G$$ conhecida. Este é um problema típico de deconvolução no processamento de imagens, no qual o objetivo é reconstruir $$F$$ de forma precisa, minimizando artefatos e ruídos.
 
-A abordagem utiliza a minimização de um erro médio quadrático entre $$B$$ e a convolução $$G * X$$, adicionando uma regularização Laplaciana para suavizar a imagem recuperada.  
+A abordagem utiliza a minimização de um erro médio quadrático entre $$B$$ e a convolução $$G * F$$, adicionando uma regularização Laplaciana para suavizar a imagem recuperada.  
 
 ## Metodologia
 
@@ -28,13 +28,15 @@ A abordagem utiliza a minimização de um erro médio quadrático entre $$B$$ e 
 O problema de deconvolução é formulado como a minimização da seguinte função de custo:
 
 $$
-E(X)  =  \sum_{i,j} ( B(i,j) - (G * X)(i,j) )^2 = \sum_{i,j}  ( B(i,j) - \sum_{u} \sum_{v} G(u,v) F(i-u,j-v) )^2 = 
-$$k
+E(F(i,j))  =  \sum_{i,j} ( B(i,j) - (G \ast F)(i,j) )^2 = \sum_{i,j}  ( B(i,j) - \sum_{u} \sum_{v} G(u,v) F(i-u,j-v) )^2 + \lambda \nabla^2 F(i,j)
+$$
+
+que representa o erro médio quadrático entre os pixels da imagem borrada e da imagem modelada pela convolução com a máscara de borramento.
 
 Onde:
 - $$B(i,j)$$: Pixel da imagem borrada.
-- $$G * X$$: Convolução da máscara $G$ com a imagem $X$.
-- $$\nabla^2 X(i,j)$$: Laplaciano do pixel $$X(i,j)$$.
+- $$G \ast F$$: Convolução da máscara $$G$$ com a imagem limpa $$F$$.
+- $$\nabla^2 X(i,j)$$: Laplaciano do pixel $$F(i,j)$$.
 - $$\lambda$$: Fator de regularização que controla o peso da suavização.
 
 ### Gradiente da Função de Custo
@@ -42,21 +44,22 @@ Onde:
 Calculando o gradiente da função custo analiticamente, temos que
 
 $$
-\frac{\partial }{\partial X(i,j)} E(X) = \frac{\partial }{\partial X(i,j)} \sum_{i,j} ( B(i,j) -  ( B(i,j) - \sum_{u} \sum_{v} G(u,v) F(i-u,j-v) )^ )^2 
+\frac{\partial }{\partial F(i,j)} E(F(i,j)) = \frac{\partial }{\partial X(i,j)} \sum_{i,j} ( B(i,j) -  ( B(i,j) - \sum_{u} \sum_{v} G(u,v) F(i-u,j-v) ) )^2 
 $$
 
-Desenvolvendo a convolução
+utilizando a regra da cadeia, temos
 
 $$
-\frac{\partial }{\partial X(i,j)} E( X(i,j) ) =  \frac{\partial }{\partial X(i,j)}    
+\frac{\partial }{\partial F(i,j)} E( F(i,j) ) =  2 \cdot    \sum_{i,j}  B(i,j) -  ( B(i,j) - \sum_{u} \sum_{v} G(u,v) F(i-u,j-v) )  \cdot 
+\frac{\partial }{\partial F(i,j)} - \sum_{u} \sum_{v} G(u,v) F(i-u,j-v) 
 $$
 
 
-O gradiente da função de custo em relação a $$X$$ é dado por:
+e finalmente temos que O gradiente da função de custo em relação a imagem a ser recuperada $$F(i,j)$$ é dado por:
 
 
 $$
-\frac{\partial E}{\partial X} = G^T * (G * X - B) - \lambda \nabla^2 X
+\frac{\partial E}{\partial F} = G^T \ast (G \ast F - B) - \lambda \nabla^2 F
 $$
 
 Onde $$G^T$$ é o kernel transposto de $$G$$.
@@ -67,6 +70,7 @@ Onde $$G^T$$ é o kernel transposto de $$G$$.
 
 1. **Inicialização**:
    - Definir $$X_0$$ como um chute inicial (por exemplo, a imagem borrada $B$ ou uma imagem aleatória).
+     
 2. **Iteração**:
    - Calcular o gradiente $$\frac{\partial E}{\partial X}$$.
    - Atualizar $$X$$ usando descida de gradiente:
@@ -74,13 +78,14 @@ Onde $$G^T$$ é o kernel transposto de $$G$$.
      X^{(k+1)} = X^{(k)} - \eta \frac{\partial E}{\partial X}
      $$
      Onde $$\eta$$ é a taxa de aprendizado.
+     
 3. **Convergência**:
    - Parar quando
     $$
     ||X^{(k+1)} - X^{(k)}||
     $$
 
-   for menor que um limiar predefinido ou quando um certo número de iterações for atingoido.
+   for menor que um limiar predefinido ou quando um certo número de iterações $$n_{iteraçôes}$$ for atingoido.
 
 
 ### Regularização Laplaciana
@@ -96,8 +101,9 @@ $$
 \end{bmatrix}
 $$
 
-### Implementação
+e serve para buscar uma solução mais suave para o problema, em busca das bordas da imagem.
 
+### Implementação
 O algoritmo foi implementado em C++ usando a biblioteca OpenCV. A função principal realiza as seguintes etapas:
 1. Carregar a imagem borrada $$B$$ e a máscara $G$.
 2. Inicializar a imagem $$X$$ com $$B$$.
@@ -228,7 +234,7 @@ observou-se que a imagem recuperada ficou muito próxima da imagem limpa, a não
 
 ![Imagem da lena recuperada](./imagens/imagem_lena_recuparada_vs_original_N_5.png)
 
-*Figura 2: Imagem recuperada pela deconvolução.*
+*Figura 2: Comparação da Imagem recuperada pela deconvolução com $$N = 5$$.*
 
 
 Porém ao aumentar a intensidade do borramento, fica cada vez mais difícil conseguir recuperar a imagem
