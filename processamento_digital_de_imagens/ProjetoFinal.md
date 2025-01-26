@@ -13,18 +13,19 @@
 
 **Aluno(a):** Pedro Arthur Oliveira dos Santos  
 **Professor(a):** Agostinho Brito Junior  
-**Data:** 15/01/2025  
+**Data:** 23/01/2025  
 
 ## Introdução
 
-Neste projeto, abordamos a recuperação de uma imagem limpa $$X$$ a partir de uma imagem borrada $$B$$ e de uma máscara de borramento $$G$$ conhecida. Este é um problema típico de deconvolução no processamento de imagens, no qual o objetivo é reconstruir $$F$$ de forma precisa, minimizando artefatos e ruídos.
+Neste projeto, abordamos a recuperação de uma imagem limpa $$F$$ a partir de uma imagem borrada $$B$$ e de uma máscara de borramento $$G$$ conhecida. Este é um problema típico de deconvolução no processamento de imagens, no qual o objetivo é reconstruir $$F$$ de forma precisa, minimizando artefatos e ruídos.
 A deconvolução é um processo matemático que busca reverter o resultado de uma convolução, dado um sistema da forma
+
 $$
-Y = X \ast G
+Y = F \ast G
 $$
 
-procura-se obter um dos sinais $$X$$ ou $$G$$.
-Quando apenas o sinal $$Y$$ é conhecido e queremos obter um dos sinais que foram convoluídos, dizemos que a deconvolução é cega, já quando temos a saída da convolução e um dos sinais $$X$$ ou $$G$$, e queremos obter o que falta, dizemos que a deconvolução é determinística, e é o caso que será tratado nesse projeto.
+procura-se obter um dos sinais $$F$$ ou $$G$$.
+Quando apenas o sinal $$Y$$ é conhecido e queremos obter um dos sinais que foram convoluídos, dizemos que a deconvolução é cega, já quando temos a saída da convolução e um dos sinais $$F$$ ou $$G$$, e queremos obter o que falta, dizemos que a deconvolução é determinística, e é o caso que será tratado nesse projeto.
 
 ## Metodologia
 O cenário abordado nesse projeto é um cenário onde capturamos uma imagem borrada e temos o modelo da máscara que fez o borramento da imagem, e queremos obter a imagem limpa a partir das outras duas.
@@ -100,7 +101,7 @@ Onde $$G^T$$ é a máscara $$G$$ transposta ou refletida.
 3. **Convergência**:
    - Parar quando
     $$
-    ||X^{(k+1)} - X^{(k)}||
+    ||F^{(k+1)} - F^{(k)}||
     $$
 
    for menor que um limiar predefinido ou quando um certo número de iterações $$n_{iteraçôes}$$ for atingoido.
@@ -108,7 +109,7 @@ Onde $$G^T$$ é a máscara $$G$$ transposta ou refletida.
 
 ### Regularização Laplaciana
 
-A regularização Laplaciana é implementada aplicando um filtro Laplaciano 3x3 à imagem $X$, definido como:
+A regularização Laplaciana é implementada aplicando um filtro Laplaciano 3x3 à imagem $F$, definido como:
 
 $$
 \text{Kernel Laplaciano} =
@@ -234,7 +235,7 @@ $$
 G(x,y) = e^{-\frac{x^2 + y²}{2 \sigma ²}}
 $$
 
-onde $$x = {-2,-1,0,1,2}$$ e $$y = {-2,-1,0,1,2}$$, pela imagem
+onde $$x = {-2,-1,0,1,2}$$ e $$y = {-2,-1,0,1,2}$$ no caso de $$N = 5$$, pela imagem limpa.
 
 
 ![Imagem da lena](./imagens/lena.png)
@@ -259,9 +260,8 @@ observou-se que a imagem recuperada ficou muito próxima da imagem limpa, a não
 
 
 Porém ao aumentar a intensidade do borramento, fica cada vez mais difícil conseguir recuperar a imagem
-com um borramento de $$N = 11$$, a recuperação ja ficou bem prejudicada
-A solução para isso pode ser encontrada usando outra função de custo para os pixels da imagem, e talvez algum fator de restrição/regularização para o problema ficar melhor
-posto e ter uma solução mais "suave".
+com um borramento de $$N = 11$$, a recuperação ja ficou bem prejudicada e surgiu componentes de alta frequência.
+A solução para isso pode ser encontrada usando outra função de custo para os pixels da imagem, e talvez algum fator de restrição/regularização para o problema ficar melhor posto e ter uma solução mais "limpa" em vez de suave.
 
 A figura abaixo mostra o resultado para um borramento de $$N = 11$$
 
