@@ -27,8 +27,9 @@ $$
 procura-se obter um dos sinais $$F$$ ou $$G$$.
 Quando apenas o sinal $$Y$$ é conhecido e queremos obter um dos sinais que foram convoluídos, dizemos que a deconvolução é cega, já quando temos a saída da convolução e um dos sinais $$F$$ ou $$G$$, e queremos obter o que falta, dizemos que a deconvolução é determinística, e é o caso que será tratado nesse projeto.
 
+
 ## Metodologia
-O cenário abordado nesse projeto é um cenário onde capturamos uma imagem borrada e temos o modelo da máscara que fez o borramento da imagem, e queremos obter a imagem limpa a partir das outras duas.
+O cenário abordado nesse projeto é um cenário onde capturamos uma imagem borrada e temos o modelo da máscara que fez o borramento da imagem, e queremos obter a imagem limpa a partir das outras duas, esse processo também é conhecido na literatura como desborramento ou "debluring" em inglês.
 
 
 ### Formulação do Problema
@@ -100,16 +101,13 @@ Onde $$G^T$$ é a máscara $$G$$ transposta ou refletida.
      
 3. **Convergência**:
    - Parar quando
-    $$
-    ||F^{(k+1)} - F^{(k)}||
-    $$
-
-   for menor que um limiar predefinido ou quando um certo número de iterações $$n_{iteraçôes}$$ for atingoido.
+    $$ ||F^{(k+1)} - F^{(k)}|| $$ for menor que um limiar predefinido
+    ou quando um certo número de iterações $$n_{iteraçôes}$$ for atingoido.
 
 
 ### Regularização Laplaciana
 
-A regularização Laplaciana é implementada aplicando um filtro Laplaciano 3x3 à imagem $F$, definido como:
+A regularização Laplaciana é implementada aplicando um filtro Laplaciano 3x3 à imagem $$F$$, definido como:
 
 $$
 \text{Kernel Laplaciano} =
@@ -124,8 +122,8 @@ e serve para buscar uma solução mais suave para o problema, em busca das borda
 
 ### Implementação
 O algoritmo foi implementado em C++ usando a biblioteca OpenCV. A função principal realiza as seguintes etapas:
-1. Carregar a imagem borrada $$B$$ e a máscara $$G$$.
-2. Inicializar a imagem $$F$$ com $$B$$.
+1. Carregar a imagem borrada $$B$$ e gera a máscara $$G$$ a partir das funções de gerar gaussianas do OpenCV.
+2. Inicializar a imagem $$F$$ com $$B$$ como sendo o chute inicial.
 3. Executar o loop de descida de gradiente até a convergência.
 
 ## Código C++
@@ -134,7 +132,7 @@ O algoritmo foi implementado em C++ usando a biblioteca OpenCV. A função princ
 #include <opencv2/opencv.hpp>
 #include <iostream>
 
-// Função direto para a convolução
+// Função para cálculo direto da convolução
 cv::Mat convolve(const cv::Mat& image, const cv::Mat& kernel) {
     cv::Mat result;
     cv::filter2D(image, result, -1, kernel, cv::Point(-1, -1), 0, cv::BORDER_CONSTANT);
@@ -194,9 +192,10 @@ int main() {
     clean.convertTo(clean, CV_32F);
 
     // Criar a máscara (kernel de borramento) - pode ser personalizada
-    int kernelSize = 5;
+    int kernelSize = 5;  //Tamanho do borramento
     cv::Mat mask = cv::getGaussianKernel(kernelSize, -1, CV_32F) *
                      cv::getGaussianKernel(kernelSize, -1, CV_32F).t();
+
 
     // Aplicar o borramento sintético
     cv::Mat blurred = convolve(clean, mask);
@@ -207,7 +206,7 @@ int main() {
     int iterations = 700;        // Número de iterações
     float learning_rate = 0.1f;  // Taxa de aprendizado ou passo do gradiente
 
-    // Recuperar a imagem limpa a partir da imagem borrada
+    // Recuperar a imagem limpa a partir da imagem borrada utilizando a deconvolução
     cv::Mat recovered = deblurImage(blurred, mask, lambda, iterations, learning_rate);
     
 
@@ -215,6 +214,7 @@ int main() {
     recovered.convertTo(recovered,CV_8U);
     clean.convertTo(clean, CV_8U);
     blurred.convertTo(blurred, CV_8U);  // Convertendo para tipo adequado para exibição
+
     // Salvar e exibir as imagens
     cv::imwrite("recovered_image.jpg", recovered);
     cv::imshow("Clean Image", clean);
@@ -260,8 +260,8 @@ observou-se que a imagem recuperada ficou muito próxima da imagem limpa, a não
 
 
 Porém ao aumentar a intensidade do borramento, fica cada vez mais difícil conseguir recuperar a imagem
-com um borramento de $$N = 11$$, a recuperação ja ficou bem prejudicada e surgiu componentes de alta frequência.
-A solução para isso pode ser encontrada usando outra função de custo para os pixels da imagem, e talvez algum fator de restrição/regularização para o problema ficar melhor posto e ter uma solução mais "limpa" em vez de suave.
+com um borramento de $$N = 11$$, a recuperação ja ficou bem prejudicada e surgira, componentes de alta frequência devido a regularização laplaciana.
+A solução para isso pode ser encontrada usando outra função de custo para os pixels da imagem, e talvez algum fator de restrição/regularização mais robusto para o problema ficar melhor posto e ter uma solução mais "limpa" em vez de suave.
 
 A figura abaixo mostra o resultado para um borramento de $$N = 11$$
 
