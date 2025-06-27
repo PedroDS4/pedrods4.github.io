@@ -30,7 +30,6 @@ $$
 então queremos minimizar a energia do erro
 
 $$
-
 \begin{align}
 \text{min } & \, E_{e(t)} \\
 \text{subject to } & \, t_1 \leq t \leq t_2
